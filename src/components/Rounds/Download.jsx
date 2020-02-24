@@ -1,5 +1,4 @@
 import React from "react";
-import html2canvas from 'html2canvas'
 
 import leaderboardService from '../../services/leaderboard';
 import eventService from '../../services/events';
@@ -7,6 +6,8 @@ import Top from "../../images/top.png"
 import Bottom from "../../images/bottom.png"
 import { Button } from "../../commons/Form";
 import collegesService from '../../services/colleges';
+
+const html2canvas = typeof window !== `undefined` ? require("html2canvas") : null
 
 export default class extends React.Component {
   constructor(props) {
@@ -40,7 +41,7 @@ export default class extends React.Component {
     let lb = await leaderboardService.getRound(this.props.event,this.props.round);
 
     if (!lb.length) return;
-    
+
     let teams = slots;
     for (let team of teams) {
       let score = lb.find(score => score.team._id === team.team._id);
@@ -61,23 +62,23 @@ export default class extends React.Component {
       for(let i=0;i<teams.length;i++){
         let team=teams[i];
         let rank = scores.indexOf(team.total)+1;
-        
+
         if(rank>=1&&rank<=3){
           let name = <>{"#"+team.number+" "+team.team.name.match(/[\w\s-]+/)[0]}</>;
-  
+
           if(team.team.members.length===1){
             let participants = await collegesService.getParticipants(team.team.college)
             let participant=participants.find(participant=>team.team.members.includes(participant.id));
             name = <>{"#"+team.number+" "+participant.name}<br/><small>{team.team.name.match(/[\w\s-]+/)[0]}</small></>;
           }
           ranks[rank].push(name);
-  
-  
+
+
         }
       }
-  
+
       await this.setState({  scoreStatus: true,ranks });
-    });    
+    });
   }
   resize(event){
     let leaderboard = document.querySelector("#leaderboardContainer");
@@ -86,7 +87,7 @@ export default class extends React.Component {
     this.setState({width:leaderboard.offsetHeight});
   }
   async componentDidMount(){
-    
+
     //document.body.appendChild(canvas);
   }
   async download(){
@@ -100,7 +101,7 @@ export default class extends React.Component {
   }
   render = () => (
     <>
-    
+
     <div id="leaderboardContainer" style={{width:this.state.width,margin:"auto"}}>
       <div id="leaderboard" css={{maxWidth:1000,background: "#eae8e3",margin:"auto"}}>
         <img src={Top} alt="top" style={{width:"100%"}}/>
@@ -130,7 +131,7 @@ export default class extends React.Component {
       <Button onClick={this.resize} styles={{marginRight:100}}>Square Image</Button>
       <Button onClick={this.download}>Download</Button>
     </div>
-    
+
     </>
   );
 };
