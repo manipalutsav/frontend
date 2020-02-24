@@ -14,7 +14,7 @@ export const  servers={
 export default {
   // Whether the registrations are open for the following type of events.
   registrations: {
-    facultyEvents: false,
+    facultyEvents: true,
     studentEvents: false,
   },
   USER_TYPES: userTypes,
