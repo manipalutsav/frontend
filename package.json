@@ -9,6 +9,7 @@
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "yarn develop",
     "serve": "gatsby serve",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d public -r https://github.com/ManipalUtsav/manipalutsav.github.io -b master -m \"Production App Updated\"",
     "deploy-test": "gh-pages -d public -r https://github.com/ManipalUtsav/test.manipalutsav.com -b master -m \"Testing App Updated\"",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
