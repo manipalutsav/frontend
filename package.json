@@ -1,5 +1,5 @@
 {
-  "name": "manipal-utsav-backend",
+  "name": "manipal-utsav-frontend",
   "private": true,
   "description": "",
   "version": "2.0.0",
@@ -10,8 +10,7 @@
     "start": "yarn develop",
     "serve": "gatsby serve",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d public -r https://github.com/ManipalUtsav/manipalutsav.github.io -b master -m \"Production App Updated\"",
-    "deploy-test": "gh-pages -d public -r https://github.com/ManipalUtsav/test.manipalutsav.com -b master -m \"Testing App Updated\"",
+    "deploy": "node ./scripts/deploy.js",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
     "getip": "node scripts/getip.js"
   },
@@ -36,6 +35,7 @@
     "typography": "^0.16.19"
   },
   "devDependencies": {
+    "chalk": "^3.0.0",
     "gh-pages": "^2.0.1",
     "prettier": "^1.16.4"
   },
@@ -45,5 +45,23 @@
   },
   "bugs": {
     "url": "https://github.com/manipalutsav/frontend/issues"
+  },
+  "config": {
+    "servers": {
+      "frontend": {
+        "development": "localhost:8000",
+        "testing": "test.manipalutsav.com",
+        "production": "manipalutsav.com"
+      },
+      "backend": {
+        "development": "localhost:3003",
+        "testing": "staging.manipalutsav.com",
+        "production": "api.manipalutsav.com"
+      }
+    },
+    "mode": {
+      "frontend": "testing",
+      "backend": "testing"
+    }
   }
 }
