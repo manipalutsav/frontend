@@ -43,6 +43,11 @@ import EditMember from "../components/CollegeTeams/Edit";
 import Winners from "../components/Winners";
 import Certificates from "../components/Certificates";
 
+//Imported for volunteer
+import CoreVolunteer from "../components/Volunteer/index";
+import EventVolunteer from "../components/Volunteer/EventVolunteer";
+import AddVolunteer from "../components/Volunteer/AddVolunteer"
+
 
 
 // import configureStore from "../store";
@@ -107,6 +112,11 @@ export default () =>
         <PrivateRoute path="/register/:event/teams" component={ RegisterTeam } type={ 4 }  />
         <PrivateRoute path="/register/:event/teams/:team" component={ Participants } type={ 4 }  />
         <PrivateRoute path="/certificates" component={ Certificates } type={ 4 } />
+
+        {/* For volunteers */}
+        <PrivateRoute path="/coreVolunteer" component={ CoreVolunteer } type={4} />
+        <PrivateRoute path="/eventVolunteer" component={ EventVolunteer } type={4} />
+        <PrivateRoute path="/addVolunteer" component={ AddVolunteer } type={4} />
 
 
         <NotFound path="/*" component={ NotFound } />
