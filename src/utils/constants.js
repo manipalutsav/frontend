@@ -1,15 +1,14 @@
+import packageJSON from "../../package.json";
+
+export const mode = packageJSON.config.mode.backend;
+const backendServer = packageJSON.config.servers.backend[mode];
+
 const userTypes = {
   ADMINISTRATOR: 1 << 0,
   SUPPORT_TEAM: 1 << 1,
   FACULTY_COORDINATOR: 1 << 2,
   STUDENT_COORDINATOR: 1 << 3,
 };
-
-export const  servers={
-  development:"http://localhost:3003",
-  testing:"https://staging.manipalutsav.com",
-  production:"https://api.manipalutsav.com"
-}
 
 export default {
   // Whether the registrations are open for the following type of events.
@@ -42,5 +41,6 @@ export default {
     light: "#f5f5f5",
     white: "#ffffff",
   },
-  server: servers.production,
+  server: backendServer,
+  mode
 };
