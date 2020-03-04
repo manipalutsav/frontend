@@ -35,23 +35,22 @@ export default class extends React.Component {
       }))
     });
     
-    let slots = await eventsService.getSlots(this.props.event, this.state.round);
-    console.log(slots);
+    let slots = await eventsService.getSlots2(this.props.event, this.state.round);
     let newSlots=[];
     for(let i=0;i<slots.length;i++){
       let slot=slots[i];
       let number = slot.number;
-      let name = slot.team.name;
-      if(event.maxMembersPerTeam===1){
-        let participants = await collegesService.getParticipants(slot.team.college)
-        let participant=participants.find(participant=>slot.team.members.includes(participant.id));
-        let college = name.match(/[\w\s-,.]*/)[0];
-        name = `${participant.name}, ${college}`;
-      }
-      if(event.maxTeamsPerCollege===1){
-        name = name.match(/[\w\s-,.]*/)[0];
+      let name = slot.teamName;
+      // if(event.maxMembersPerTeam===1){
+      //   let participants = await collegesService.getParticipants(slot.team.college)
+      //   let participant=participants.find(participant=>slot.team.members.includes(participant.id));
+      //   let college = name.match(/[\w\s-,.]*/)[0];
+      //   name = `${participant.name}, ${college}`;
+      // }
+      // if(event.maxTeamsPerCollege===1){
+      //   name = name.match(/[\w\s-,.]*/)[0];
         
-      }
+      // }
      newSlots.push({number,name}); 
     }
     await this.setState({ slotted: !!slots.length, slots:newSlots });
@@ -63,7 +62,7 @@ export default class extends React.Component {
     this.setState(
       { round: e.value, loaded: false, },
       () =>
-        eventsService.getSlots(this.props.event, this.state.round).then(slots =>
+        eventsService.getSlots2(this.props.event, this.state.round).then(slots =>
           this.setState({ slotted: !!slots.length, slots }, () =>
             this.setState({ loaded: true })
           )
