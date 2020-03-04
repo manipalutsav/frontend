@@ -11,3 +11,20 @@ export const create = async (payload) => {
     console.log(response);
     return response;
   }
+
+  export const getVolunteer = async (payload) => {
+    let response = await request(`/volunteer/get`, "GET", payload);
+    console.log(response);
+    return response;
+  }
+
+  export const getAll = async () => {
+    let response = await request(`/volunteer`);
+    return response;
+  }
+  const getCollegeVolunteer = async (collegeId) => {
+    let response = await request(`/volunteer/get/${collegeId}`, "GET");
+    return response;
+  }
+
+  export default { getCollegeVolunteer };

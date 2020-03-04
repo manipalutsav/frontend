@@ -1,6 +1,7 @@
 import React from "react";
-
+import { getUser } from "../../services/userServices";
 import { Link } from "gatsby";
+import { getVolunteer } from "../../services/volunteerService";
 
 const styles = {
     volunteerCard: {
@@ -21,9 +22,18 @@ const styles = {
     },
 };
 
-
+let user;
 export default class AddVolunteer extends React.Component {
-    state = {}
+
+    state = {
+        col: 0,
+        type: 0,
+    }
+    componentWillMount() {
+        user = getUser();
+        console.log(user);
+
+    }
     render() {
         return (
             <div>
@@ -56,6 +66,22 @@ export default class AddVolunteer extends React.Component {
                     }}>
                         Add Event Volunteer
                 </Link>
+                    {/* {
+                        user.type == 1 ?
+                            <Link to="/viewCoreVolunteer" css={{
+                                ...styles.volunteerCard,
+                                backgroundColor: "#ff5800",
+                                color: "white",
+                                ":hover": {
+                                    color: "white",
+                                    boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+                                }
+                            }}>
+                                View Volunteers
+                </Link>
+                            : null
+
+                    } */}
                 </div>
             </div>
         )
