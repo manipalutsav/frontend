@@ -35,7 +35,8 @@ export default class extends React.Component {
       }))
     });
     
-    let slots = await eventsService.getSlots(this.props.event, this.state.round);
+    let slots = await eventsService.getSlots2(this.props.event, this.state.round);
+    console.log(slots);
     let newSlots=[];
     for(let i=0;i<slots.length;i++){
       let slot=slots[i];
