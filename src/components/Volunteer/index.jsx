@@ -266,7 +266,7 @@ class Volunteer extends React.Component {
 
                 {/* Volunteer 3 */}
                 <div>
-                    <h3>Volunteer 1</h3>
+                    <h3>Volunteer 3</h3>
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
