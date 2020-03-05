@@ -1,5 +1,4 @@
 @import "./fonts.css";
-
 *, ::before, ::after {
   box-sizing: border-box;
 }
@@ -8,10 +7,7 @@ body {
   margin: 0;
   width: 100%;
   min-height: 100vh;
-  font-family: 'Avenir LT Std', -apple-system ,BlinkMacSystemFont, 'Segoe UI',
-    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue',
-    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', sans-serif;
+  font-family: 'Avenir LT Std', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
   font-size: 20px;
   background-color: white;
 }
@@ -21,6 +17,7 @@ a {
   text-decoration: none;
   transition: color .25s ease-out;
 }
+
 a:hover {
   color: #ffd100;
 }
@@ -40,13 +37,15 @@ button {
   justify-content: center;
   transition: .15s ease-out;
 }
+
 button:hover {
   background-color: #ffd100;
   color: black;
 }
-button:disabled{
+
+button:disabled {
   background-color: #ffa593;
-  color:#fff;
+  color: #fff;
 }
 
 input, textarea {
@@ -57,18 +56,15 @@ input, textarea {
   border: 1px solid rgba(0, 0, 0, .1);
 }
 
-input:hover,
-textarea:hover,
-input:focus,
-textarea:focus {
+input:hover, textarea:hover, input:focus, textarea:focus {
   box-shadow: 0 3px 10px -5px rgba(0, 0, 0, .3);
 }
-input:hover,
-textarea:hover {
+
+input:hover, textarea:hover {
   border-color: #ff5800;
 }
-input:focus,
-textarea:focus {
+
+input:focus, textarea:focus {
   border-color: #ffd100;
 }
 
@@ -84,60 +80,106 @@ a, input, button {
   .no-print, .no-print * {
     display: none !important;
   }
-  .leaderboardContainer{
+  .leaderboardContainer {
     overflow: visible!important;
   }
 }
 
-.leaderboard{
-  border:1px solid #000;
+.leaderboard {
+  border: 1px solid #000;
   border-collapse: collapse;
-  margin:10px;
+  margin: 10px;
 }
-.leaderboard th,td{
-  width:100px;
-  border:1px solid #000;
-  padding:5px;
+
+.leaderboard th, td {
+  width: 100px;
+  border: 1px solid #000;
+  padding: 5px;
 }
-th:first-child{
+
+th:first-child {
   position: sticky;
-  left:0px;
+  left: 0px;
   background: #fff;
 }
-tr:nth-child(odd){
+
+tr:nth-child(odd) {
   background: #eee;
 }
-tr:nth-child(odd) th:first-child{
+
+tr:nth-child(odd) th:first-child {
   background: #eee;
 }
-thead th{
+
+thead th {
   position: sticky;
-  top:0px;
+  top: 0px;
 }
 
-
-.feedback input[type="radio"]{
-  display:inline-block;
+.feedback input[type="radio"] {
+  display: inline-block;
 }
-.feedback form{
+
+.feedback form {
   display: block;
 }
-.feedback select{
-  height:50px;
-  font-size:20px;
+
+.feedback select {
+  height: 50px;
+  font-size: 20px;
 }
 
-.table td,.table th{
-  width:auto;
-  padding:10px;
+.table td, .table th {
+  width: auto;
+  padding: 10px;
 }
 
-.table{
+.table {
   border-collapse: collapse;
-  margin:auto;
+  margin: auto;
 }
 
-.table thead th{
+.table thead th {
   background: #555!important;
-  color:#fff;
+  color: #fff;
+}
+
+.vtable {
+  border-collapse: collapse;
+  margin: 10px auto;
+  font-size: 16px;
+}
+
+.vtable td {
+  border: none;
+}
+
+.vtable thead th {
+  background-color: #ff5800 !important;
+  color: #fff;
+  padding: 10px;
+}
+
+.vtable th, .vtable td {
+  padding: 10px 2px;
+  text-align: center;
+}
+
+.coreVolunteers {
+  overflow-x: auto;
+  width: 90rw;
+  min-height: 100vh;
+}
+
+/* Chrome, Safari, Edge, Opera */
+
+.vtable input::-webkit-outer-spin-button, .vtable input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+
+.vtable input[type=number] {
+  -moz-appearance: textfield;
 }
