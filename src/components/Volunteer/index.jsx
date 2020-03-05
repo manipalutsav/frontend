@@ -6,6 +6,7 @@ import { create } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getAll } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
+import { navigate } from "gatsby";
 
 const sizes = [
 
@@ -61,6 +62,7 @@ class Volunteer extends React.Component {
                 buttonText: this.state.ADD_VOLUNTEER
             }, async () => {
                 let response = await create({
+                    college: this.state.college,
                     name1: this.state.name1,
                     regno1: this.state.regno1,
                     size1: this.state.size1,
@@ -76,12 +78,19 @@ class Volunteer extends React.Component {
                     name5: this.state.name5,
                     regno5: this.state.regno5,
                     size5: this.state.size5,
+                    name6: this.state.name6,
+                    regno6: this.state.regno6,
+                    size6: this.state.size6,
+                    name7: this.state.name7,
+                    regno7: this.state.regno7,
+                    size7: this.state.size7,
 
                 });
                 this.setState({
                     buttonText: this.ADD_VOLUNTEER,
                 })
                 toast(response.message);
+                return navigate("/")
             });
         }
 
@@ -146,7 +155,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -159,7 +168,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Select
                         isSearchable={false}
                         name="tshirt-size"
@@ -208,7 +217,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -221,7 +230,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Select
                         isSearchable={false}
                         name="tshirt-size"
@@ -270,7 +279,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -283,7 +292,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Select
                         isSearchable={false}
                         name="tshirt-size"
@@ -332,7 +341,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -345,7 +354,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Select
                         isSearchable={false}
                         name="tshirt-size"
@@ -393,7 +402,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -406,7 +415,7 @@ class Volunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Select
                         isSearchable={false}
                         name="tshirt-size"
@@ -438,8 +447,131 @@ class Volunteer extends React.Component {
                             width: 300,
                         }}
                     />
-                </div>
 
+                </div>
+                &nbsp;&nbsp;
+                {/* Volunteer 6 */}
+                <div>
+                    <h3>Volunteer 6</h3>
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="name6"
+                        type="text"
+                        placeholder="Name"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />&nbsp;
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="regno6"
+                        type="text"
+                        placeholder="Registration Number"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />&nbsp;
+                    <Select
+                        isSearchable={false}
+                        name="tshirt-size"
+                        placeholder="T Shirt Sizes"
+                        options={sizes}
+                        onChange={(e) => this.setState({ size6: e.value })}
+                        styles={{
+                            control: (provided, state) => ({
+                                ...provided,
+                                marginBottom: 10,
+                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                                ":hover": {
+                                    border: "1px solid #ff5800",
+                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                                },
+                            }),
+                            option: (provided, state) => ({
+                                ...provided,
+                                backgroundColor: state.isSelected ? "#ff5800" : "",
+                                ":hover": {
+                                    backgroundColor: "#ffd100",
+                                    color: "black",
+                                },
+                            }),
+                        }}
+                        css={{
+                            fontSize: "16px",
+                            width: 300,
+                        }}
+                    />
+                </div>
+                {/* Volunteer 7 */}
+                <div>
+                    <h3>Volunteer 7</h3>
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="name7"
+                        type="text"
+                        placeholder="Name"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />&nbsp;
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="regno7"
+                        type="text"
+                        placeholder="Registration Number"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />&nbsp;
+                    <Select
+                        isSearchable={false}
+                        name="tshirt-size"
+                        placeholder="T Shirt Sizes"
+                        options={sizes}
+                        onChange={(e) => this.setState({ size7: e.value })}
+                        styles={{
+                            control: (provided, state) => ({
+                                ...provided,
+                                marginBottom: 10,
+                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                                ":hover": {
+                                    border: "1px solid #ff5800",
+                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                                },
+                            }),
+                            option: (provided, state) => ({
+                                ...provided,
+                                backgroundColor: state.isSelected ? "#ff5800" : "",
+                                ":hover": {
+                                    backgroundColor: "#ffd100",
+                                    color: "black",
+                                },
+                            }),
+                        }}
+                        css={{
+                            fontSize: "16px",
+                            width: 300,
+                        }}
+                    />
+                </div>
                 <div>
                     <div>
                         <Button onClick={this.handleClick}>{this.state.buttonText}</Button>

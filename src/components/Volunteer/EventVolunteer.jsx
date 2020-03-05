@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-
+import { navigate } from "gatsby";
 import reducer from "../../reducers/commonReducer";
 import { createEventVolunteer } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
@@ -53,6 +53,8 @@ class EventVolunteer extends React.Component {
                 buttonText: this.state.ADD_VOLUNTEER
             }, async () => {
                 let response = await createEventVolunteer({
+                    college: this.state.college,
+
                     name1: this.state.name1,
                     regno1: this.state.regno1,
 
@@ -68,12 +70,16 @@ class EventVolunteer extends React.Component {
                     name5: this.state.name5,
                     regno5: this.state.regno5,
 
+                    name6: this.state.name6,
+                    regno6: this.state.regno6,
+
 
                 });
                 this.setState({
                     buttonText: this.ADD_VOLUNTEER,
                 })
                 toast(response.message);
+                return navigate("/")
             });
         }
 
@@ -85,8 +91,8 @@ class EventVolunteer extends React.Component {
             <div>
                 <div>
                     <div>
-                        <h2>Add Core Volunteer</h2>
-                        <p>Add a new Core Volunteer to MUCAPP</p>
+                        <h2>Add Event Volunteer</h2>
+                        <p>Add a new Event Volunteer to MUCAPP</p>
                     </div>
                 </div>
 
@@ -138,7 +144,7 @@ class EventVolunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -169,7 +175,7 @@ class EventVolunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -188,7 +194,7 @@ class EventVolunteer extends React.Component {
 
                 {/* Volunteer 3 */}
                 <div>
-                    <h3>Volunteer 1</h3>
+                    <h3>Volunteer 3</h3>
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -214,7 +220,7 @@ class EventVolunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
 
                 </div>
 
@@ -233,7 +239,7 @@ class EventVolunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
@@ -264,11 +270,43 @@ class EventVolunteer extends React.Component {
                             float: "left",
 
                         }}
-                    />
+                    />&nbsp;
                     <Input
                         onChange={this.handleChange}
                         autoComplete="off"
                         name="regno5"
+                        type="text"
+                        placeholder="Registration Number"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />
+
+                </div>
+
+                {/* Volunteer 6 */}
+                <div>
+                    <h3>Volunteer 6</h3>
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="name6"
+                        type="text"
+                        placeholder="Name"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />&nbsp;
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="regno6"
                         type="text"
                         placeholder="Registration Number"
                         required

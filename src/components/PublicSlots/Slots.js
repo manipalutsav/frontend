@@ -63,7 +63,7 @@ export default class extends React.Component {
     this.setState(
       { round: e.value, loaded: false, },
       () =>
-        eventsService.getSlots(this.props.event, this.state.round).then(slots =>
+        eventsService.getSlots2(this.props.event, this.state.round).then(slots =>
           this.setState({ slotted: !!slots.length, slots }, () =>
             this.setState({ loaded: true })
           )

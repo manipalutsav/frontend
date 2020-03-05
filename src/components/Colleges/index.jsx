@@ -27,6 +27,7 @@ const styles = {
 
 const College = (props) => (
   <Link to={ "/colleges/" + props.info.id + "/teams" } css={{
+    // link on click
     ...styles.collegeCard,
   }}>
     <div>{ props.info.name }</div>
@@ -64,6 +65,7 @@ const CollegeList = (props) => (
     }}>
       Add College
     </Link>
+    {/* Colleges rendered */}
     {
       props.colleges
       ? props.colleges.map((college, i) => (
@@ -140,6 +142,7 @@ export default class Colleges extends React.Component {
           ? <Loader/>
           : <CollegeList
               colleges={ this.state.colleges } stats={ this.state.stats }
+              // college list rendered
             />
         }
       </div>

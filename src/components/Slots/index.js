@@ -41,11 +41,12 @@ export default class extends React.Component {
       });
     }
     );
+
   }
 
   animate(slots) {
     this.slots = Object.assign([], slots);
-    // this.slots = slots;
+    //this.slots = slots;
 
     this.timer = setInterval(() => {
       let slot = this.slots.shift();
@@ -69,6 +70,7 @@ export default class extends React.Component {
         this.animate(this.state.slots)
       )
     )
+
   }
 
   deleteSlots() {
