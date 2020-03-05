@@ -53,6 +53,8 @@ class EventVolunteer extends React.Component {
                 buttonText: this.state.ADD_VOLUNTEER
             }, async () => {
                 let response = await createEventVolunteer({
+                    college: this.state.college,
+
                     name1: this.state.name1,
                     regno1: this.state.regno1,
 
@@ -89,8 +91,8 @@ class EventVolunteer extends React.Component {
             <div>
                 <div>
                     <div>
-                        <h2>Add Core Volunteer</h2>
-                        <p>Add a new Core Volunteer to MUCAPP</p>
+                        <h2>Add Event Volunteer</h2>
+                        <p>Add a new Event Volunteer to MUCAPP</p>
                     </div>
                 </div>
 

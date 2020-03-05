@@ -53,7 +53,7 @@ const SidebarItems = () => (
     <SidebarItem to="/register" title="Register" />
     <SidebarItem to="/teams" title="Teams" />
     <SidebarItem to="/slots" title="Slots" />
-    {/* <SidebarItem to="/addVolunteer" title="Volunteer" /> */}
+    <SidebarItem to="/addVolunteer" title="Volunteer" />
     {/* <SidebarItem to="/leaderboard/public" title="Leaderboard" />
     <SidebarItem to="/certificates" title="Certificates" /> */}
     <SidebarSeparator />

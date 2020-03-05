@@ -7,7 +7,7 @@ const userTypes = {
 
 export const  servers={
   development:"http://localhost:3003",
-  testing:"http://ec2-13-232-199-176.ap-south-1.compute.amazonaws.com:3003",
+  testing:"https://staging.manipalutsav.com",
   production:"https://api.manipalutsav.com"
 }
 
@@ -42,5 +42,5 @@ export default {
     light: "#f5f5f5",
     white: "#ffffff",
   },
-  server: servers.production,
+  server: servers.development,
 };

@@ -81,6 +81,9 @@ class Volunteer extends React.Component {
                     name6: this.state.name6,
                     regno6: this.state.regno6,
                     size6: this.state.size6,
+                    name7: this.state.name7,
+                    regno7: this.state.regno7,
+                    size7: this.state.size7,
 
                 });
                 this.setState({
@@ -482,6 +485,67 @@ class Volunteer extends React.Component {
                         placeholder="T Shirt Sizes"
                         options={sizes}
                         onChange={(e) => this.setState({ size6: e.value })}
+                        styles={{
+                            control: (provided, state) => ({
+                                ...provided,
+                                marginBottom: 10,
+                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                                ":hover": {
+                                    border: "1px solid #ff5800",
+                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                                },
+                            }),
+                            option: (provided, state) => ({
+                                ...provided,
+                                backgroundColor: state.isSelected ? "#ff5800" : "",
+                                ":hover": {
+                                    backgroundColor: "#ffd100",
+                                    color: "black",
+                                },
+                            }),
+                        }}
+                        css={{
+                            fontSize: "16px",
+                            width: 300,
+                        }}
+                    />
+                </div>
+                {/* Volunteer 7 */}
+                <div>
+                    <h3>Volunteer 7</h3>
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="name7"
+                        type="text"
+                        placeholder="Name"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />&nbsp;
+                    <Input
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                        name="regno7"
+                        type="text"
+                        placeholder="Registration Number"
+                        required
+                        styles={{ width: 300 }}
+                        css={{
+                            float: "left",
+
+                        }}
+                    />&nbsp;
+                    <Select
+                        isSearchable={false}
+                        name="tshirt-size"
+                        placeholder="T Shirt Sizes"
+                        options={sizes}
+                        onChange={(e) => this.setState({ size7: e.value })}
                         styles={{
                             control: (provided, state) => ({
                                 ...provided,
