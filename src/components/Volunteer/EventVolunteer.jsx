@@ -178,7 +178,7 @@ class EventVolunteer extends React.Component {
                                         <td>{index + 1}</td>
                                         <td>{volunteer.name}</td>
                                         <td>{volunteer.registerNumber}</td>
-                                        <td>{volunteer.college}</td>
+                                        <td>{volunteer.college && volunteer.college.name || volunteer.college}</td>
                                         <td></td>
                                     </tr>
                                 ))
