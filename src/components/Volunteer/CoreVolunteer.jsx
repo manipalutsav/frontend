@@ -1,18 +1,25 @@
 import React from "react";
 import Select from "react-select";
 
-import { addEventVolunteer, getEventVolunteers } from "../../services/volunteerService";
+import { addCoreVolunteer, getCoreVolunteers } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 
+const sizes = [
+    { value: 's', label: 'Small' },
+    { value: 'm', label: 'Medium' },
+    { value: 'l', label: 'Large' },
+    { value: 'xl', label: 'X Large' },
+];
 
-class EventVolunteer extends React.Component {
+class CoreVolunteer extends React.Component {
     ADD_VOLUNTEER = "Add";
     state = {
         buttonText: this.ADD_VOLUNTEER,
         name: "",
         registerNumber: "",
+        shirtSize: null,
         college: null,
         volunteers: []
     };
@@ -44,16 +51,19 @@ class EventVolunteer extends React.Component {
     addVolunteer = async () => {
         try {
             await this.setState({ buttonText: this.ADDING_VOLUNTEER });
-            const { name, registerNumber, college } = this.state;
+            const { name, registerNumber, shirtSize, college } = this.state;
             if (!name || name.length === 0)
                 throw Error("Please enter name.");
             if (!registerNumber || registerNumber.length === 0)
                 throw Error("Please enter register number.");
+            if (!shirtSize || shirtSize.length === 0)
+                throw Error("Please select shirt size.");
             if (!college || college.length === 0)
                 throw Error("Please select the college.");
-            let response = await addEventVolunteer({
+            let response = await addCoreVolunteer({
                 name,
                 registerNumber,
+                shirtSize,
                 college
             });
             this.setState({
@@ -71,7 +81,7 @@ class EventVolunteer extends React.Component {
     }
 
     getVolunteers = async () => {
-        const response = await getEventVolunteers();
+        const response = await getCoreVolunteers();
         if (response.status === 200) {
             const volunteers = response.data;
             this.setState({ volunteers })
@@ -85,7 +95,7 @@ class EventVolunteer extends React.Component {
             <div >
                 <div>
                     <div>
-                        <h2>Event Volunteers</h2>
+                        <h2>Core Volunteers</h2>
                     </div>
                 </div>
                 <div className="coreVolunteers">
@@ -95,6 +105,7 @@ class EventVolunteer extends React.Component {
                                 <th>Sl. No.</th>
                                 <th>Name</th>
                                 <th>Register Number</th>
+                                <th>Shirt Size</th>
                                 <th>College</th>
                                 <th>Actions</th>
                             </tr>
@@ -131,6 +142,40 @@ class EventVolunteer extends React.Component {
                                         css={{
                                             float: "left",
 
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    <Select
+                                        isSearchable={false}
+                                        name={`shirtSize`}
+                                        placeholder="T Shirt Sizes"
+                                        options={sizes}
+
+                                        onChange={(e) => this.setState({ [`shirtSize`]: e.value })}
+                                        styles={{
+                                            control: (provided, state) => ({
+                                                ...provided,
+                                                marginBottom: 10,
+                                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                                                ":hover": {
+                                                    border: "1px solid #ff5800",
+                                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                                                },
+                                            }),
+                                            option: (provided, state) => ({
+                                                ...provided,
+                                                backgroundColor: state.isSelected ? "#ff5800" : "",
+                                                ":hover": {
+                                                    backgroundColor: "#ffd100",
+                                                    color: "black",
+                                                },
+                                            }),
+                                        }}
+                                        css={{
+                                            fontSize: "16px",
+                                            width: 300,
                                         }}
                                     />
                                 </td>
@@ -178,6 +223,7 @@ class EventVolunteer extends React.Component {
                                         <td>{index + 1}</td>
                                         <td>{volunteer.name}</td>
                                         <td>{volunteer.registerNumber}</td>
+                                        <td>{volunteer.shirtSize}</td>
                                         <td>{volunteer.college}</td>
                                         <td></td>
                                     </tr>
@@ -191,4 +237,4 @@ class EventVolunteer extends React.Component {
     }
 }
 
-export default EventVolunteer
+export default CoreVolunteer
