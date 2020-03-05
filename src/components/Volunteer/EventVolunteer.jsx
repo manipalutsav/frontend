@@ -2,7 +2,7 @@ import React from "react";
 import Select from "react-select";
 import { navigate } from "gatsby";
 import reducer from "../../reducers/commonReducer";
-import { createEventVolunteer } from "../../services/volunteerService";
+import { addEventVolunteer } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getAll } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
@@ -64,7 +64,7 @@ class EventVolunteer extends React.Component {
                     regno: this.state[`regno-${i}`]
                 })
             }
-            let response = await createEventVolunteer({
+            let response = await addEventVolunteer({
                 college,
                 list
             });
