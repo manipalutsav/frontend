@@ -20,18 +20,7 @@ const styles = {
         }
     },
 };
-
-let user;
 export default class AddVolunteer extends React.Component {
-
-    state = {
-        col: 0,
-        type: 0,
-    }
-    componentWillMount() {
-        user = getUser();
-
-    }
     render() {
         return (
             <div>
