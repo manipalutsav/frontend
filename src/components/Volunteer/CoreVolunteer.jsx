@@ -7,7 +7,6 @@ import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 
 const sizes = [
-
     { value: 's', label: 'Small' },
     { value: 'm', label: 'Medium' },
     { value: 'l', label: 'Large' },
