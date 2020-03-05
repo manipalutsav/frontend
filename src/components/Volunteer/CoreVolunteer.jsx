@@ -10,7 +10,7 @@ const sizes = [
     { value: 's', label: 'Small' },
     { value: 'm', label: 'Medium' },
     { value: 'l', label: 'Large' },
-    { value: 'xl', label: 'X Large' },
+    { value: 'xl', label: 'Extra Large' },
 ];
 
 class CoreVolunteer extends React.Component {
