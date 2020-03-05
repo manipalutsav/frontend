@@ -5,10 +5,10 @@ const userTypes = {
   STUDENT_COORDINATOR: 1 << 3,
 };
 
-export const  servers={
-  development:"http://localhost:3003",
-  testing:"https://staging.manipalutsav.com",
-  production:"https://api.manipalutsav.com"
+export const servers = {
+  development: "http://localhost:3003",
+  testing: "https://staging.manipalutsav.com",
+  production: "https://api.manipalutsav.com"
 }
 
 export default {

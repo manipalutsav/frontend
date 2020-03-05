@@ -9,8 +9,10 @@ import { toast } from "../../actions/toastActions";
 
 class EventVolunteer extends React.Component {
     ADD_VOLUNTEER = "Add Volunteer";
+    ADDING_VOLUNTEER = "Adding...";
     state = {
-        buttonText: this.ADD_VOLUNTEER
+        buttonText: this.ADD_VOLUNTEER,
+        count: 6
     };
 
     title = <div>
@@ -44,49 +46,44 @@ class EventVolunteer extends React.Component {
             <Button onClick={this.handleClick}>{this.state.buttonText}</Button>
         </div>
 
-    handleClick = () => {
-        if (!this.state.name1 || !this.state.regno1) {
-            toast("Enter all details");
-        }
-        else {
-            this.setState({
-                buttonText: this.state.ADD_VOLUNTEER
-            }, async () => {
-                let response = await createEventVolunteer({
-                    college: this.state.college,
+    handleClick = async () => {
+        try {
+            await this.setState({ buttonText: this.ADDING_VOLUNTEER });
+            const { count, college } = this.state;
+            if (!college)
+                throw Error("Please select the college.");
+            const list = [];
+            for (let i = 0; i < count; i++) {
+                if (!this.state[`name-${i}`])
+                    throw Error(`Please enter volunteer ${i + 1} name`)
+                if (!this.state[`regno-${i}`])
+                    throw Error(`Please enter volunteer ${i + 1} regno`)
 
-                    name1: this.state.name1,
-                    regno1: this.state.regno1,
-
-                    name2: this.state.name2,
-                    regno2: this.state.regno2,
-
-                    name3: this.state.name3,
-                    regno3: this.state.regno3,
-
-                    name4: this.state.name4,
-                    regno4: this.state.regno4,
-
-                    name5: this.state.name5,
-                    regno5: this.state.regno5,
-
-                    name6: this.state.name6,
-                    regno6: this.state.regno6,
-
-
-                });
-                this.setState({
-                    buttonText: this.ADD_VOLUNTEER,
+                list.push({
+                    name: this.state[`name-${i}`],
+                    regno: this.state[`regno-${i}`]
                 })
-                toast(response.message);
-                return navigate("/")
+            }
+            let response = await createEventVolunteer({
+                college,
+                list
             });
+            this.setState({
+                buttonText: this.ADD_VOLUNTEER,
+            })
+            toast(response.message);
+            return navigate("/")
+        }
+        catch (err) {
+            toast(err.message)
+            this.setState({ buttonText: this.ADD_VOLUNTEER });
         }
 
     }
 
 
     render() {
+        console.log(this.state)
         return (
             <div>
                 <div>
@@ -129,199 +126,58 @@ class EventVolunteer extends React.Component {
                         }}
                     />
                 </div>
-                {/* Volunteer 1 */}
                 <div>
-                    <h3>Volunteer 1</h3>
+                    <h3>No. of vounteers:&nbsp;
                     <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name1"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno1"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                            name="count"
+                            type="text"
+                            placeholder="Enter number of volunteers"
+                            required
+                            value={this.state.count}
+                            styles={{ width: 300 }}
+                            css={{
+                                float: "left",
+                            }} />
+                    </h3>
                 </div>
+                {Array(Number(this.state.count)).fill(0).map((i, j) =>
+                    <div key={j}>
+                        <h3>Volunteer {j + 1}</h3>
+                        <Input
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                            name={`name-${j}`}
+                            type="text"
+                            placeholder="Name"
+                            required
+                            styles={{ width: 300 }}
+                            css={{
+                                float: "left",
 
-                {/* Volunteer 2  */}
-                <div>
-                    <h3>Volunteer 2</h3>
+                            }}
+                        />&nbsp;
                     <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name2"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                            name={`regno-${j}`}
+                            type="text"
+                            placeholder="Registration Number"
+                            required
+                            styles={{ width: 300 }}
+                            css={{
+                                float: "left",
 
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno2"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
+                            }}
+                        />
+                    </div>)
+                }
 
-                        }}
-                    />
-
-                </div>
-
-                {/* Volunteer 3 */}
-                <div>
-                    <h3>Volunteer 3</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name3"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno3"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-
-                </div>
-
-                {/* Volunteer 4 */}
-                <div>
-                    <h3>Volunteer 4</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name4"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno4"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />
-
-                </div>
-                {/* Volunteer 5 */}
-                <div>
-                    <h3>Volunteer 5</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name5"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno5"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />
-
-                </div>
-
-                {/* Volunteer 6 */}
-                <div>
-                    <h3>Volunteer 6</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name6"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno6"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />
-
-                </div>
 
                 <div>
                     <div>
-                        <Button onClick={this.handleClick}>{this.state.buttonText}</Button>
+                        <Button onClick={this.handleClick} disabled={this.state.buttonText == this.ADDING_VOLUNTEER}>{this.state.buttonText}</Button>
                     </div>
                 </div>
             </div >
