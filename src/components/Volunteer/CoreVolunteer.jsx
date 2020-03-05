@@ -51,11 +51,14 @@ class CoreVolunteer extends React.Component {
     addVolunteer = async () => {
         try {
             await this.setState({ buttonText: this.ADDING_VOLUNTEER });
-            const { name, registerNumber, shirtSize, college } = this.state;
+            let { name, registerNumber, shirtSize, college } = this.state;
+            name = name.trim();
             if (!name || name.length === 0)
                 throw Error("Please enter name.");
             if (!registerNumber || registerNumber.length === 0)
                 throw Error("Please enter register number.");
+            if (!registerNumber.match(/^\d{4,}$/))
+                throw Error("Please enter valid register number.");
             if (!shirtSize || shirtSize.length === 0)
                 throw Error("Please select shirt size.");
             if (!college || college.length === 0)

@@ -44,11 +44,14 @@ class EventVolunteer extends React.Component {
     addVolunteer = async () => {
         try {
             await this.setState({ buttonText: this.ADDING_VOLUNTEER });
-            const { name, registerNumber, college } = this.state;
+            let { name, registerNumber, college } = this.state;
+            name = name.trim();
             if (!name || name.length === 0)
                 throw Error("Please enter name.");
             if (!registerNumber || registerNumber.length === 0)
                 throw Error("Please enter register number.");
+            if (!registerNumber.match(/^\d{4,}$/))
+                throw Error("Please enter valid register number.");
             if (!college || college.length === 0)
                 throw Error("Please select the college.");
             let response = await addEventVolunteer({
