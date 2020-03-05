@@ -2,12 +2,20 @@ import React from "react";
 import Select from "react-select";
 import { navigate } from "gatsby";
 import reducer from "../../reducers/commonReducer";
-import { createEventVolunteer } from "../../services/volunteerService";
+import { createVol } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getAll } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 
-class EventVolunteer extends React.Component {
+const sizes = [
+
+    { value: 's', label: 'Small' },
+    { value: 'm', label: 'Medium' },
+    { value: 'l', label: 'Large' },
+    { value: 'xl', label: 'X Large' },
+];
+
+class Volunteer extends React.Component {
     ADD_VOLUNTEER = "Add Volunteer";
     ADDING_VOLUNTEER = "Adding...";
     state = {
@@ -17,7 +25,7 @@ class EventVolunteer extends React.Component {
 
     title = <div>
         <h2>Add Volunteer</h2>
-        <p>Add a new Event Volunteer to MUCAPP</p>
+        <p>Add a new Core Volunteer to MUCAPP</p>
     </div>
 
     componentWillMount() {
@@ -61,10 +69,11 @@ class EventVolunteer extends React.Component {
 
                 list.push({
                     name: this.state[`name-${i}`],
-                    regno: this.state[`regno-${i}`]
+                    regno: this.state[`regno-${i}`],
+                    size: this.state[`size-${i}`]
                 })
             }
-            let response = await createEventVolunteer({
+            let response = await createVol({
                 college,
                 list
             });
@@ -171,6 +180,37 @@ class EventVolunteer extends React.Component {
 
                             }}
                         />
+                        <Select
+                            isSearchable={false}
+                            name={`size-${j}`}
+                            placeholder="T Shirt Sizes"
+                            options={sizes}
+                            onChange={(e) => this.setState({ size1: e.value })}
+                            styles={{
+                                control: (provided, state) => ({
+                                    ...provided,
+                                    marginBottom: 10,
+                                    border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                                    boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                                    ":hover": {
+                                        border: "1px solid #ff5800",
+                                        boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                                    },
+                                }),
+                                option: (provided, state) => ({
+                                    ...provided,
+                                    backgroundColor: state.isSelected ? "#ff5800" : "",
+                                    ":hover": {
+                                        backgroundColor: "#ffd100",
+                                        color: "black",
+                                    },
+                                }),
+                            }}
+                            css={{
+                                fontSize: "16px",
+                                width: 300,
+                            }}
+                        />
                     </div>)
                 }
 
@@ -185,4 +225,4 @@ class EventVolunteer extends React.Component {
     }
 }
 
-export default EventVolunteer;
+export default Volunteer;

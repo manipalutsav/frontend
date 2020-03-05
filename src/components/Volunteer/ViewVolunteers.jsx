@@ -15,7 +15,7 @@ export default class ViewVolunteers extends Component {
     getCollegeVolunteer = async () => {
         let resp = await VolunteerService.getCollegeVolunteer(this.props.collegeId);
         console.log(resp.data);
-        this.setState({ volunteers: resp.data.volunteer, mes: resp.message })
+        this.setState({ volunteers: resp.data[0].list, mes: resp.message })
     }
 
     componentWillMount() {
@@ -24,21 +24,31 @@ export default class ViewVolunteers extends Component {
 
     }
     render() {
-        const volunteers = this.state.volunteers
+        const volunteers = this.state.volunteers;
+        if (volunteers.length == 0)
+            return (<div>No Volunteers</div>)
 
-        return !volunteers ? 'No Volunteers' : volunteers.map((volunteer) => {
-            return (
-                <div key={volunteer._id}>
-                    <span>Name</span>&nbsp;&nbsp;<span>Regno</span>&nbsp;&nbsp;<span>Size</span> <br />
-                    <span>{volunteer.name1}</span> &nbsp;&nbsp;
-                    <span>{volunteer.regno1}</span> &nbsp;&nbsp;
-                    <span>{volunteer.size1}</span> &nbsp;&nbsp;
-                    <span>{volunteer.name2}</span> &nbsp;&nbsp;
-                    <span>{volunteer.regno2}</span> &nbsp;&nbsp;
-                    <span>{volunteer.size2}</span> &nbsp;&nbsp;
-                </div>
-            )
-        })
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>RegNo</th>
+                            <th>Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volunteers.map(v => (
+                            <tr>
+                                <td>{v.name}</td>
+                                <td>{v.regno}</td>
+                                <td>{v.size}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>);
     }
 }
 

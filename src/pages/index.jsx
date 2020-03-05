@@ -49,6 +49,7 @@ import EventVolunteer from "../components/Volunteer/EventVolunteer";
 import AddVolunteer from "../components/Volunteer/AddVolunteer";
 import ViewCoreVolunteer from "../components/Volunteer/ViewCoreVolunteer";
 import ViewVolunteers from "../components/Volunteer/ViewVolunteers";
+import AddVol from "../components/Volunteer/Add";
 
 
 
@@ -121,6 +122,8 @@ export default () =>
         <PrivateRoute path="/addVolunteer" component={ AddVolunteer } type={4} />
         <PrivateRoute path="/viewCoreVolunteer" component={ ViewCoreVolunteer } type={4} />
         <PrivateRoute path="/viewVolunteers/:collegeId" component={ ViewVolunteers } type={4} />
+        <PrivateRoute path="/addVol" component={ AddVol } type={4} />
+        
       
         <NotFound path="/*" component={ NotFound } />
       </Router>

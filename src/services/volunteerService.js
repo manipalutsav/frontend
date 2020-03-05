@@ -7,7 +7,12 @@ export const create = async (payload) => {
   }
 
   export const createEventVolunteer = async (payload) => {
-    let response = await request(`/eventVolunteer/addEventVolunteer/`, "POST", payload);
+    let response = await request(`/eventVolunteer/addVolunteer/`, "POST", payload);
+    console.log(response);
+    return response;
+  }
+  export const createVol = async (payload) => {
+    let response = await request(`/volunteer/addVolunteer/`, "POST", payload);
     console.log(response);
     return response;
   }
@@ -23,7 +28,7 @@ export const create = async (payload) => {
     return response;
   }
   const getCollegeVolunteer = async (collegeId) => {
-    let response = await request(`/volunteer/get/${collegeId}`, "GET");
+    let response = await request(`/volunteer/getAllFromCollege/${collegeId}`, "GET");
     return response;
   }
 

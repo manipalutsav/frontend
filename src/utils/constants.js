@@ -7,7 +7,7 @@ const userTypes = {
 
 export const  servers={
   development:"http://localhost:3003",
-  testing:"https://staging.manipalutsav.com/",
+  testing:"https://staging.manipalutsav.com",
   production:"https://api.manipalutsav.com"
 }
 

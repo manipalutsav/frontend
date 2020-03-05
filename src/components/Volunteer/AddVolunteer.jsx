@@ -44,7 +44,7 @@ export default class AddVolunteer extends React.Component {
                     flexWrap: "wrap",
                 }}>
                     <br /><br /><br /><br />
-                    <Link to="/coreVolunteer" css={{
+                    <Link to="/addVol" css={{
                         ...styles.volunteerCard,
                         backgroundColor: "#ff5800",
                         color: "white",
