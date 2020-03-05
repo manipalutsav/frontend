@@ -1,7 +1,6 @@
 import React from "react";
 import { getUser } from "../../services/userServices";
 import { Link } from "gatsby";
-import { getVolunteer } from "../../services/volunteerService";
 
 const styles = {
     volunteerCard: {

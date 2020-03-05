@@ -177,7 +177,7 @@ class EventVolunteer extends React.Component {
 
                 <div>
                     <div>
-                        <Button onClick={this.handleClick} disabled={this.state.buttonText == this.ADDING_VOLUNTEER}>{this.state.buttonText}</Button>
+                        <Button onClick={this.handleClick} disabled={this.state.buttonText === this.ADDING_VOLUNTEER}>{this.state.buttonText}</Button>
                     </div>
                 </div>
             </div >

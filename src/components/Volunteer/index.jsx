@@ -19,7 +19,8 @@ const sizes = [
 class Volunteer extends React.Component {
     ADD_VOLUNTEER = "Add Volunteer";
     state = {
-        buttonText: this.ADD_VOLUNTEER
+        buttonText: this.ADD_VOLUNTEER,
+        count: 6
     };
 
     title = <div>
@@ -53,51 +54,45 @@ class Volunteer extends React.Component {
             <Button onClick={this.handleClick}>{this.state.buttonText}</Button>
         </div>
 
-    handleClick = () => {
-        if (!this.state.name1 || !this.state.regno1 || !this.state.size1) {
-            toast("Enter all details");
-        }
-        else {
-            this.setState({
-                buttonText: this.state.ADD_VOLUNTEER
-            }, async () => {
-                let response = await create({
-                    college: this.state.college,
-                    name1: this.state.name1,
-                    regno1: this.state.regno1,
-                    size1: this.state.size1,
-                    name2: this.state.name2,
-                    regno2: this.state.regno2,
-                    size2: this.state.size2,
-                    name3: this.state.name3,
-                    regno3: this.state.regno3,
-                    size3: this.state.size3,
-                    name4: this.state.name4,
-                    regno4: this.state.regno4,
-                    size4: this.state.size4,
-                    name5: this.state.name5,
-                    regno5: this.state.regno5,
-                    size5: this.state.size5,
-                    name6: this.state.name6,
-                    regno6: this.state.regno6,
-                    size6: this.state.size6,
-                    name7: this.state.name7,
-                    regno7: this.state.regno7,
-                    size7: this.state.size7,
-
-                });
-                this.setState({
-                    buttonText: this.ADD_VOLUNTEER,
+    handleClick = async () => {
+        try {
+            await this.setState({ buttonText: this.ADDING_VOLUNTEER });
+            const { count, college } = this.state;
+            if (!college)
+                throw Error("Please select the college.");
+            const list = [];
+            for (let i = 0; i < count; i++) {
+                if (!this.state[`name-${i}`])
+                    throw Error(`Please enter volunteer ${i + 1} name`)
+                if (!this.state[`regno-${i}`])
+                    throw Error(`Please enter volunteer ${i + 1} register number`)
+                if (!this.state[`shirtSize-${i}`])
+                    throw Error(`Please enter volunteer ${i + 1} shirt size`)
+                list.push({
+                    name: this.state[`name-${i}`],
+                    regno: this.state[`regno-${i}`],
+                    shirtSize: this.state[`shirtSize-${i}`]
                 })
-                toast(response.message);
-                return navigate("/")
+            }
+            let response = await create({
+                college,
+                list
             });
+            this.setState({
+                buttonText: this.ADD_VOLUNTEER,
+            })
+            toast(response.message);
+            return navigate("/")
         }
-
+        catch (err) {
+            toast(err.message)
+            this.setState({ buttonText: this.ADD_VOLUNTEER });
+        }
     }
 
 
     render() {
+        console.log(this.state)
         return (
             <div>
                 <div>
@@ -140,438 +135,87 @@ class Volunteer extends React.Component {
                         }}
                     />
                 </div>
-                {/* Volunteer 1 */}
                 <div>
-                    <h3>Volunteer 1</h3>
+                    <h3>No. of vounteers:&nbsp;
                     <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name1"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno1"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Select
-                        isSearchable={false}
-                        name="tshirt-size"
-                        placeholder="T Shirt Sizes"
-                        options={sizes}
-                        onChange={(e) => this.setState({ size1: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                            name="count"
+                            type="text"
+                            placeholder="Enter number of volunteers"
+                            required
+                            value={this.state.count}
+                            styles={{ width: 300 }}
+                            css={{
+                                float: "left",
+                            }} />
+                    </h3>
                 </div>
 
-                {/* Volunteer 2  */}
-                <div>
-                    <h3>Volunteer 2</h3>
+                {Array(Number(this.state.count)).fill(0).map((i, j) =>
+                    <div key={j}>
+                        <h3>Volunteer {j + 1}</h3>
+                        <Input
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                            name={`name-${j}`}
+                            type="text"
+                            placeholder="Name"
+                            required
+                            styles={{ width: 300 }}
+                            css={{
+                                float: "left",
+
+                            }}
+                        />&nbsp;
                     <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name2"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                            name={`regno-${j}`}
+                            type="text"
+                            placeholder="Registration Number"
+                            required
+                            styles={{ width: 300 }}
+                            css={{
+                                float: "left",
 
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno2"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
+                            }}
+                        />
+                        <Select
+                            isSearchable={false}
+                            name={`shirtSize-${j}`}
+                            placeholder="T Shirt Sizes"
+                            options={sizes}
+                            onChange={(e) => this.setState({ [`shirtSize-${j}`]: e.value })}
+                            styles={{
+                                control: (provided, state) => ({
+                                    ...provided,
+                                    marginBottom: 10,
+                                    border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                                    boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                                    ":hover": {
+                                        border: "1px solid #ff5800",
+                                        boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                                    },
+                                }),
+                                option: (provided, state) => ({
+                                    ...provided,
+                                    backgroundColor: state.isSelected ? "#ff5800" : "",
+                                    ":hover": {
+                                        backgroundColor: "#ffd100",
+                                        color: "black",
+                                    },
+                                }),
+                            }}
+                            css={{
+                                fontSize: "16px",
+                                width: 300,
+                            }}
+                        />
+                    </div>)
+                }
 
-                        }}
-                    />&nbsp;
-                    <Select
-                        isSearchable={false}
-                        name="tshirt-size"
-                        placeholder="T Shirt Sizes"
-                        options={sizes}
-                        onChange={(e) => this.setState({ size2: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
-                </div>
 
-                {/* Volunteer 3 */}
-                <div>
-                    <h3>Volunteer 1</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name3"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno3"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Select
-                        isSearchable={false}
-                        name="tshirt-size"
-                        placeholder="T Shirt Sizes"
-                        options={sizes}
-                        onChange={(e) => this.setState({ size3: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
-                </div>
-
-                {/* Volunteer 4 */}
-                <div>
-                    <h3>Volunteer 4</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name4"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno4"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Select
-                        isSearchable={false}
-                        name="tshirt-size"
-                        placeholder="T Shirt Sizes"
-                        options={sizes}
-                        onChange={(e) => this.setState({ size4: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
-                </div>
-                {/* Volunteer 5 */}
-                <div>
-                    <h3>Volunteer 5</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name5"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno5"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Select
-                        isSearchable={false}
-                        name="tshirt-size"
-                        placeholder="T Shirt Sizes"
-                        options={sizes}
-                        onChange={(e) => this.setState({ size5: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
-
-                </div>
-                &nbsp;&nbsp;
-                {/* Volunteer 6 */}
-                <div>
-                    <h3>Volunteer 6</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name6"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno6"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Select
-                        isSearchable={false}
-                        name="tshirt-size"
-                        placeholder="T Shirt Sizes"
-                        options={sizes}
-                        onChange={(e) => this.setState({ size6: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
-                </div>
-                {/* Volunteer 7 */}
-                <div>
-                    <h3>Volunteer 7</h3>
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="name7"
-                        type="text"
-                        placeholder="Name"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Input
-                        onChange={this.handleChange}
-                        autoComplete="off"
-                        name="regno7"
-                        type="text"
-                        placeholder="Registration Number"
-                        required
-                        styles={{ width: 300 }}
-                        css={{
-                            float: "left",
-
-                        }}
-                    />&nbsp;
-                    <Select
-                        isSearchable={false}
-                        name="tshirt-size"
-                        placeholder="T Shirt Sizes"
-                        options={sizes}
-                        onChange={(e) => this.setState({ size7: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
-                </div>
                 <div>
                     <div>
                         <Button onClick={this.handleClick}>{this.state.buttonText}</Button>

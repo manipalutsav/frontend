@@ -25,7 +25,7 @@ export default class ViewVolunteers extends Component {
     }
     render() {
         const volunteers = this.state.volunteers;
-        if (volunteers.length == 0)
+        if (volunteers.length === 0)
             return (<div>No Volunteers</div>)
 
         return (
