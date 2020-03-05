@@ -66,6 +66,8 @@ class Volunteer extends React.Component {
                     throw Error(`Please enter volunteer ${i + 1} name`)
                 if (!this.state[`regno-${i}`])
                     throw Error(`Please enter volunteer ${i + 1} regno`)
+                if(this.state[`size-${i}`] != "XS" && this.state[`size-${i}`] != "S" && this.state[`size-${i}`] != "M" && this.state[`size-${i}`] != "L" && this.state[`size-${i}`] != "XXL")
+                    throw Error(`Please enter proper size`)
 
                 list.push({
                     name: this.state[`name-${i}`],
@@ -179,13 +181,26 @@ class Volunteer extends React.Component {
                                 float: "left",
 
                             }}
+                        />&nbsp;
+                        <Input
+                            onChange={this.handleChange}
+                            autoComplete="off"
+                            name={`size-${j}`}
+                            type="text"
+                            placeholder="T Shirt Size (XS / S / M / L / XXL"
+                            required
+                            styles={{ width: 300 }}
+                            css={{
+                                float: "left",
+
+                            }}
                         />
-                        <Select
+                        {/* <Select
                             isSearchable={false}
                             name={`size-${j}`}
                             placeholder="T Shirt Sizes"
                             options={sizes}
-                            onChange={(e) => this.setState({ size1: e.value })}
+                            onChange={this.handleChange}
                             styles={{
                                 control: (provided, state) => ({
                                     ...provided,
@@ -210,7 +225,7 @@ class Volunteer extends React.Component {
                                 fontSize: "16px",
                                 width: 300,
                             }}
-                        />
+                        /> */}
                     </div>)
                 }
 
