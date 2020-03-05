@@ -2,7 +2,6 @@ import request from "../utils/request";
 
 export const addCoreVolunteer = async (payload) => {
   let response = await request(`/coreVolunteer/add`, "POST", payload);
-  console.log(response);
   return response;
 }
 
@@ -13,9 +12,14 @@ export const getCoreVolunteers = async () => {
 
 export const addEventVolunteer = async (payload) => {
   let response = await request(`/eventVolunteer/add`, "POST", payload);
-  console.log(response);
   return response;
 }
+
+export const getEventVolunteers = async () => {
+  let response = await request(`/eventVolunteer`);
+  return response;
+}
+
 
 // export const getVolunteer = async (payload) => {
 //   let response = await request(`/volunteer/get`, "GET", payload);

@@ -1,38 +1,38 @@
 import React from "react";
 import Select from "react-select";
-import { navigate } from "gatsby";
-import reducer from "../../reducers/commonReducer";
-import { addEventVolunteer } from "../../services/volunteerService";
+
+import { addEventVolunteer, getEventVolunteers } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
-import { getAll } from "../../services/collegeServices";
+import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 
+
 class EventVolunteer extends React.Component {
-    ADD_VOLUNTEER = "Add Volunteer";
-    ADDING_VOLUNTEER = "Adding...";
+    ADD_VOLUNTEER = "Add";
     state = {
         buttonText: this.ADD_VOLUNTEER,
-        count: 6
+        name: "",
+        registerNumber: "",
+        college: null,
+        volunteers: []
     };
 
-    title = <div>
-        <h2>Add Volunteer</h2>
-        <p>Add a new Event Volunteer to MUCAPP</p>
-    </div>
-
     componentWillMount() {
-        getAll();
+        this.getColleges();
+        this.getVolunteers();
+    }
 
-        reducer.subscribe(() => {
-            reducer.getState().then(state => {
-                this.setState({
-                    colleges: state.data.list.map(college => ({
-                        value: college.id,
-                        label: college.name + ", " + college.location,
-                    })),
-                });
-            });
-        });
+    getColleges = async () => {
+        let response = await getColleges();
+        if (response.status === 200) {
+            const colleges = response.data.map(college => ({
+                value: college.id,
+                label: college.name + ", " + college.location
+            }))
+            this.setState({ colleges })
+        }
+        else
+            toast("An error occured while fetching colleges");
     }
 
     handleChange = (e) => {
@@ -41,148 +41,154 @@ class EventVolunteer extends React.Component {
         });
     };
 
-    addVolunteerButton =
-        <div>
-            <Button onClick={this.handleClick}>{this.state.buttonText}</Button>
-        </div>
-
-    handleClick = async () => {
+    addVolunteer = async () => {
         try {
             await this.setState({ buttonText: this.ADDING_VOLUNTEER });
-            const { count, college } = this.state;
-            if (!college)
+            const { name, registerNumber, college } = this.state;
+            if (!name || name.length === 0)
+                throw Error("Please enter name.");
+            if (!registerNumber || registerNumber.length === 0)
+                throw Error("Please enter register number.");
+            if (!college || college.length === 0)
                 throw Error("Please select the college.");
-            const list = [];
-            for (let i = 0; i < count; i++) {
-                if (!this.state[`name-${i}`])
-                    throw Error(`Please enter volunteer ${i + 1} name`)
-                if (!this.state[`regno-${i}`])
-                    throw Error(`Please enter volunteer ${i + 1} regno`)
-
-                list.push({
-                    name: this.state[`name-${i}`],
-                    regno: this.state[`regno-${i}`]
-                })
-            }
             let response = await addEventVolunteer({
-                college,
-                list
+                name,
+                registerNumber,
+                college
             });
             this.setState({
                 buttonText: this.ADD_VOLUNTEER,
             })
             toast(response.message);
-            return navigate("/")
+            this.getVolunteers();
+            this.setState({ name: "", registerNumber: "" })
+
         }
         catch (err) {
             toast(err.message)
             this.setState({ buttonText: this.ADD_VOLUNTEER });
         }
-
     }
 
+    getVolunteers = async () => {
+        const response = await getEventVolunteers();
+        if (response.status === 200) {
+            const volunteers = response.data;
+            this.setState({ volunteers })
+        }
+        else
+            toast("Failed to fetch volunteers");
+    }
 
     render() {
-        console.log(this.state)
         return (
-            <div>
+            <div >
                 <div>
                     <div>
-                        <h2>Add Event Volunteer</h2>
-                        <p>Add a new Event Volunteer to MUCAPP</p>
+                        <h2>Event Volunteers</h2>
                     </div>
                 </div>
+                <div className="coreVolunteers">
+                    <table className="vtable">
+                        <thead>
+                            <tr>
+                                <th>Sl. No.</th>
+                                <th>Name</th>
+                                <th>Register Number</th>
+                                <th>College</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td />
+                                <td>
+                                    <Input
+                                        onChange={this.handleChange}
+                                        autoComplete="off"
+                                        name={`name`}
+                                        type="text"
+                                        value={this.state.name}
+                                        placeholder="Enter Name"
+                                        required
+                                        styles={{ width: 300 }}
+                                        css={{
+                                            float: "left",
 
-                <div>
-                    <Select
-                        isSearchable={false}
-                        name="college"
-                        placeholder="College"
-                        options={this.state.colleges}
-                        onChange={(e) => this.setState({ college: e.value })}
-                        styles={{
-                            control: (provided, state) => ({
-                                ...provided,
-                                marginBottom: 10,
-                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                                ":hover": {
-                                    border: "1px solid #ff5800",
-                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                                },
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "#ff5800" : "",
-                                ":hover": {
-                                    backgroundColor: "#ffd100",
-                                    color: "black",
-                                },
-                            }),
-                        }}
-                        css={{
-                            fontSize: "16px",
-                            width: 300,
-                        }}
-                    />
-                </div>
-                <div>
-                    <h3>No. of vounteers:&nbsp;
-                    <Input
-                            onChange={this.handleChange}
-                            autoComplete="off"
-                            name="count"
-                            type="text"
-                            placeholder="Enter number of volunteers"
-                            required
-                            value={this.state.count}
-                            styles={{ width: 300 }}
-                            css={{
-                                float: "left",
-                            }} />
-                    </h3>
-                </div>
-                {Array(Number(this.state.count)).fill(0).map((i, j) =>
-                    <div key={j}>
-                        <h3>Volunteer {j + 1}</h3>
-                        <Input
-                            onChange={this.handleChange}
-                            autoComplete="off"
-                            name={`name-${j}`}
-                            type="text"
-                            placeholder="Name"
-                            required
-                            styles={{ width: 300 }}
-                            css={{
-                                float: "left",
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    <Input
+                                        onChange={this.handleChange}
+                                        autoComplete="off"
+                                        name={`registerNumber`}
+                                        type="number"
+                                        placeholder="Enter Register Number"
+                                        value={this.state.registerNumber}
+                                        required
+                                        styles={{ width: 300 }}
+                                        css={{
+                                            float: "left",
 
-                            }}
-                        />&nbsp;
-                    <Input
-                            onChange={this.handleChange}
-                            autoComplete="off"
-                            name={`regno-${j}`}
-                            type="text"
-                            placeholder="Registration Number"
-                            required
-                            styles={{ width: 300 }}
-                            css={{
-                                float: "left",
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    <Select
+                                        isSearchable={false}
+                                        name="college"
+                                        placeholder="College"
+                                        options={this.state.colleges}
+                                        onChange={(e) => this.setState({ college: e.value })}
 
-                            }}
-                        />
-                    </div>)
-                }
-
-
-                <div>
-                    <div>
-                        <Button onClick={this.handleClick} disabled={this.state.buttonText === this.ADDING_VOLUNTEER}>{this.state.buttonText}</Button>
-                    </div>
+                                        styles={{
+                                            control: (provided, state) => ({
+                                                ...provided,
+                                                marginBottom: 10,
+                                                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                                                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                                                ":hover": {
+                                                    border: "1px solid #ff5800",
+                                                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                                                },
+                                            }),
+                                            option: (provided, state) => ({
+                                                ...provided,
+                                                backgroundColor: state.isSelected ? "#ff5800" : "",
+                                                ":hover": {
+                                                    backgroundColor: "#ffd100",
+                                                    color: "black",
+                                                },
+                                            }),
+                                        }}
+                                        css={{
+                                            fontSize: "16px",
+                                            width: 300,
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    <Button onClick={this.addVolunteer}>{this.state.buttonText}</Button>
+                                </td>
+                            </tr>
+                            {
+                                this.state.volunteers.map((volunteer, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{volunteer.name}</td>
+                                        <td>{volunteer.registerNumber}</td>
+                                        <td>{volunteer.college}</td>
+                                        <td></td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div >
         )
     }
 }
 
-export default EventVolunteer;
+export default EventVolunteer

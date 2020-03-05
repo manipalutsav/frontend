@@ -30,7 +30,6 @@ export default class AddVolunteer extends React.Component {
     }
     componentWillMount() {
         user = getUser();
-        console.log(user);
 
     }
     render() {
