@@ -6,7 +6,7 @@ import LBList from "../../commons/LBList";
 import Shuffle from "../../commons/Shuffle";
 
 export default class extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.slots = [];
@@ -31,10 +31,15 @@ export default class extends React.Component {
       this.setState({ event })
     );
 
-    eventsService.getSlots(this.props.event, this.props.round).then(slots =>
-      this.setState({ slotted: !!slots.length, slots }, () =>
-        this.setState({ loaded: true })
-      )
+    eventsService.getSlots2(this.props.event, this.props.round).then(slots => {
+      eventsService.getTeams(this.props.event).then(teams => {
+        //const registeredTeamsSlots = slots.filter(slot => teams.find(team => team.name === slot.teamName.replace(",", "")))
+        //console.log(registeredTeamsSlots);
+        this.setState({ slotted: !!slots.length, slots }, () =>
+          this.setState({ loaded: true })
+        )
+      });
+    }
     );
   }
 
@@ -84,14 +89,14 @@ export default class extends React.Component {
 
   render = () => (
     this.state.loaded
-    ? this.state.slotted
-      ? <div>
+      ? this.state.slotted
+        ? <div>
           <div css={{
             textAlign: "center",
             marginBottom: 30,
           }}>
             <h2>
-              { this.state.event.name } Round { this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1) } Slots
+              {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)} Slots
             </h2>
             {/* NOTE: Removed for precautionary measures. */}
             {/* <button onClick={ this.deleteSlots }>Reset Slots</button> */}
@@ -100,38 +105,38 @@ export default class extends React.Component {
             {
               this.state.slots.map((slot, i) =>
                 <LBList
-                  key={ i }
-                  position={ slot.number }
-                  title={ slot.team && slot.team.name }
+                  key={i}
+                  position={slot.number}
+                  title={slot.teamName}
                 />
               )
             }
           </div>
         </div>
-      : this.state.slotting
-        ? <div>
+        : this.state.slotting
+          ? <div>
             <div css={{
               textAlign: "center",
               marginBottom: 30,
             }}>
               <h2>
-                Slotting teams for { this.state.event.name } Round { this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1) }
+                Slotting teams for {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}
               </h2>
-              <button onClick={ this.deleteSlots }>Reset Slots</button>
+              <button onClick={this.deleteSlots}>Reset Slots</button>
             </div>
             <div>
               {
                 this.state.newSlots.map((slot, i) =>
                   <LBList
-                    
-                    key={ i }
-                    position={ slot.number }
+
+                    key={i}
+                    position={slot.number}
                     title={
                       <Scramble
                         autoStart
                         preScramble
                         speed="slow"
-                        text={ slot.teamName }
+                        text={slot.teamName}
                         steps={[
                           {
                             action: "-",
@@ -147,31 +152,31 @@ export default class extends React.Component {
             <div>
               {
                 this.state.slots.length !== this.slots.length && this.slots.length
-                ? <Shuffle />
-                : null
+                  ? <Shuffle />
+                  : null
               }
             </div>
           </div>
-        : <div css={{
+          : <div css={{
             height: "100%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}>
-            <h2>{ this.state.event.name }</h2>
+            <h2>{this.state.event.name}</h2>
             <div css={{ color: "rgba(0, 0, 0, .5)" }}>
-              Teams haven't been slotted for Round { this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1) }
+              Teams haven't been slotted for Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}
             </div>
             <p css={{ color: "green" }}>Generate slots now!</p>
-            <button onClick={ this.startSlotting }>
+            <button onClick={this.startSlotting}>
               {
                 this.state.slotting
-                ? "Slotting..."
-                : "Slot Teams"
+                  ? "Slotting..."
+                  : "Slot Teams"
               }
             </button>
           </div>
-    : <div>Please wait while we check for slots...</div>
+      : <div>Please wait while we check for slots...</div>
   );
 };

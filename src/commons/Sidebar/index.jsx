@@ -12,8 +12,8 @@ const SidebarSeparator = () => (
   </li>
 );
 
-const path=()=>{
-  if(typeof(window)=="undefined")
+const path = () => {
+  if (typeof (window) == "undefined")
     return "";
   else
     return window.location.pathname;
@@ -21,7 +21,7 @@ const path=()=>{
 
 const SidebarItem = (props) => (
   <li>
-    <Link to={ props.to } title={ props.title } css={{
+    <Link to={props.to} title={props.title} css={{
       display: "block",
       marginTop: 10,
       padding: 10,
@@ -35,13 +35,13 @@ const SidebarItem = (props) => (
         color: "#ff5800",
       },
     }}>
-      { props.title }
+      {props.title}
     </Link>
   </li>
 );
 
 const SidebarItems = () => (
-  <ul css = {{
+  <ul css={{
     display: "flex",
     flexDirection: "column",
     margin: 0,
@@ -57,13 +57,14 @@ const SidebarItems = () => (
     {/* <SidebarItem to="/leaderboard/public" title="Leaderboard" />
     <SidebarItem to="/certificates" title="Certificates" /> */}
     <SidebarSeparator />
+    <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li>
     <SidebarItem to="/users" title="Users" />
     <SidebarItem to="/colleges" title="Colleges" />
     <SidebarItem to="/events" title="Events" />
     {/* <SidebarItem to="/judges" title="Judges" />
     <SidebarItem to="/winners" title="Winners" />
     <SidebarItem to="/leaderboard" title="Leaderboard" /> */}
-    
+
     <SidebarSeparator />
     <li>
       <a href="/feedback" css={{
@@ -72,9 +73,9 @@ const SidebarItems = () => (
         padding: 10,
         paddingLeft: 50,
         fontSize: ".9em",
-        color:"#222"
+        color: "#222"
       }}>
-       Feedback
+        Feedback
       </a>
     </li>
     <SidebarItem to="/stats" title="Stats" />
@@ -86,14 +87,14 @@ export default class Sidebar extends Component {
     open: false
   };
 
-  componentDidMount(){
+  componentDidMount() {
     store.subscribe(() => {
-      this.setState({ open:store.getState() === "open" });
+      this.setState({ open: store.getState() === "open" });
     });
   }
 
   render = () => (
-    <div className="no-print" css = {{
+    <div className="no-print" css={{
       display: "block",
       height: "100vh",
       overflow: "hidden",
