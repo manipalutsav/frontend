@@ -70,7 +70,7 @@ class Volunteer extends React.Component {
                 list.push({
                     name: this.state[`name-${i}`],
                     regno: this.state[`regno-${i}`],
-                    size: this.state[`size-${i}`]
+                    shirtSize: this.state[`size-${i}`]
                 })
             }
             let response = await createVol({
