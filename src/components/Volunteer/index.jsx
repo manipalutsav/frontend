@@ -1,5 +1,4 @@
 import React from "react";
-import { getUser } from "../../services/userServices";
 import { Link } from "gatsby";
 
 const styles = {
