@@ -7,10 +7,12 @@ import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 
 const sizes = [
+    { value: 'XS', label: 'Extra Small' },
     { value: 'S', label: 'Small' },
     { value: 'M', label: 'Medium' },
     { value: 'L', label: 'Large' },
     { value: 'XL', label: 'Extra Large' },
+    { value: 'XXL', label: 'Extra Extra Large' },
 ];
 
 class CoreVolunteer extends React.Component {
