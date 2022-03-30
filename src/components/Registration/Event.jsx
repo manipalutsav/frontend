@@ -40,7 +40,7 @@ const TeamCard = ({ team }) => {
   }
 
   return (
-    <Link to={ "/register/" + team.event._id + "/teams/" + team.id } css={{
+    <Link to={"/register/" + team.event._id + "/teams/" + team.id} css={{
       ...styles.teamCard,
     }}>
       <div css={{
@@ -48,20 +48,20 @@ const TeamCard = ({ team }) => {
         justifyContent: "space-between",
         fontSize: "1.3em",
       }}>
-        <span>{ team.name }</span>
+        <span>{team.name}</span>
         <span css={{
           cursor: "pointer",
           ":hover": {
             color: "red",
           },
         }}>
-          <FiX onClick={ () => handleDelete(team) } />
+          <FiX onClick={() => handleDelete(team)} />
         </span>
       </div>
       <div css={{
         color: "rgba(0, 0, 0, .5)",
       }}>
-        { team.members.length } members
+        {team.members.length} members
       </div>
     </Link>
   )
@@ -89,7 +89,7 @@ export default class Events extends React.Component {
 
     let user = getUser();
     collegesService.getTeams(user.college).then(teams => {
-      teams = teams.filter(team => team.event._id === this.props.event );
+      teams = teams.filter(team => team.event._id === this.props.event);
       teams = teams.map(team => team);
 
       this.setState({ teams });
@@ -99,15 +99,15 @@ export default class Events extends React.Component {
   render = () => (
     <div>
       <div>
-        <h2>{ this.state.event.name } Registration</h2>
-        <p>Register teams for the { this.state.event.name } event in Utsav</p>
-        <p>You can register at most { this.state.event.maxTeamsPerCollege } teams for this event.</p>
+        <h2>{this.state.event.name} Registration</h2>
+        <p>Register teams for the {this.state.event.name} event in Utsav</p>
+        <p>You can register at most {this.state.event.maxTeamsPerCollege} teams for this event.</p>
         <p>Minimum participants: {this.state.event.minMembersPerTeam} </p>
         <p>Maximum participants: {this.state.event.maxMembersPerTeam} </p>
         {
           this.state.registrationStatus === false
-          ? <p css={{ textTransform: "uppercase", color: "red", }}>Registrations are now closed!</p>
-          : null
+            ? <p css={{ textTransform: "uppercase", color: "red", }}>Registrations are now closed!</p>
+            : null
         }
       </div>
       <div css={{
@@ -116,9 +116,9 @@ export default class Events extends React.Component {
       }}>
         {
           this.state.teams.length < this.state.event.maxTeamsPerCollege
-          ? this.state.registrationStatus === false
-            ? null
-            : <Link to={ "/register/" + this.props.event + "/teams" } css={{
+            ? this.state.registrationStatus === false
+              ? null
+              : <Link to={"/register/" + this.props.event + "/teams"} css={{
                 ...styles.teamCard,
                 backgroundColor: "#ff5800",
                 color: "white",
@@ -127,13 +127,13 @@ export default class Events extends React.Component {
                   boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
                 }
               }}>
-                Register Team { this.state.teams.length + 1 }
+                Register Team {this.state.teams.length + 1}
               </Link>
-          : null
+            : null
         }
-        { this.state.teams.map((team, i) => <TeamCard key={i} team={team} />) }
+        {this.state.teams.map((team, i) => <TeamCard key={i} team={team} />)}
       </div>
-      <Button styles={{marginTop: "10px"}} onClick={() => { navigate("/register")} }>Back</Button>
+      <Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register") }}>Back</Button>
     </div>
   );
 };

@@ -1,19 +1,19 @@
 import React from "react";
 import { Link } from "gatsby";
-import constants,{servers} from '../../utils/constants';
+import constants, { servers } from '../../utils/constants';
 
 
-const Contact = (props) => <a href={ "tel:+91" + props.number }>{ props.name } ({ props.number })</a>
+const Contact = (props) => <a href={"tel:+91" + props.number}>{props.name} ({props.number})</a>
 
 export default () => (
-  <footer className="no-print" css = {{
+  <footer className="no-print" css={{
     color: "white",
     backgroundColor: "black",
     padding: "50px 20px",
-    textAlign:"center"
+    textAlign: "center"
   }}>
     <div>
-      Copyright &copy; {(new Date().getFullYear())} - <Link to="/devs" css={{ color: "white" }}>Placeholder</Link>
+      Copyright &copy; {(new Date().getFullYear())} - MAHE
     </div>
     <br />
     <div>
@@ -23,7 +23,10 @@ export default () => (
       &ensp;or&ensp;
       <Contact name="Sambit" number="9986104763" />
     </div>
-    {constants.server===servers.testing?<p>Testing</p>:<></>}
-    {constants.server===servers.development?<p>Development</p>:<></>}
+    <div>
+      <Link to="/devs" css={{ color: "white" }}>🦄</Link>
+    </div>
+    {constants.server === servers.testing ? <p>Testing</p> : <></>}
+    {constants.server === servers.development ? <p>Development</p> : <></>}
   </footer>
 );

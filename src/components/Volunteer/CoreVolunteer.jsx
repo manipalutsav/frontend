@@ -229,7 +229,7 @@ class CoreVolunteer extends React.Component {
                                         <td>{volunteer.name}</td>
                                         <td>{volunteer.registerNumber}</td>
                                         <td>{volunteer.shirtSize}</td>
-                                        <td>{volunteer.college && volunteer.college.name || volunteer.college}</td>
+                                        <td>{volunteer.college ? (volunteer.college.name || volunteer.college) : ""}</td>
                                         <td></td>
                                     </tr>
                                 ))

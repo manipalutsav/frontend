@@ -101,18 +101,18 @@ export default class EditEvent extends React.Component {
     <div>
       <div>
         <h2>Edit Event</h2>
-        <p>Editing the event { this.state.event.name }.</p>
+        <p>Editing the event {this.state.event.name}.</p>
       </div>
 
       <div>
         <div>
           <div>Name</div>
           <input
-            onChange = { this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="name"
             type="text"
-            value={ this.state.event.name || "" }
+            value={this.state.event.name || ""}
             placeholder="Name"
             required
             css={{ width: 300 }}
@@ -122,12 +122,12 @@ export default class EditEvent extends React.Component {
         <div>
           <div>College</div>
           <Select
-            isSearchable={ false }
+            isSearchable={false}
             name="college"
-            value={ this.getCollege() || "" }
+            value={this.getCollege() || ""}
             placeholder="College"
-            options={ this.state.colleges }
-            onChange={ (e) => this.setState({ event: { ...this.state.event, college: e.value } }) }
+            options={this.state.colleges}
+            onChange={(e) => this.setState({ event: { ...this.state.event, college: e.value } })}
             styles={{
               control: (provided, state) => ({
                 ...provided,
@@ -148,9 +148,9 @@ export default class EditEvent extends React.Component {
                 },
               }),
             }}
-            css = {{
+            css={{
               fontSize: "16px",
-              display:'inline-block',
+              display: 'inline-block',
               width: 300,
             }}
           />
@@ -159,14 +159,14 @@ export default class EditEvent extends React.Component {
         <div>
           <div>Minimum Members Per Team</div>
           <input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="minMembersPerTeam"
             type="number"
             placeholder="Minimum Members Per Team"
             min="1"
             required
-            value={ this.state.event.minMembersPerTeam || 1 }
+            value={this.state.event.minMembersPerTeam || 1}
             css={{ width: 300 }}
           />
         </div>
@@ -174,14 +174,14 @@ export default class EditEvent extends React.Component {
         <div>
           <div>Maximum Members Per Team</div>
           <input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="maxMembersPerTeam"
             type="number"
             placeholder="Maximum Members Per Team"
             min="1"
             required
-            value={ this.state.event.maxMembersPerTeam || 1 }
+            value={this.state.event.maxMembersPerTeam || 1}
             css={{ width: 300 }}
           />
         </div>
@@ -189,14 +189,14 @@ export default class EditEvent extends React.Component {
         <div>
           <div>Maximum Teams Per College</div>
           <input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="maxTeamsPerCollege"
             type="number"
             placeholder="Maximum Teams Per Team"
             min="1"
             required
-            value={ this.state.event.maxTeamsPerCollege || 1 }
+            value={this.state.event.maxTeamsPerCollege || 1}
             css={{ width: 300 }}
           />
         </div>
@@ -204,7 +204,7 @@ export default class EditEvent extends React.Component {
         <div>
           <div>Venue</div>
           <Select
-            isSearchable={ false }
+            isSearchable={false}
             name="venue"
             placeholder="Venue"
             value={{ label: this.state.event.venue || "", value: this.state.event.venue || "" }}
@@ -215,9 +215,9 @@ export default class EditEvent extends React.Component {
               { label: "MMMC, Manipal", value: "MMMC, Manipal" },
               { label: "KMC Greens, Main Stage", value: "KMC Greens, Main Stage" },
               { label: "KMC Greens, STEPS", value: "KMC Greens, STEPS" },
-              { label: "WGSHA Kitchen",value: "WGSHA, Kitchen" }
+              { label: "WGSHA Kitchen", value: "WGSHA, Kitchen" }
             ]}
-            onChange={ (e) => this.setState({ event: { ...this.state.event, venue: e.value } }) }
+            onChange={(e) => this.setState({ event: { ...this.state.event, venue: e.value } })}
             styles={{
               control: (provided, state) => ({
                 ...provided,
@@ -238,10 +238,10 @@ export default class EditEvent extends React.Component {
                 },
               }),
             }}
-            css = {{
+            css={{
               fontSize: "16px",
               width: 300,
-              display:'inline-block'
+              display: 'inline-block'
             }}
           />
         </div>
@@ -249,27 +249,27 @@ export default class EditEvent extends React.Component {
         <div>
           <div>Description</div>
           <textarea
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="description"
             type="text"
             placeholder="Description"
             css={{ width: 300, height: 200, maxWidth: "100%", }}
-            value={ this.state.event.description || "" }
+            value={this.state.event.description || ""}
           />
         </div>
 
         <div>
           <div>Duration per team (minutes)</div>
           <input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="duration"
             type="number"
             placeholder="Duration"
             min="1"
             required
-            value={ this.state.event.duration || 0 }
+            value={this.state.event.duration || 0}
             css={{ width: 300 }}
           />
         </div>
@@ -280,8 +280,8 @@ export default class EditEvent extends React.Component {
             autoComplete="off"
             name="startDate"
             type="datetime-local"
-            value={ (this.state.event.startDate && this.state.event.startDate.split("Z")[0]) || "" }
-            onChange={ this.handleChange }
+            value={(this.state.event.startDate && this.state.event.startDate.split("Z")[0]) || ""}
+            onChange={this.handleChange}
           />
         </div>
 
@@ -291,15 +291,15 @@ export default class EditEvent extends React.Component {
             autoComplete="off"
             name="endDate"
             type="datetime-local"
-            value={ (this.state.event.endDate && this.state.event.endDate.split("Z")[0]) || "" }
-            onChange={ this.handleChange }
+            value={(this.state.event.endDate && this.state.event.endDate.split("Z")[0]) || ""}
+            onChange={this.handleChange}
           />
         </div>
 
         <div>
           <div>For</div>
           <Select
-            isSearchable={ false }
+            isSearchable={false}
             name="faculty"
             value={{
               label: this.state.event.faculty ? "Faculty" : "Student",
@@ -310,7 +310,7 @@ export default class EditEvent extends React.Component {
               { label: 'Students', value: false },
               { label: 'Faculty', value: true },
             ]}
-            onChange={ (e) => this.setState({ event: { ...this.state.event, faculty: e.value } }) }
+            onChange={(e) => this.setState({ event: { ...this.state.event, faculty: e.value } })}
             styles={{
               control: (provided, state) => ({
                 ...provided,
@@ -331,20 +331,20 @@ export default class EditEvent extends React.Component {
                 },
               }),
             }}
-            css = {{
+            css={{
               fontSize: "16px",
               width: 300,
-              display:'inline-block'
+              display: 'inline-block'
             }}
           />
         </div>
 
         <div>
           <Button
-            onClick={ this.handleClick }
-            disabled={ this.state.buttonText === this.UPDATING }
+            onClick={this.handleClick}
+            disabled={this.state.buttonText === this.UPDATING}
           >
-            { this.state.buttonText }
+            {this.state.buttonText}
           </Button>
         </div>
       </div>

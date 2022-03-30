@@ -1,5 +1,5 @@
 import React from "react";
-import { navigate,Link } from "gatsby";
+import { navigate, Link } from "gatsby";
 
 import { getUser, logout } from "../../services/userServices";
 import usersService from "../../services/users";
@@ -43,7 +43,7 @@ export default class Profile extends React.Component {
       changePassword: !this.state.changePassword,
     });
 
-    if(this.state["password:new"]!==this.state["password:new:confirm"]){
+    if (this.state["password:new"] !== this.state["password:new:confirm"]) {
       return toast("Confirm pasword does not match");
     }
 
@@ -66,50 +66,50 @@ export default class Profile extends React.Component {
     }
   }
 
-   componentWillMount() {
-     this.getUser();
-    
+  componentWillMount() {
+    this.getUser();
+
   }
 
-  getUser=async()=>{
+  getUser = async () => {
     let user = await usersService.get2(this.props.user);
-    this.setState(user,this.getCollege);
+    this.setState(user, this.getCollege);
   }
 
-   getCollege=async ()=>{
-     if(!this.state.college)
+  getCollege = async () => {
+    if (!this.state.college)
       return;
     let response = await collegeService.getCollege(this.state.college);
-    if(!response)
+    if (!response)
       return;
     this.setState({
-      collegeName: response.name+", "+response.location
+      collegeName: response.name + ", " + response.location
     })
-    }
+  }
 
   render() {
-    let {name,email,collegeName,type}=this.state;
-    
-    
+    let { name, email, collegeName, type } = this.state;
+
+
     return (
       <div css={{
         marginTop: 50,
         textAlign: "center",
       }}>
         <div>
-          <img src={ avatar } alt="Avatar" height="200" width="200" />
+          <img src={avatar} alt="Avatar" height="200" width="200" />
         </div>
         <div>
-          <h1>{ name || "..." }</h1>
-          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{ email || "..." }</p>
-          <p css={{ color: "truergba(0, 0, 0, .5)" }}>{ type ? constants.getUserType(type) : "..." }</p>
-          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{ collegeName }</p>
+          <h1>{name || "..."}</h1>
+          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{email || "..."}</p>
+          <p css={{ color: "truergba(0, 0, 0, .5)" }}>{type ? constants.getUserType(type) : "..."}</p>
+          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{collegeName}</p>
         </div>
         <div>
-          {getUser().type&&getUser().type===1? <Link to={`users/${this.props.user}/edit`}><button css={{ margin: 5, }}>Edit</button></Link>:''}
+          {getUser().type && getUser().type === 1 ? <Link to={`/users/${this.props.user}/edit`}><button css={{ margin: 5, }}>Edit</button></Link> : ''}
           <Link to="/users"><button css={{ margin: 5, }}>Go Back</button></Link>
         </div>
-       
+
       </div>
     );
   }

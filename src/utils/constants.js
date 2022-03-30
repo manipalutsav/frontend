@@ -8,6 +8,7 @@ const userTypes = {
 export const servers = {
   development: "http://localhost:3003",
   testing: "https://staging.manipalutsav.com",
+  prodIP: "http://54.89.249.180:3003",
   production: "https://api.manipalutsav.com"
 }
 
@@ -42,5 +43,5 @@ export default {
     light: "#f5f5f5",
     white: "#ffffff",
   },
-  server: servers.production,
+  server: servers.prodIP,
 };
