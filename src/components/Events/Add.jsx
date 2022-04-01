@@ -13,7 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default class AddEvent extends React.Component {
 
-  types = (function() {
+  types = (function () {
     let options = [];
 
     for (let userType in constants.USER_TYPES) {
@@ -27,73 +27,73 @@ export default class AddEvent extends React.Component {
 
     return options;
   }());
-  ADD="Add Event";
-  ADDING="Adding Event...";
+  ADD = "Add Event";
+  ADDING = "Adding Event...";
   state = {
-    buttonText:this.ADD,
-    minMembersPerTeam:1,
-    maxMembersPerTeam:1,
-    maxTeamsPerCollege:1
+    buttonText: this.ADD,
+    minMembersPerTeam: 1,
+    maxMembersPerTeam: 1,
+    maxTeamsPerCollege: 1
   };
 
   handleChange = (e) => {
-    
-    this.setState({ [e.name]: e.value },()=>{
-      
+
+    this.setState({ [e.name]: e.value }, () => {
+
     });
   };
 
   handleClick = () => {
-    if(!this.state.name)
+    if (!this.state.name)
       return toast("Please enter name");
-    if(!this.state.college)
+    if (!this.state.college)
       return toast("Please enter college");
-    if(!this.state.minMembersPerTeam)
+    if (!this.state.minMembersPerTeam)
       return toast("Please enter minimum members per team");
-    if(!this.state.maxMembersPerTeam)
+    if (!this.state.maxMembersPerTeam)
       return toast("Please enter maximum members per team");
-    if(!this.state.maxTeamsPerCollege)
+    if (!this.state.maxTeamsPerCollege)
       return toast("Please enter maximum teams per college");
-    
+
     this.setState({
-      buttonText:this.ADDING
-    },async ()=>{
+      buttonText: this.ADDING
+    }, async () => {
       let response = await create({
-        name:this.state.name,
-        college:this.state.college,
-        minMembersPerTeam:this.state.minMembersPerTeam,
-        maxMembersPerTeam:this.state.maxMembersPerTeam,
-        maxTeamsPerCollege:this.state.maxMembersPerCollege,
-        venue:this.state.venue,
-        description:this.state.description,
-        duration:this.state.duration,
-        startDate:new Date(this.state.startDate),
-        endDate:new Date(this.state.endDate),
-        for:this.state.for,
-        criteria:[this.state.criteria1,this.state.criteria2,this.state.criteria3,this.state.criteria4],
-        slottable:true
+        name: this.state.name,
+        college: this.state.college,
+        minMembersPerTeam: this.state.minMembersPerTeam,
+        maxMembersPerTeam: this.state.maxMembersPerTeam,
+        maxTeamsPerCollege: this.state.maxTeamsPerCollege,
+        venue: this.state.venue,
+        description: this.state.description,
+        duration: this.state.duration,
+        startDate: new Date(this.state.startDate),
+        endDate: new Date(this.state.endDate),
+        faculty: this.state.faculty,
+        criteria: [this.state.criteria1, this.state.criteria2, this.state.criteria3, this.state.criteria4],
+        slottable: true
       });
-      if(!response)
+      if (!response)
         toast("Some error occured");
-      else if(response.status===200){
+      else if (response.status === 200) {
         this.UNSUB();
         return navigate("/events");
       }
       else
         toast(response.message);
-      this.setState({buttonText:this.ADD})
+      this.setState({ buttonText: this.ADD })
 
 
     })
-   
 
-   
+
+
   };
 
   componentWillMount() {
     getAll();
 
-    this.UNSUB=reducer.subscribe(() => {
+    this.UNSUB = reducer.subscribe(() => {
       reducer.getState().then(state => {
         this.setState({
           colleges: state.data.list.map(college => ({
@@ -113,7 +113,7 @@ export default class AddEvent extends React.Component {
         <div>
           <label htmlFor="name">Name: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="name"
             id="name"
@@ -125,14 +125,14 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-        <label htmlFor="college">College: </label>
+          <label htmlFor="college">College: </label>
           <Select
             isSearchable={false}
             name="college"
             id="college"
             placeholder="College"
-            options={ this.state.colleges }
-            onChange={ (e) => this.setState({ college: e.value }) }
+            options={this.state.colleges}
+            onChange={(e) => this.setState({ college: e.value })}
             styles={{
               control: (provided, state) => ({
                 ...provided,
@@ -153,17 +153,17 @@ export default class AddEvent extends React.Component {
                 },
               }),
             }}
-            css = {{
+            css={{
               fontSize: "16px",
-              display:'inline-block',
+              display: 'inline-block',
               width: 300,
             }}
           />
         </div>
         <div>
-        <label htmlFor="minMembersPerTeam">Minimum Members Per Team: </label>
+          <label htmlFor="minMembersPerTeam">Minimum Members Per Team: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="minMembersPerTeam"
             id="minMembersPerTeam"
@@ -176,9 +176,9 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-        <label htmlFor="maxMembersPerTeam">Maximum Members Per Team: </label>
+          <label htmlFor="maxMembersPerTeam">Maximum Members Per Team: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="maxMembersPerTeam"
             id="maxMembersPerTeam"
@@ -190,9 +190,9 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-        <label htmlFor="maxTeamsPerCollege">Maximum Teams Per College: </label>
+          <label htmlFor="maxTeamsPerCollege">Maximum Teams Per College: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="maxTeamsPerCollege"
             id="maxTeamsPerCollege"
@@ -203,22 +203,22 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-        <label htmlFor="venue">Venue: </label>
-         <Select
+          <label htmlFor="venue">Venue: </label>
+          <Select
             isSearchable={false}
             name="venue"
             id="venue"
             placeholder="Venue"
-            options={ [
-              {label:'Dr. TMA Pai Hall, 2nd Floor',value:'Dr. TMA Pai Hall, 2nd Floor'},
-              {label:'Dr. TMA Pai Hall, 3rd Floor',value:'Dr. TMA Pai Hall, 3rd Floor'},
-              {label:'Counselling Hall, manipal.edu',value:'Counselling Hall, manipal.edu'},
-              {label:'MMMC, Manipal',value:'MMMC, Manipal'},
-              {label:'KMC Greens, Main Stage',value:'KMC Greens, Main Stage'},
-              {label:'KMC Greens, STEPS',value:'KMC Greens, STEPS'},
-              {label:'WGSHA Kitchen',value:'WGSHA, Kitchen'}
-              ] }
-            onChange={ (e) => this.setState({ venue: e.value }) }
+            options={[
+              { label: 'Dr. TMA Pai Hall, 2nd Floor', value: 'Dr. TMA Pai Hall, 2nd Floor' },
+              { label: 'Dr. TMA Pai Hall, 3rd Floor', value: 'Dr. TMA Pai Hall, 3rd Floor' },
+              { label: 'Counselling Hall, manipal.edu', value: 'Counselling Hall, manipal.edu' },
+              { label: 'MMMC, Manipal', value: 'MMMC, Manipal' },
+              { label: 'KMC Greens, Main Stage', value: 'KMC Greens, Main Stage' },
+              { label: 'KMC Greens, STEPS', value: 'KMC Greens, STEPS' },
+              { label: 'WGSHA Kitchen', value: 'WGSHA, Kitchen' }
+            ]}
+            onChange={(e) => this.setState({ venue: e.value })}
             styles={{
               control: (provided, state) => ({
                 ...provided,
@@ -239,68 +239,68 @@ export default class AddEvent extends React.Component {
                 },
               }),
             }}
-            css = {{
+            css={{
               fontSize: "16px",
               width: 300,
-              display:'inline-block'
+              display: 'inline-block'
             }}
           />
         </div>
         <div>
-        <label htmlFor="description">Description: </label>
+          <label htmlFor="description">Description: </label>
           <TextArea
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="description"
             id="description"
             type="text"
             placeholder="Description"
-            styles={{ maxWidth: 300,minWidth:300 }}
+            styles={{ maxWidth: 300, minWidth: 300 }}
           />
         </div>
         <div>
-        <label htmlFor="duration">Duration in minutes: </label>
+          <label htmlFor="duration">Duration in minutes: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="duration"
             id="duration"
             type="number"
             placeholder="Duration in minutes"
-            styles={{ width: 300 ,verticalAlign:"top"}}
+            styles={{ width: 300, verticalAlign: "top" }}
           />
         </div>
         <div>
-        <label htmlFor="startDate">Start Date: </label>
-          <Input 
-            type="datetime-local" 
-            name="startDate" 
-            id="startDate" 
+          <label htmlFor="startDate">Start Date: </label>
+          <Input
+            type="datetime-local"
+            name="startDate"
+            id="startDate"
             value={this.state.startDate}
             onChange={this.handleChange}
-            />
-        
+          />
+
         </div>
-      
+
         <div>
-        <label htmlFor="endDate">End Date: </label>
-        <Input 
-            type="datetime-local" 
-            name="endDate" 
-            id="endDate" 
+          <label htmlFor="endDate">End Date: </label>
+          <Input
+            type="datetime-local"
+            name="endDate"
+            id="endDate"
             value={this.state.endDate}
             onChange={this.handleChange}
-            />
+          />
         </div>
         <div>
-        <label htmlFor="type">For: </label>
+          <label htmlFor="type">For: </label>
           <Select
             isSearchable={false}
             name="type"
             id="type"
             placeholder="For"
-            options={ [{label:'Students',value:'students'},{span:'Faculty',value:'faculty'}] }
-            onChange={ (e) => this.setState({ type: e.value }) }
+            options={[{ label: 'Students', value: false }, { label: 'Faculty', value: true }]}
+            onChange={(e) => this.setState({ faculty: e.value })}
             styles={{
               control: (provided, state) => ({
                 ...provided,
@@ -321,18 +321,18 @@ export default class AddEvent extends React.Component {
                 },
               }),
             }}
-            css = {{
+            css={{
               fontSize: "16px",
               width: 300,
-              display:'inline-block'
+              display: 'inline-block'
             }}
           />
         </div>
-        
+
         <div>
-        <label htmlFor="criteria1">Criteria 1: </label>
+          <label htmlFor="criteria1">Criteria 1: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria1"
             id="criteria1"
@@ -341,9 +341,9 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-        <label htmlFor="criteria2">Criteria 2: </label>
+          <label htmlFor="criteria2">Criteria 2: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria2"
             id="criteria2"
@@ -352,9 +352,9 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-        <label htmlFor="criteria3">Criteria 3: </label>
+          <label htmlFor="criteria3">Criteria 3: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria3"
             id="criteria3"
@@ -363,9 +363,9 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-        <label htmlFor="criteria4">Criteria 4: </label>
+          <label htmlFor="criteria4">Criteria 4: </label>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria4"
             id="criteria4"
@@ -374,7 +374,7 @@ export default class AddEvent extends React.Component {
           />
         </div>
         <div>
-          <Button onClick={ this.handleClick } disabled={this.state.buttonText===this.ADDING}>{this.state.buttonText}</Button>
+          <Button onClick={this.handleClick} disabled={this.state.buttonText === this.ADDING}>{this.state.buttonText}</Button>
         </div>
       </div>
     </div>

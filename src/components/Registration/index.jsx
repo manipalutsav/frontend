@@ -12,7 +12,7 @@ const EventCard = ({ event }) => {
   let registrationStatus = event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents;
 
   return (
-    <Link to={"/register/" + event.id } css={{
+    <Link to={"/register/" + event.id} css={{
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
@@ -35,13 +35,14 @@ const EventCard = ({ event }) => {
           fontSize: "1.3em",
           marginBottom: "8px"
         }}>
-          { event.name }
+          {event.name}
         </div>
+        {event.faculty ? <div><span css={{ fontSize: "0.6em", background: "#ff5800", color: "white", padding: 5, marginBottom: 5, display: "inline-block", borderRadius: 10 }}>For Faculty</span></div> : ""}
         <div css={{
           fontSize: "0.8em",
           color: "rgba(0, 0, 0, .7)",
         }}>
-          Organized by { event.college.name }
+          Organized by {event.college.name}
         </div>
         <div css={{
           fontSize: "0.7em",
@@ -58,14 +59,14 @@ const EventCard = ({ event }) => {
           overflowY: "auto",
           whiteSpace: "pre-wrap"
         }}>
-          { event.description && event.description.replace(/[>]/g,'- ') }
+          {event.description && event.description.replace(/[>]/g, '- ')}
         </div>
       </div>
       <div css={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        marginTop:10,
+        marginTop: 10,
       }}>
         <div css={{
           color: "red",
@@ -76,10 +77,10 @@ const EventCard = ({ event }) => {
         <div>
           {
             registrationStatus === false
-            ? <span css={{fontSize: "0.9em"}}>Registrations closed</span>
-            : event.registeredCount !== event.maxTeamsPerCollege
-              ? <Button>Register</Button>
-              : <span css={{fontSize: "0.9em"}}>Slots full for college</span>
+              ? <span css={{ fontSize: "0.9em" }}>Registrations closed</span>
+              : event.registeredCount !== event.maxTeamsPerCollege
+                ? <Button>Register</Button>
+                : <span css={{ fontSize: "0.9em" }}>Slots full for college</span>
           }
         </div>
       </div>
@@ -120,7 +121,7 @@ export default class Events extends React.Component {
           registeredCount: teams.filter(team => team.event._id === event.id).length,
           faculty: event.faculty,
         }));
-        events.sort((a,b) => {
+        events.sort((a, b) => {
           return new Date(a.startDate) - new Date(b.startDate);
         });
 
@@ -142,8 +143,8 @@ export default class Events extends React.Component {
       }}>
         {
           this.state.loading
-          ? <Loader />
-          : this.state.events.map((event, i) => <EventCard key={i} event={event} />)
+            ? <Loader />
+            : this.state.events.map((event, i) => <EventCard key={i} event={event} />)
         }
       </div>
     </div>
