@@ -10,8 +10,8 @@ const RoundCard = (props) => (
       padding: 20,
       borderRadius: "4px",
       // border: "2px solid #efefef",
-      minWidth:"100px",
-      maxWidth:"400px",
+      minWidth: "100px",
+      maxWidth: "400px",
       display: "inline-block",
       boxShadow: "0px 5px 12px -5px rgba(0, 0, 0, .1)",
     }}
@@ -22,28 +22,29 @@ const RoundCard = (props) => (
       marginBottom: 20,
       fontSize: "1.2em",
     }}>
-      <span>{ props.title }</span>
+      <span>{props.title}</span>
       <span css={{
         cursor: "pointer",
         ":hover": {
           color: "red",
         },
       }}>
-        <FiX onClick={ () => props.onClick(props.roundId) } />
+        <FiX onClick={() => props.onClick(props.roundId)} />
       </span>
     </div>
 
-      {/* TODO: enable tag later on*/}
-      {/*<Tag styles={{
+    {/* TODO: enable tag later on*/}
+    {/*<Tag styles={{
               float: "right",
               margin: 16,
             }} type={props.type}/>*/}
     <div>
-      <Button onClick={ event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/edit`) }} styles={{color:"black", backgroundColor : "#f5f5f5", width: "100%"}}  color="#f5f5f5" >Edit Round</Button>
-      <Button onClick={ event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/slot`) }} styles={{marginTop: "16px",color:"black", backgroundColor : "#f5f5f5", width: "100%"}}  color="#f5f5f5" >View Slots</Button>
-      <Button onClick={ event => { navigate(`/judge/${props.eventId}/rounds/${props.roundId}`); }} styles={{marginTop: "16px", width: "100%"}} value="Start Round" >Start Round</Button>
-      <Button onClick={ event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/bias`); }} styles={{marginTop: "16px", width: "100%"}} >Bias</Button>
-      <Button onClick={ event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/leaderboard`); }} styles={{marginTop: "16px", width: "100%"}} value="Start Round" >View Leaderboard</Button>
+      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/edit`) }} styles={{ color: "black", backgroundColor: "#f5f5f5", width: "100%" }} color="#f5f5f5" >Edit Round</Button>
+      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/slot`) }} styles={{ marginTop: "16px", color: "black", backgroundColor: "#f5f5f5", width: "100%" }} color="#f5f5f5" >View Slots</Button>
+      <Button onClick={event => { navigate(`/judge/${props.eventId}/rounds/${props.roundId}`); }} styles={{ marginTop: "16px", width: "100%" }} value="Start Round" >Start Round</Button>
+      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/bias`); }} styles={{ marginTop: "16px", width: "100%" }} >Bias</Button>
+      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/scoresheet`); }} styles={{ marginTop: "16px", width: "100%" }} value="View Scoresheet" >View Scoresheet</Button>
+      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/leaderboard`); }} styles={{ marginTop: "16px", width: "100%" }} value="Start Round" >View Leaderboard</Button>
     </div>
   </div>
 );
@@ -67,13 +68,13 @@ const CriteriaCard = (props) => (
     >{props.title} </div>
 
     <div
-    css={{
-      padding: "16px",
-    }}
+      css={{
+        padding: "16px",
+      }}
     >
       <Input
         value={props.value}
-        name = {props.name}
+        name={props.name}
         type="number"
         onChange={props.onChange}
         placeholder="Enter points here"

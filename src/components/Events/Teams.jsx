@@ -28,7 +28,7 @@ const TeamCard = (props) => (
   <Link to={`/events/${props.team.event}/teams/${props.team.college}/${props.team.id}`} css={{
     ...styles.teamCard,
   }}>
-    <div>{props.team.college.name} 1 {props.team.name}</div>
+    <div>{props.team.college.name} {props.team.name}</div>
     <div css={{
       fontSize: ".7em",
       color: "grey",

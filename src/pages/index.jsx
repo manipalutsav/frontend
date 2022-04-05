@@ -35,6 +35,7 @@ import Slots from "../components/Slots";
 import PublicSlotsEvents from "../components/PublicSlots";
 import PublicSlots from "../components/PublicSlots/Slots";
 import Judge from "../components/Judges/StartJudging";
+import ViewJudgeSheet from "../components/Judges/ViewJudgeSheet";
 import RoundLeaderboard from '../components/Rounds/Leaderboard';
 import Bias from '../components/Rounds/Bias';
 import Download from '../components/Rounds/Download';
@@ -57,6 +58,7 @@ import EventVolunteer from "../components/Volunteer/EventVolunteer";
 
 import Layout from "../layouts/app";
 import EditRound from "../components/Rounds/Edit";
+import AddVolunteer from "../components/Volunteer";
 
 if (typeof (document) != 'undefined')
   document.title = "MUCAPP";
@@ -82,28 +84,29 @@ export default () =>
       <PrivateRoute path="/events/add" component={AddEvent} type={1} />
       <PrivateRoute path="/events/:event" component={Event} type={2} />
       <PrivateRoute path="/events/:event/edit" component={EditEvent} type={1} />
-      <PrivateRoute path="/events/:event/teams" component={EventTeams} type={1} />
-      <PrivateRoute path="/events/:event/teams/:college/:team" component={EventParticipants} type={1} />
+      <PrivateRoute path="/events/:event/teams" component={EventTeams} type={2} />
+      <PrivateRoute path="/events/:event/teams/:college/:team" component={EventParticipants} type={2} />
       <PrivateRoute path="/events/:event/rounds" exact component={Rounds} type={2} />
       <PrivateRoute path="/events/:event/rounds/add" exact component={AddRound} type={1} />
-      <PrivateRoute path="/events/:event/rounds/:round/slot" exact component={Slots} type={1} />
+      <PrivateRoute path="/events/:event/rounds/:round/slot" exact component={Slots} type={2} />
       <PrivateRoute path="/events/:event/rounds/:round/edit" exact component={EditRound} type={1} />
-      <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={1} />
-      <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={1} />
-      <PrivateRoute path="/events/:event/rounds/:round/leaderboard/download" exact component={Download} type={1} />
+      <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={2} />
+      <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={2} />
+      <PrivateRoute path="/events/:event/rounds/:round/leaderboard/download" exact component={Download} type={2} />
 
-      <PrivateRoute path="/colleges" component={Colleges} type={1} />
+      <PrivateRoute path="/colleges" component={Colleges} type={2} />
       <PrivateRoute path="/colleges/add" component={AddCollege} type={1} />
-      <PrivateRoute path="/colleges/:college/teams" component={Teams} type={1} />
+      <PrivateRoute path="/colleges/:college/teams" component={Teams} type={2} />
       <PrivateRoute path="/colleges/:college/teams/:team/members" component={Members} type={1} />
 
-      <PrivateRoute path="/judges" component={Judges} type={1} />
-      <PrivateRoute path="/judges/add" component={AddJudge} type={1} />
+      <PrivateRoute path="/judges" component={Judges} type={2} />
+      <PrivateRoute path="/judges/add" component={AddJudge} type={2} />
       <PrivateRoute path="/judge/:event/rounds/:round" exact component={Judge} type={2} />
+      <PrivateRoute path="/events/:event/rounds/:round/scoresheet" exact component={ViewJudgeSheet} type={2} />
 
-      <PrivateRoute path="/winners" component={Winners} type={1} />
+      <PrivateRoute path="/winners" component={Winners} type={2} />
 
-      <PrivateRoute path="/leaderboard" component={Leaderboard} type={1} />
+      <PrivateRoute path="/leaderboard" component={Leaderboard} type={2} />
       <PrivateRoute path="/leaderboard/public" component={PublicLeaderboard} type={4} />
 
       <PrivateRoute path="/teams" component={CollegeTeams} type={4} />
@@ -120,8 +123,8 @@ export default () =>
       <PrivateRoute path="/volunteers" component={Volunteer} type={4} />
       <PrivateRoute path="/volunteers/core" component={CoreVolunteer} type={4} />
       <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={4} />
-      {/* <PrivateRoute path="/addVolunteer" component={AddVolunteer} type={4} />
-      <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
+      <PrivateRoute path="/addVolunteer" component={AddVolunteer} type={4} />
+      {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
 
       <NotFound path="/*" component={NotFound} />

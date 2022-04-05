@@ -41,20 +41,20 @@ const Judge = (props) => {
         display: "flex",
         justifyContent: "space-between",
       }}>
-        <span>{ props.info.name }</span>
+        <span>{props.info.name}</span>
         <span css={{
           cursor: "pointer",
           ":hover": {
             color: "red",
           },
         }}>
-          <FiX onClick={ () => handleDelete(props.info) } />
+          <FiX onClick={() => handleDelete(props.info)} />
         </span>
       </div>
       <div css={{
         fontSize: ".7em",
         color: "grey",
-      }}>{ "Judged " + props.info.rounds.length + " round" + (props.info.rounds.length === 1 ? "" : "s") }</div>
+      }}>{"Judged " + props.info.rounds.length + " round" + (props.info.rounds.length === 1 ? "" : "s")}</div>
     </div>
   )
 };
@@ -77,10 +77,10 @@ const JudgesList = (props) => (
     </Link>
     {
       props.judges
-      ? props.judges.map((judge, i) => (
+        ? props.judges.map((judge, i) => (
           <Judge info={judge} key={i} />
         ))
-      : null
+        : null
     }
   </div>
 );
@@ -94,14 +94,14 @@ export default class Judges extends React.Component {
   componentWillMount() {
     getAll();
 
-    this.unsubscribe=reducer.subscribe(() => {
+    this.unsubscribe = reducer.subscribe(() => {
       reducer.getState().then(state => {
         this.setState({ judges: state.data.list, loading: false });
       });
     });
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.unsubscribe();
   }
 
@@ -109,11 +109,11 @@ export default class Judges extends React.Component {
     <div>
       <h2>Judges</h2>
       <div>
-      {
-        this.state.loading
-        ? <Loader />
-        : <JudgesList judges={ this.state.judges } />
-      }
+        {
+          this.state.loading
+            ? <Loader />
+            : <JudgesList judges={this.state.judges} />
+        }
       </div>
     </div>
   );

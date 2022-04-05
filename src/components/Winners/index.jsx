@@ -25,29 +25,29 @@ const styles = {
 
 const Member = (props) => (
   <div css={styles.teamCard}>
-    <div>{ props.name }</div>
+    <div>{props.name}</div>
     <div css={{
       fontSize: "0.8em",
       color: "#ff5800",
-    }}>{ props.team }</div>
+    }}>{props.team}</div>
   </div>
 );
 
 const College = (props) => (
   <div>
-    <h2>{ props.info.name + ", " + props.info.location }</h2>
+    <h2>{props.info.name + ", " + props.info.location}</h2>
     <div>
       {
         props.winners && props.winners.map((winner) => (
           <div>
-            <h3>{ winner.team && winner.team.event.name } - { winner.rank + (winner.rank === 1 ? "st" : winner.rank === 2 ? "nd" : winner.rank === 3 ? "rd" : "th") } Prize</h3>
+            <h3>{winner.team && winner.team.event.name} - {winner.rank + (winner.rank === 1 ? "st" : winner.rank === 2 ? "nd" : winner.rank === 3 ? "rd" : "th")} Prize</h3>
             <div>
               {
                 winner && winner.team && winner.team.members.map((member, i) => (
                   <Member
-                    key={ i }
-                    name={ member.name }
-                    team={ winner.team.name.match(/Team ./i)[0] }
+                    key={i}
+                    name={member.name}
+                    team={winner.team.name.match(/Team ./i)[0]}
                   />
                 ))
               }
@@ -63,14 +63,14 @@ const CollegeList = (props) => (
   <div>
     {
       props.colleges
-      ? props.colleges.map((college, i) => (
+        ? props.colleges.map((college, i) => (
           <College
-            key={ i }
-            info={ college }
-            winners={ props.winners && props.winners.filter(winner => winner.team.college._id === college.id) }
+            key={i}
+            info={college}
+            winners={props.winners && props.winners.filter(winner => winner.team.college && winner.team.college._id === college.id)}
           />
         ))
-      : null
+        : null
     }
   </div>
 );
@@ -84,7 +84,7 @@ export default class Colleges extends React.Component {
   componentWillMount() {
     leaderboardService.getWinners().then(winners => {
       collegesService.getAll().then(colleges => {
-        let winningColleges = winners.map(winner => winner.team.college._id);
+        let winningColleges = winners.map(winner => winner.team.college && winner.team.college._id);
         colleges = colleges.filter(college => winningColleges.includes(college.id));
         this.setState({ colleges, winners });
       });
@@ -98,10 +98,10 @@ export default class Colleges extends React.Component {
       <div>
         {
           this.state.winners.length
-          ? <CollegeList
-              colleges={ this.state.colleges } winners={ this.state.winners }
+            ? <CollegeList
+              colleges={this.state.colleges} winners={this.state.winners}
             />
-          : <Loader/>
+            : <Loader />
         }
       </div>
     </div>
