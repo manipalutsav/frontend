@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "gatsby";
 
-import { getTeams2} from "../../services/eventService";
+import { getTeams2 } from "../../services/eventService";
 import Loader from "../../commons/Loader";
 
 
@@ -28,12 +28,12 @@ const TeamCard = (props) => (
   <Link to={`/events/${props.team.event}/teams/${props.team.college}/${props.team.id}`} css={{
     ...styles.teamCard,
   }}>
-    <div>{ props.team.name }</div>
+    <div>{props.team.college.name} 1 {props.team.name}</div>
     <div css={{
       fontSize: ".7em",
       color: "grey",
     }}>
-      { props.team.members + " member" + (props.team.members === 1 ? "" : "s") }
+      {props.team.members + " member" + (props.team.members === 1 ? "" : "s")}
     </div>
   </Link>
 );
@@ -42,32 +42,32 @@ export default class Teams extends React.Component {
   state = {
     colleges: [],
     teams: {},
-    loaded:false
+    loaded: false
   };
 
-  async componentWillMount () {
+  async componentWillMount() {
     let teams = await getTeams2(this.props.event);
-    teams=teams.map(team=>({
-      name:team.name,
-      id:team.id,
-      event:team.event,
-      college:team.college,
-      members:team.members.length
+    teams = teams.map(team => ({
+      name: team.name,
+      id: team.id,
+      event: team.event,
+      college: team.college,
+      members: team.members.length
     }));
-    
-    this.setState({teams,loaded:true});
-      /*
-      let sortedTeams = {};
-      let colleges = Array.from(new Set(teams.map(team => team.event.name)));
-      for (let event of events) {
-        sortedTeams[event] = teams.filter(team => team.event.name === event);
-      }
 
-      this.setState({
-        events,
-        teams: sortedTeams,
-      });*/
-    
+    this.setState({ teams, loaded: true });
+    /*
+    let sortedTeams = {};
+    let colleges = Array.from(new Set(teams.map(team => team.event.name)));
+    for (let event of events) {
+      sortedTeams[event] = teams.filter(team => team.event.name === event);
+    }
+
+    this.setState({
+      events,
+      teams: sortedTeams,
+    });*/
+
   }
 
   render = () => {
@@ -77,15 +77,15 @@ export default class Teams extends React.Component {
           <h2>Teams</h2>
         </div>
         <div>
-          {this.state.loaded?<>
-            {this.state.teams.length?<>
+          {this.state.loaded ? <>
+            {this.state.teams.length ? <>
               {
-                this.state.teams.map((team,key)=>
-                  <TeamCard key={key} team={team}/>
+                this.state.teams.map((team, key) =>
+                  <TeamCard key={key} team={team} />
                 )
               }
-            </>:"No teams have registered yet."}
-          </>:<Loader/>}
+            </> : "No teams have registered yet."}
+          </> : <Loader />}
         </div>
       </div>
     );
