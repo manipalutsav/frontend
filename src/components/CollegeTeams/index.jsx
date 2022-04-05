@@ -3,6 +3,7 @@ import { Link } from "gatsby";
 
 import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
+import LoadContent from "../../commons/LoadContent";
 
 const styles = {
   memberCard: {
@@ -40,7 +41,7 @@ const MemberCard = ({ member, team }) => (
     <div css={{
       color: "#ff5800",
     }}>
-      {team.slice(-7).substring(0, 6)}
+      {team.name}
     </div>
   </Link>
 );
@@ -48,14 +49,16 @@ const MemberCard = ({ member, team }) => (
 export default class Teams extends React.Component {
   state = {
     college: {},
+    collegeLoading: true,
     events: [],
     teams: {},
+    teamsLoading: true
   };
 
   componentWillMount() {
     let user = getUser();
 
-    collegesService.get(user.college).then(college => this.setState({ college }));
+    collegesService.get(user.college).then(college => this.setState({ college, collegeLoading: false }));
 
     collegesService.getTeams(user.college).then(teams => {
       let sortedTeams = {};
@@ -75,18 +78,20 @@ export default class Teams extends React.Component {
         this.setState({
           events,
           teams: sortedTeams,
+          teamsLoading: false
         });
       });
     });
   }
 
   render = () => {
+    console.log(this.state)
     return (
-      <div>
+      <LoadContent loading={this.state.collegeLoading}>
         <div>
           <h2>{this.state.college ? (this.state.college.name + " " + this.state.college.location) : ""} Teams</h2>
         </div>
-        <div>
+        <LoadContent loading={this.state.teamsLoading}>
           {
             this.state.events.length
               ? this.state.events.map((event, i) => (
@@ -99,7 +104,7 @@ export default class Teams extends React.Component {
                     {
                       this.state.teams[event].map((team) =>
                         team.members.map((member, i) => (
-                          <MemberCard key={i} member={member} team={team.name} />
+                          <MemberCard key={i} member={member} team={team} />
                         ))
                       )
                     }
@@ -110,8 +115,8 @@ export default class Teams extends React.Component {
                 No teams have been registered yet.
               </div>
           }
-        </div>
-      </div>
+        </LoadContent>
+      </LoadContent>
     );
   }
 };
