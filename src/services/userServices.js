@@ -21,9 +21,11 @@ export const isLoggedIn = () => {
 };
 
 const authorize = async (partialUser) => {
-  let response = await request("/users/login", "POST", partialUser);
-
-  return response;
+  try {
+    return await request("/users/login", "POST", partialUser);
+  } catch (e) {
+    return { status: 0, message: "Failure to authenticate" }
+  }
 };
 
 export const login = async (partialUser) => {
@@ -47,7 +49,7 @@ export const getAll = async () => {
       src: 'users',
     });
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     send([]);
   }
@@ -56,24 +58,24 @@ export const getAll = async () => {
 export const get = async (id) => {
   let response = await request(`/users/${id}`);
 
-  if(response.status && response.status === 200) {
+  if (response.status && response.status === 200) {
     send({
       list: response.data,
       src: 'users',
     });
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
- }
+}
 
 export const create = async (payload) => {
   let response = await request(`/users`, "POST", payload);
   return response;
 }
 
-export const updateUser = async (user,payload) => {
+export const updateUser = async (user, payload) => {
   let response = await request(`/users/${user}`, "POST", payload);
   return response;
 }
@@ -87,7 +89,7 @@ export const update = async (payload) => {
       src: 'users',
     });
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
