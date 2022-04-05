@@ -38,17 +38,25 @@ export default class extends React.Component {
     colleges = colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
     await this.setState({ colleges });
     let set = [];
+
+    //loop each event
     for (let i = 0; i < events.length; i++) {
       let event = events[i];
       if (event.faculty)
         continue;
 
       await this.setState({ status: "Fetching  " + event.name + " leaderboard..." });
-      let leaderboard = await leaderboardService.getRound(event.id, event.rounds[0]);
-      leaderboard = leaderboard.filter(team => !team.disqualified).sort((a, b) => b.points - a.points);
-      let rankingPoints = Array.from(new Set(leaderboard.map(team => team.points)));
-      leaderboard.forEach(team => {
 
+      //Fetch rounds leaderboard
+      //!IMPORTANT: Currently considering we have only one round, need to improve code.
+      let leaderboard = await leaderboardService.getRound(event.id, event.rounds[0]);
+      //sort round leaderboard
+      leaderboard = leaderboard.filter(team => !team.disqualified).sort((a, b) => b.points - a.points);
+      //Convert to set
+      let rankingPoints = Array.from(new Set(leaderboard.map(team => team.points)));
+
+      //Get rank
+      leaderboard.forEach(team => {
         // #TODO, two teams of same college winning in one event.
         let rank = rankingPoints.indexOf(team.points);
         if (rank < 3) {
@@ -59,16 +67,19 @@ export default class extends React.Component {
           });
         }
       });
+
       this.setState({ set })
     }
+
     let total = {};
     colleges.forEach(college => {
       total[college.id] = this.getTotal(college);
     })
     this.setState({ status: "Done", showButton: true, total });
   }
+
   getPoints(event, college) {
-    let teams = this.state.set.filter(team => team.college === college.id && team.event === event.id);
+    let teams = this.state.set.filter(team => team.college._id === college.id && team.event === event.id);
     let points = 0;
     teams.forEach(team => {
       if (event.maxMembersPerTeam > 1) {
@@ -95,10 +106,13 @@ export default class extends React.Component {
       return '';
   }
   getTotal(college) {
-    let teams = this.state.set.filter(team => team.college === college.id);
+
+    let teams = this.state.set.filter(team => team.college._id === college.id);
+    console.log({ college })
     let points = 0;
     teams.forEach(team => {
       let event = this.state.events.find(event => event.id === team.event);
+      console.log({ event })
       if (event.maxMembersPerTeam > 1) {
         switch (team.rank) {
           case 1: points += 14; break;
@@ -125,6 +139,9 @@ export default class extends React.Component {
   sortByName() {
     let colleges = this.state.colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
     this.setState({ colleges });
+  }
+  componentDidUpdate() {
+    console.log(this.state)
   }
   render = () => (
     <Layout>
