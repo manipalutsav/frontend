@@ -4,6 +4,7 @@ import Scramble from "react-scramble";
 import eventsService from "../../services/events";
 import LBList from "../../commons/LBList";
 import Shuffle from "../../commons/Shuffle";
+import { getTeamName, setSlotCollege } from "../../utils/common";
 
 export default class extends React.Component {
   constructor(props) {
@@ -20,6 +21,9 @@ export default class extends React.Component {
       loaded: false,
       event: {},
       slots: [],
+      teams: [],
+      visibleSlots: [],
+      showOnlyRegistered: true,
       newSlots: [],
       slotting: false,
       slotted: false,
@@ -33,15 +37,23 @@ export default class extends React.Component {
 
     eventsService.getSlots2(this.props.event, this.props.round).then(slots => {
       eventsService.getTeams(this.props.event).then(teams => {
-        //const registeredTeamsSlots = slots.filter(slot => teams.find(team => team.name === slot.teamName.replace(",", "")))
-        //console.log(registeredTeamsSlots);
-        this.setState({ slotted: !!slots.length, slots }, () =>
-          this.setState({ loaded: true })
-        )
+        slots.forEach(setSlotCollege);
+        this.setState({ slotted: !!slots.length, slots, visibleSlots: slots, teams, loaded: true }, () => {
+          this.filterVisibleSlots();
+        })
       });
-    }
-    );
+    });
 
+  }
+
+  filterVisibleSlots = () => {
+    console.log(this.state)
+    if (this.state.showOnlyRegistered) {
+      this.setState({ visibleSlots: this.state.slots.filter(slot => this.state.teams.find(team => team.name === slot.teamName && team.college.name === slot.college.name && team.college.location === slot.college.location)) });
+    }
+    else {
+      this.setState({ visibleSlots: this.state.slots })
+    }
   }
 
   animate(slots) {
@@ -100,16 +112,18 @@ export default class extends React.Component {
             <h2>
               {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)} Slots
             </h2>
-            {/* NOTE: Removed for precautionary measures. */}
-            {/* <button onClick={ this.deleteSlots }>Reset Slots</button> */}
+            <button onClick={this.deleteSlots}>Reset Slots</button>
+          </div>
+          <div css={{ textAlign: "center" }}>
+            <input type="checkbox" id="slotsFilter" defaultChecked={this.state.showOnlyRegistered} onChange={(e) => { this.setState({ showOnlyRegistered: e.target.checked }, this.filterVisibleSlots); }} /> <label htmlFor="slotsFilter">Show only registered teams</label>
           </div>
           <div>
             {
-              this.state.slots.map((slot, i) =>
+              this.state.visibleSlots.map((slot, i) =>
                 <LBList
                   key={i}
                   position={slot.number}
-                  title={slot.teamName}
+                  title={getTeamName(slot)}
                 />
               )
             }
@@ -125,7 +139,9 @@ export default class extends React.Component {
                 Slotting teams for {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}
               </h2>
               <button onClick={this.deleteSlots}>Reset Slots</button>
+
             </div>
+
             <div>
               {
                 this.state.newSlots.map((slot, i) =>
@@ -138,7 +154,7 @@ export default class extends React.Component {
                         autoStart
                         preScramble
                         speed="slow"
-                        text={slot.teamName}
+                        text={getTeamName(slot)}
                         steps={[
                           {
                             action: "-",
