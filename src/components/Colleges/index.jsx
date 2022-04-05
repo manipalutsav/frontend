@@ -2,9 +2,11 @@ import React from "react";
 import { Link } from "gatsby";
 
 import collegesService from "../../services/colleges";
-import reducer from "../../reducers/commonReducer";
-import { getAll } from "../../services/collegeServices";
-import Loader from "../../commons/Loader";
+import LoadContent from "../../commons/LoadContent";
+import { toast } from "../../actions/toastActions";
+import Block from "../../commons/Block";
+import { toUnitText } from "../../utils/common";
+import Loop from "../../commons/Loop";
 
 const styles = {
   collegeCard: {
@@ -26,25 +28,21 @@ const styles = {
 };
 
 const College = (props) => (
-  <Link to={ "/colleges/" + props.info.id + "/teams" } css={{
-    // link on click
+  <Link to={"/colleges/" + props.college.id + "/teams"} css={{
     ...styles.collegeCard,
   }}>
-    <div>{ props.info.name }</div>
+    <div>{props.college.name}</div>
     <div css={{
       fontSize: ".9em",
       color: "grey",
-    }}>{ props.info.location }</div>
+    }}>{props.college.location}</div>
     <div css={{
       fontSize: "0.8em",
       color: "#ff5800",
     }}>
-      {
-        props.stats.teams
-        ? props.stats.teams + " team" + (props.stats.teams === 1 ? "" : "s")
-          + " in " + props.stats.events.length + " event" + (props.stats.events.length === 1 ? "" : "s")
-        : "no registrations yet"
-      }
+      {console.log(props)}
+      <Block show={props.college.teams}>{toUnitText(props.college.teams && props.college.teams.length, "Team")}</Block>
+      <Block show={props.college.events}>{toUnitText(props.college.events && props.college.events.size, "Event")}</Block>
     </div>
   </Link>
 );
@@ -65,18 +63,8 @@ const CollegeList = (props) => (
     }}>
       Add College
     </Link>
-    {/* Colleges rendered */}
-    {
-      props.colleges
-      ? props.colleges.map((college, i) => (
-          <College
-            key={ i }
-            info={ college }
-            stats={ props.stats[college.id] || { teams: 0, events: [], } }
-          />
-        ))
-      : null
-    }
+
+    <Loop name="college" items={props.colleges} component={College} />
   </div>
 );
 
@@ -90,62 +78,48 @@ export default class Colleges extends React.Component {
   };
 
   componentWillMount() {
-    collegesService.getTeams().then(teams => {
-      let collegeCounts = {};
-
-      for (let team of teams) {
-        if (collegeCounts.hasOwnProperty(team.college)) {
-          collegeCounts[team.college].teams++;
-          collegeCounts[team.college].events.push(team.event);
-          collegeCounts[team.college].events = Array.from(new Set(collegeCounts[team.college].events));
-        } else {
-          collegeCounts[team.college] = {
-            teams: 1,
-            events: [ team.event ],
-          };
-        }
-      }
-
-
-      let collegeTeams = {};
-
-      for (let team of teams) {
-        if (collegeTeams.hasOwnProperty(team.college)) collegeTeams[team.college]++;
-        else collegeTeams[team.college] = 0;
-      }
-
-      this.setState({
-        teams: collegeTeams,
-        stats: collegeCounts,
-      });
-    });
-
-    getAll();
-
-    this.unsubscribe=reducer.subscribe(() => {
-      reducer.getState().then(state => {
-        this.setState({ colleges: state.data.list, loading: false });
-      });
-    });
+    this.init();
   }
-  componentWillUnmount(){
-    this.unsubscribe();
+
+  async init() {
+    try {
+      const colleges = await collegesService.getAll();
+      this.setState({ colleges, loading: false });
+
+      const teams = await collegesService.getTeams();
+
+      teams.forEach(team => {
+
+        let college = this.state.colleges.find(college => college.id === team.college);
+        if (!college.teams)
+          college.teams = [team];
+        else
+          college.teams.push(team);
+
+        if (!college.events)
+          college.events = new Set();
+        college.events.add(team.event);
+      });
+
+      this.forceUpdate();
+
+    } catch (e) {
+      toast("Failed to fetch colleges")
+    }
   }
+
+  componentDidUpdate() {
+    console.log(this.state);
+  }
+
 
   render = () => (
     <div>
       <h2>Colleges</h2>
       <p>Colleges participating in Utsav.</p>
-      <div>
-        {
-          this.state.loading
-          ? <Loader/>
-          : <CollegeList
-              colleges={ this.state.colleges } stats={ this.state.stats }
-              // college list rendered
-            />
-        }
-      </div>
+      <LoadContent loading={this.state.loading}>
+        <CollegeList colleges={this.state.colleges} stats={this.state.stats} />
+      </LoadContent>
     </div>
   );
 };
