@@ -47,7 +47,6 @@ export default class extends React.Component {
   }
 
   filterVisibleSlots = () => {
-    console.log(this.state)
     if (this.state.showOnlyRegistered) {
       this.setState({ visibleSlots: this.state.slots.filter(slot => this.state.teams.find(team => team.name === slot.teamName && team.college.name === slot.college.name && team.college.location === slot.college.location)) });
     }

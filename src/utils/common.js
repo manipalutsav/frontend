@@ -33,7 +33,7 @@ export const setSlotCollege = (slot) => {
             slot.teamName = slot.teamName.substring(start, end);
         }
         else {
-            return { teamName: slot.teamName }
+            slot.college = { id: "", name: "", location: "" }
         }
     }
 

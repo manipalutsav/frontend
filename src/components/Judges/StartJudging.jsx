@@ -22,10 +22,9 @@ export default class Judge extends Component {
       judge: null,
       slots: [],
       selection: null,
-
+      submitted: false,
       judgeSelected: false,
       criteria: [],
-
       ...JSON.parse(localStorage.getItem("scoresheet:" + this.props.round)) || {}
     };
   }
@@ -157,8 +156,22 @@ export default class Judge extends Component {
 
     events.createScores(this.props.event, this.props.round, scores).then(res => {
       if (res) {
-        localStorage.removeItem("scoresheet:" + this.props.round);
-        navigate("/events/" + this.props.event + "/rounds");
+        //verify the scores are saved to the server.
+        events.getScores(this.props.event, this.props.round, scores).then(res2 => {
+          if (res2[0].judges.find(judge => judge.id === this.state.judge)) {
+            localStorage.removeItem("scoresheet:" + this.props.round);
+            navigate("/events/" + this.props.event + "/rounds");
+          }
+          else {
+            typeof window !== "undefined"
+              && window.confirm("CRITICAL: Failed to update judge scores on the server, keep a backup from side menu and contact help.");
+          }
+        });
+
+      }
+      else {
+        typeof window !== "undefined"
+          && window.confirm("CRITICAL: Failed to update judge scores on the server, keep a backup from side menu and contact help.");
       }
     })
   };
