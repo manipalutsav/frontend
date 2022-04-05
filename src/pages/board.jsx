@@ -67,17 +67,14 @@ export default class extends React.Component {
           });
         }
       });
-
       this.setState({ set })
     }
-
     let total = {};
     colleges.forEach(college => {
       total[college.id] = this.getTotal(college);
     })
     this.setState({ status: "Done", showButton: true, total });
   }
-
   getPoints(event, college) {
     let teams = this.state.set.filter(team => team.college._id === college.id && team.event === event.id);
     let points = 0;
@@ -106,13 +103,10 @@ export default class extends React.Component {
       return '';
   }
   getTotal(college) {
-
     let teams = this.state.set.filter(team => team.college._id === college.id);
-    console.log({ college })
     let points = 0;
     teams.forEach(team => {
       let event = this.state.events.find(event => event.id === team.event);
-      console.log({ event })
       if (event.maxMembersPerTeam > 1) {
         switch (team.rank) {
           case 1: points += 14; break;
@@ -139,9 +133,6 @@ export default class extends React.Component {
   sortByName() {
     let colleges = this.state.colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
     this.setState({ colleges });
-  }
-  componentDidUpdate() {
-    console.log(this.state)
   }
   render = () => (
     <Layout>
