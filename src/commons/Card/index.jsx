@@ -78,6 +78,7 @@ const CriteriaCard = (props) => (
         type="number"
         onChange={props.onChange}
         placeholder="Enter points here"
+        disabled={props.disabled}
         styles={{
           width: "100%",
           textAlign: "center",

@@ -65,8 +65,8 @@ const createScores = async (eventID, roundID, scores) => {
   }
 };
 
-const getScores = async (eventID, roundID, scores) => {
-  let response = await request("/events/" + eventID + "/rounds/" + roundID + "/scores", "GET", scores);
+const getScores = async (eventID, roundID) => {
+  let response = await request("/events/" + eventID + "/rounds/" + roundID + "/scores", "GET");
 
   if (response && response.status === 200) {
     return response.data;

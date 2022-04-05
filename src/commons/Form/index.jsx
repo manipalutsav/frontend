@@ -9,6 +9,7 @@ const Input = (props) => (
     min={props.min}
     max={props.max}
     value={props.value}
+    readOnly={props.disabled}
     placeholder={props.placeholder}
     css={{
       ...props.styles,

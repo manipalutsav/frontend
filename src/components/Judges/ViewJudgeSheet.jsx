@@ -21,22 +21,53 @@ export default class ViewJudgeSheet extends Component {
       judgeOptions: [],
       judge: null,
       slots: [],
-      selection: null,
+      selection: 0,
+      scores: [],
 
       judgeSelected: false,
       criteria: [],
 
-      ...JSON.parse(localStorage.getItem("scoresheet:" + this.props.round)) || {}
     };
   }
 
   componentWillMount = () => {
 
+    this.init();
 
-    judges.getAll().then(judges => this.setState({
-      judgeOptions: judges.map(judge => ({ value: judge.id, label: judge.name }))
-    }));
   };
+
+  init = async () => {
+    try {
+      let judgesList = await judges.getAll();
+
+      let scores = await events.getScores(this.props.event, this.props.round);
+      this.setState({
+        judgeOptions: judgesList.filter(i => scores[0].judges.find(judge => judge.id == i.id)).map(judge => ({ value: judge.id, label: judge.name })),
+      })
+
+      let slots = await events.getSlots2(this.props.event, this.props.round);
+      events.get(this.props.event).then(event => {
+        this.setState({ event });
+      });
+
+      events.getRound(this.props.event, this.props.round).then(round => {
+        this.setState({ round, criteria: round.criteria });
+      });
+
+      slots.forEach(slot => {
+        let score = scores.find(score => score.team == slot.id)
+        slot.judges = score.judges;
+      })
+
+      this.setState({
+        slots,
+        selection: slots[0].number
+      })
+    } catch (e) {
+      toast("Failed to load scoresheet: " + e);
+      console.log(e);
+    }
+  }
 
   handleJudgeChange = (id) => {
     this.setState({
@@ -46,74 +77,12 @@ export default class ViewJudgeSheet extends Component {
 
   selectJudge = async () => {
     if (this.state.judge) {
-      events.getSlots2(this.props.event, this.props.round).then(slots => {
-        slots.map(team => team.points = []);
-        this.setState({
-          slots,
-          selection: slots[0] && slots[0].number
-        });
-      });
-
-      events.get(this.props.event).then(event => {
-        this.setState({ event });
-      });
-
-      events.getRound(this.props.event, this.props.round).then(round => {
-        this.setState({ round, criteria: round.criteria });
-      });
-
       this.setState({
         judgeSelected: true
       })
     }
   };
 
-  handelCritriaChange = async (event) => {
-    let { name, value } = event;
-
-    if (value < 0 || value > 10) {
-      return toast("Score cannot be above 10 or below 0");
-    }
-
-
-    let teams = this.state.slots;
-
-    if (!teams[this.getSlotIndex(this.state.selection)].points.length) teams[this.getSlotIndex(this.state.selection)].points = new Array(this.state.criteria.length).fill(null);
-
-    // teams[this.getSlotIndex(this.state.selection)].points[name] = parseFloat(parseFloat(value).toFixed(1));
-    teams[this.getSlotIndex(this.state.selection)].points[name] = value.includes(".") && !value.endsWith(".5") ? value.split(".")[1] > 7 ? (parseInt(value.split(".")[0]) + 1) : value.split(".")[0] + (value.split(".")[1] < 3 ? "" : ".5") : value; // Yeah, tell me about it!
-
-    let total = 0;
-
-    for (let score of this.state.slots[this.getSlotIndex(this.state.selection)].points) {
-      if (score) total += parseFloat(parseFloat(score).toFixed(1));
-    }
-
-    teams[this.getSlotIndex(this.state.selection)].total = total;
-
-    await this.setState({
-      slots: teams
-    }, () => {
-      let finished = true;
-      this.state.slots.forEach(slot => {
-        if (slot.points.length === 0) {
-          finished = false;
-          return;
-        }
-        slot.points.forEach(point => {
-
-          if (point === "" || point === null) {
-            finished = false;
-          }
-        })
-      })
-
-      this.setState({
-        submitVisible: finished
-      });
-      localStorage.setItem("scoresheet:" + this.props.round, JSON.stringify(this.state));
-    })
-  };
 
   changeTeam = (team) => {
     this.setState({
@@ -128,56 +97,12 @@ export default class ViewJudgeSheet extends Component {
       index++;
     }
   }
-  handleNoteChange = async (event) => {
-
-    let index = event.target.name;
-    let slots = this.state.slots;
-    slots[this.getSlotIndex(Number(index))].notes = event.target.value
-
-    await this.setState({
-      slots
-    });
-    localStorage.setItem("scoresheet:" + this.props.round, JSON.stringify(this.state));
-
-  }
-  submitScore = () => {
-    let surity = typeof window !== "undefined"
-      && window.confirm("Are you sure you want to submit the scores?\nOnce submitted, scores can't be edited.");
-
-    if (!surity) {
-      return;
+  getJudgeIndex = () => {
+    let index = 0;
+    for (let judge of this.state.slots[0].judges) {
+      if (this.state.judge === judge.id) return index;
+      index++;
     }
-
-    let scores = this.state.slots.map(slot => ({
-      judges: [{
-        id: this.state.judge,
-        points: slot.points
-      }],
-      team: slot.id,
-      round: slot.round,
-    }));
-
-    events.createScores(this.props.event, this.props.round, scores).then(res => {
-      if (res) {
-        localStorage.removeItem("scoresheet:" + this.props.round);
-        navigate("/events/" + this.props.event + "/rounds");
-      }
-    })
-  };
-
-  cancelJudging = () => {
-    let surity = typeof window !== "undefined"
-      && window.confirm("Are you sure you want to cancel juding? All your progress will be deleted!");
-
-    if (!surity) {
-      return;
-    }
-    localStorage.removeItem("scoresheet:" + this.props.round);
-    navigate("/events/" + this.props.event + "/rounds");
-  }
-
-  componentDidUpdate() {
-    console.log(this.state);
   }
 
   render = () => (
@@ -204,12 +129,10 @@ export default class ViewJudgeSheet extends Component {
                 this.state.slots.map((team, i) => (
                   <TeamList
                     key={i}
-                    score={team.total || 0}
+                    score={team.judges[this.getJudgeIndex()].points.reduce((acc, cur) => acc + cur) || 0}
                     slot={"#" + team.number}
                     name={team.team && team.team.name}
-                    backgroundColor={team.number === this.state.selection ? "rgba(255, 209, 0, .2)" :
-                      (team.points.length !== 0 && !team.points.includes(null) && !team.points.includes("") ? "rgba(255, 193, 167, 0.53)" : "")
-                    }
+                    backgroundColor={team.number === this.state.selection ? "rgba(255, 209, 0, .2)" : "rgba(255, 193, 167, 0.53)"}
                     onClick={() => this.changeTeam(team)}
                   />
                 ))
@@ -233,7 +156,7 @@ export default class ViewJudgeSheet extends Component {
                 color: "#ff5800",
                 fontSize: "1.5em"
               }}>
-                {(this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].total && this.state.slots[this.getSlotIndex(this.state.selection)].total.toFixed(1)) || 0} Points
+                {this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()].points.reduce((acc, cur) => acc + cur) || 0} Points
               </div>
 
 
@@ -248,15 +171,15 @@ export default class ViewJudgeSheet extends Component {
                     ? <CriteriaCard
                       title="Score"
                       onChange={this.handelCritriaChange}
-                      value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[0]) || "")}
+                      value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex(this.state.judge)].points[0]) || "0")}
                       name={0}
                     />
                     : this.state.criteria.map((criterion, i) => (
                       <CriteriaCard
+                        disabled={true}
                         key={i}
                         title={criterion}
-                        onChange={this.handelCritriaChange}
-                        value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[i]) || "")}
+                        value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex(this.state.judge)].points[i]) || "0")}
                         name={i}
 
                       />
@@ -264,29 +187,7 @@ export default class ViewJudgeSheet extends Component {
                 }
               </div>
 
-              <textarea
-                onChange={this.handleNoteChange}
-                css={{ margin: "20px auto", minWidth: "50%", maxWidth: "70%" }}
-                placeholder="Write your notes here"
-                name={this.state.selection}
-                value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].notes) || "")}
-              ></textarea>
-              <Block show={this.state.submitVisible}>
-                <Button styles={{ marginTop: 16, }} onClick={this.submitScore} style={{}}>Submit</Button>
-              </Block>
 
-              <p css={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: "0.9em",
-                whiteSpace: "pre-wrap",
-              }}>
-
-                {this.state.event.description}
-              </p>
-              <div>
-                <Button styles={{ marginTop: 16, backgroundColor: "#ff4a4a" }} onClick={this.cancelJudging} style={{}}>Cancel Judging</Button>
-              </div>
             </div>
 
           </div>
@@ -349,7 +250,7 @@ export default class ViewJudgeSheet extends Component {
                   disabled={!this.state.judge}
                   onClick={this.selectJudge}
                   styles={{ width: "100%" }}
-                >Start Round</Button>
+                >View Scoresheet</Button>
               </div>
             </div>
           </div>
