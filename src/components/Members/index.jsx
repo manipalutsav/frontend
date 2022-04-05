@@ -29,12 +29,12 @@ const MemberCard = ({ member }) => (
     <div css={{
       fontSize: "1.3em",
     }}>
-      { member.name }
+      {member.name}
     </div>
     <div css={{
       color: "rgba(0, 0, 0, .5)",
     }}>
-      { member.registrationID }
+      {member.registrationID}
     </div>
   </div>
 );
@@ -45,14 +45,16 @@ export default class Members extends React.Component {
     super(props);
 
     this.state = {
-      team: {},
-      members:[]
+      team: {
+        college: {}
+      },
+      members: []
     };
   }
 
   componentWillMount = () => {
     collegesService.getTeams(this.props.college).then(teams => {
-      let team = teams.find(team => team.id === this.props.team );
+      let team = teams.find(team => team.id === this.props.team);
 
       collegesService.getParticipants(this.props.college).then(members => {
         members = members.filter(member => team.members.includes(member.id));
@@ -64,19 +66,20 @@ export default class Members extends React.Component {
   render = () => (
     <div>
       <div>
-        <h2>{ this.state.team.event && this.state.team.event.name } team { this.state.team.name }</h2>
-        <p>{ this.state.members.length } member{ this.state.members.length === 1 ? "" : "s" }</p>
+        <h2>{this.state.team.event && this.state.team.event.name} </h2>
+        <h3>{this.state.team.college.name} {this.state.team.college.location} ({this.state.team.name})</h3>
+        <p>{this.state.members.length} member{this.state.members.length === 1 ? "" : "s"}</p>
       </div>
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-        }}>
-          {
-            this.state.members.map((member, i) => (
-              <MemberCard key={ i } member={ member } />
-            ))
-          }
-        </div>
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+      }}>
+        {
+          this.state.members.map((member, i) => (
+            <MemberCard key={i} member={member} />
+          ))
+        }
+      </div>
     </div>
   );
 };
