@@ -78,3 +78,5 @@ constants.js
 .vscode
 
 .idea
+
+ssl/
