@@ -64,7 +64,7 @@ export default class extends React.Component {
     this.setState({ status: "Done", showButton: true, total });
   }
   getPoints(event, college) {
-    let teams = this.state.set.filter(team => team.college === college.id && team.event === event.id);
+    let teams = this.state.set.filter(team => team.college._id === college.id && team.event === event.id);
     let points = 0;
     teams.forEach(team => {
       if (event.maxMembersPerTeam > 1) {
@@ -91,7 +91,7 @@ export default class extends React.Component {
       return '';
   }
   getTotal(college) {
-    let teams = this.state.set.filter(team => team.college === college.id);
+    let teams = this.state.set.filter(team => team.college._id === college.id);
     let points = 0;
     teams.forEach(team => {
       let event = this.state.events.find(event => event.id === team.event);
