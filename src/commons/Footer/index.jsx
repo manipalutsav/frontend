@@ -24,7 +24,7 @@ export default () => (
       <Contact name="Sambit" number="9986104763" />
     </div>
     <div>
-      <Link to="/devs" css={{ color: "white" }}>🦄</Link>
+      <Link to="/devs" css={{ color: "white" }}><span role="img" aria-label="unicorn">🦄</span></Link>
     </div>
     {constants.server === servers.testing ? <p>Testing</p> : <></>}
     {constants.server === servers.development ? <p>Development</p> : <></>}
