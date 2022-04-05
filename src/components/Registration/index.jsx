@@ -6,7 +6,7 @@ import eventsService from "../../services/events";
 import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
 import { Button } from "../../commons/Form";
-import Loader from "../../commons/Loader";
+import LoadContent from "../../commons/LoadContent";
 
 const EventCard = ({ event }) => {
   let registrationStatus = event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents;
@@ -141,11 +141,9 @@ export default class Events extends React.Component {
         display: "flex",
         flexWrap: "wrap",
       }}>
-        {
-          this.state.loading
-            ? <Loader />
-            : this.state.events.map((event, i) => <EventCard key={i} event={event} />)
-        }
+        <LoadContent loading={this.state.loading} noDiv={true}>
+          {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+        </LoadContent>
       </div>
     </div>
   );
