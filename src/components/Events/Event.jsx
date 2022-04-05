@@ -23,15 +23,15 @@ const styles = {
 };
 
 const TeamCard = (props) => (
-  <Link to={ "/colleges/" + props.team.college + "/teams/" + props.team.id + "/members" } css={{
+  <Link to={"/colleges/" + props.team.college._id + "/teams/" + props.team.id + "/members"} css={{
     ...styles.teamCard,
   }}>
-    <div>{ props.team.name }</div>
+    <div>{props.team.college.name} {props.team.college.location}({props.team.name})</div>
     <div css={{
       fontSize: ".7em",
       color: "grey",
     }}>
-      { props.team.members.length + " member" + (props.team.members.length === 1 ? "" : "s") }
+      {props.team.members.length + " member" + (props.team.members.length === 1 ? "" : "s")}
     </div>
   </Link>
 );
@@ -56,7 +56,7 @@ export default class Events extends React.Component {
 
     eventsService.getTeams(this.props.event).then(teams =>
       this.setState({ teams }
-    ));
+      ));
   };
 
   render = () => (
@@ -64,23 +64,23 @@ export default class Events extends React.Component {
       <div>
         {
           this.state.event
-          ? <>
-              <h2>{ this.state.event.name }</h2>
+            ? <>
+              <h2>{this.state.event.name}</h2>
               <p>
-                { this.state.event.faculty ? "Faculty Event" : "Student Event" } organized by { this.state.event.college && this.state.event.college.name + ", " + this.state.event.college.location }
+                {this.state.event.faculty ? "Faculty Event" : "Student Event"} organized by {this.state.event.college && this.state.event.college.name + ", " + this.state.event.college.location}
               </p>
               <p>
-                at { this.state.event.venue }
+                at {this.state.event.venue}
                 <br />
                 from {(new Date(this.state.event.startDate)).toLocaleString()} to {(new Date(this.state.event.endDate)).toLocaleString()}
               </p>
               <p>
-                A maximum of { this.state.event.maxTeamsPerCollege } team{ this.state.event.maxTeamsPerCollege === 1 ? "" : "s" } can participate from one college.
+                A maximum of {this.state.event.maxTeamsPerCollege} team{this.state.event.maxTeamsPerCollege === 1 ? "" : "s"} can participate from one college.
                 <br />
                 {
                   this.state.event.minMembersPerTeam === this.state.event.maxMembersPerTeam
-                  ? "A team should have " + this.state.event.minMembersPerTeam + " members."
-                  : "A team can contain a minimum of " + this.state.event.minMembersPerTeam + " members and a maximum of " + this.state.event.maxMembersPerTeam + " members."
+                    ? "A team should have " + this.state.event.minMembersPerTeam + " members."
+                    : "A team can contain a minimum of " + this.state.event.minMembersPerTeam + " members and a maximum of " + this.state.event.maxMembersPerTeam + " members."
                 }
               </p>
               <p css={{
@@ -90,7 +90,7 @@ export default class Events extends React.Component {
                 whiteSpace: "pre-wrap",
               }}>
                 <button
-                  onClick={ this.toggleDescription }
+                  onClick={this.toggleDescription}
                   css={{
                     marginBottom: 10,
                     width: 255,
@@ -98,34 +98,34 @@ export default class Events extends React.Component {
                 >
                   {
                     this.state.descriptionStatus
-                    ? "Hide Rules"
-                    : "Show Rules"
+                      ? "Hide Rules"
+                      : "Show Rules"
                   }
                 </button>
                 {
                   this.state.descriptionStatus
-                  ? this.state.event.description
-                  : null
+                    ? this.state.event.description
+                    : null
                 }
               </p>
               <div>
-                <Link to={ "/events/" + this.props.event + "/rounds" } css={{
+                <Link to={"/events/" + this.props.event + "/rounds"} css={{
                   marginRight: 10,
                 }}>
                   <button>View Rounds</button>
                 </Link>
-                <Link to={ "/events/" + this.props.event + "/edit" }>
+                <Link to={"/events/" + this.props.event + "/edit"}>
                   <button>Edit Event</button>
                 </Link>
               </div>
             </>
-          : null
+            : null
         }
       </div>
       <div>
         <div>
           <h3>Participating Teams</h3>
-          <p>A total of { this.state.teams.length } teams are participating.</p>
+          <p>A total of {this.state.teams.length} teams are participating.</p>
         </div>
         <div css={{
           marginTop: 20,
