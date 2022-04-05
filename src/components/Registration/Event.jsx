@@ -7,6 +7,9 @@ import { Button } from "../../commons/Form";
 import collegesService from "../../services/colleges";
 import eventsService from "../../services/events";
 import { getUser } from "../../services/userServices";
+import LoadContent from "../../commons/LoadContent";
+import Block from "../../commons/Block";
+import { toast } from "../../actions/toastActions";
 
 const styles = {
   teamCard: {
@@ -27,7 +30,7 @@ const styles = {
   },
 };
 
-const TeamCard = ({ team }) => {
+const TeamCard = ({ team, college }) => {
   let handleDelete = (team) => {
     // let surety = typeof window !== "undefined"
     //   && window.confirm("Are you sure you want to delete " + team.name + "?");
@@ -48,7 +51,7 @@ const TeamCard = ({ team }) => {
         justifyContent: "space-between",
         fontSize: "1.3em",
       }}>
-        <span>{team.name}</span>
+        <span>{college.name} {college.location} ({team.name})</span>
         <span css={{
           cursor: "pointer",
           ":hover": {
@@ -75,42 +78,55 @@ export default class Events extends React.Component {
     this.state = {
       event: {},
       teams: [],
+      teamsLoading: true,
       registrationStatus: null,
     };
   }
 
   componentWillMount = () => {
-    eventsService.get(this.props.event).then(event => {
+    this.init();
+  };
+
+  init = async () => {
+    try {
+      const event = await eventsService.get(this.props.event);
       this.setState({
         event,
         registrationStatus: event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents,
       });
-    });
 
-    let user = getUser();
-    collegesService.getTeams(user.college).then(teams => {
-      teams = teams.filter(team => team.event._id === this.props.event);
-      teams = teams.map(team => team);
+      const user = getUser();
+      const college = await collegesService.getCollege(user.college);
+      const teams = await collegesService.getTeams(user.college);
+      this.setState({
+        teams: teams.filter(team => team.event._id === this.props.event),
+        teamsLoading: false,
+        college
+      })
+    }
+    catch (e) {
+      toast("Failed to load: " + e);
+    }
+  }
 
-      this.setState({ teams });
-    });
-  };
 
   render = () => (
-    <div>
+    <LoadContent loading={!this.state.event.name}>
       <div>
+
         <h2>{this.state.event.name} Registration</h2>
         <p>Register teams for the {this.state.event.name} event in Utsav</p>
         <p>You can register at most {this.state.event.maxTeamsPerCollege} teams for this event.</p>
         <p>Minimum participants: {this.state.event.minMembersPerTeam} </p>
         <p>Maximum participants: {this.state.event.maxMembersPerTeam} </p>
-        {
-          this.state.registrationStatus === false
-            ? <p css={{ textTransform: "uppercase", color: "red", }}>Registrations are now closed!</p>
-            : null
-        }
+
+        <Block show={this.state.registrationStatus === false}>
+          <p css={{ textTransform: "uppercase", color: "red", }}>Registrations are now closed!</p>
+        </Block>
+
       </div>
-      <div css={{
+
+      <LoadContent loading={this.state.teamsLoading} css={{
         display: "flex",
         flexWrap: "wrap",
       }}>
@@ -131,9 +147,9 @@ export default class Events extends React.Component {
               </Link>
             : null
         }
-        {this.state.teams.map((team, i) => <TeamCard key={i} team={team} />)}
-      </div>
+        {this.state.teams.map((team, i) => <TeamCard key={i} team={team} college={this.state.college} />)}
+      </LoadContent>
       <Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register") }}>Back</Button>
-    </div>
+    </LoadContent>
   );
 };
