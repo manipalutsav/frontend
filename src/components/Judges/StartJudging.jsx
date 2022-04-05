@@ -8,6 +8,7 @@ import { TeamList } from "../../commons/List";
 import judges from "../../services/judges";
 import events from "../../services/events";
 import { toast } from "../../actions/toastActions";
+import Block from "../../commons/Block";
 
 export default class Judge extends Component {
   constructor(props) {
@@ -43,8 +44,8 @@ export default class Judge extends Component {
 
   selectJudge = async () => {
     if (this.state.judge) {
-      events.getSlots(this.props.event, this.props.round).then(slots => {
-        slots.map(team =>  team.points = []);
+      events.getSlots2(this.props.event, this.props.round).then(slots => {
+        slots.map(team => team.points = []);
         this.setState({
           slots,
           selection: slots[0] && slots[0].number
@@ -92,21 +93,21 @@ export default class Judge extends Component {
       slots: teams
     }, () => {
       let finished = true;
-      this.state.slots.forEach(slot=>{
-         if(slot.points.length===0){
-           finished=false;
-           return;
-         }
-         slot.points.forEach(point=>{
+      this.state.slots.forEach(slot => {
+        if (slot.points.length === 0) {
+          finished = false;
+          return;
+        }
+        slot.points.forEach(point => {
 
-           if(point===""||point===null){
-             finished=false;
-           }
-         })
+          if (point === "" || point === null) {
+            finished = false;
+          }
+        })
       })
 
       this.setState({
-        submitVisible:finished
+        submitVisible: finished
       });
       localStorage.setItem("scoresheet:" + this.props.round, JSON.stringify(this.state));
     })
@@ -125,12 +126,12 @@ export default class Judge extends Component {
       index++;
     }
   }
-  handleNoteChange=async(event)=>{
-    
+  handleNoteChange = async (event) => {
+
     let index = event.target.name;
     let slots = this.state.slots;
-    slots[this.getSlotIndex(Number(index))].notes=event.target.value
-    
+    slots[this.getSlotIndex(Number(index))].notes = event.target.value
+
     await this.setState({
       slots
     });
@@ -150,7 +151,7 @@ export default class Judge extends Component {
         id: this.state.judge,
         points: slot.points
       }],
-      team: slot.team._id,
+      team: slot.id,
       round: slot.round,
     }));
 
@@ -162,12 +163,26 @@ export default class Judge extends Component {
     })
   };
 
+  cancelJudging = () => {
+    let surity = typeof window !== "undefined"
+      && window.confirm("Are you sure you want to cancel juding? All your progress will be deleted!");
+
+    if (!surity) {
+      return;
+    }
+    localStorage.removeItem("scoresheet:" + this.props.round);
+    navigate("/events/" + this.props.event + "/rounds");
+  }
+
+  componentDidUpdate() {
+    console.log(this.state);
+  }
 
   render = () => (
     <div>
       {
         this.state.judgeSelected
-        ? <div css={{
+          ? <div css={{
             display: "flex",
           }}>
             <div css={{
@@ -177,17 +192,23 @@ export default class Judge extends Component {
               overflowY: "auto",
               flex: 1,
             }}>
+              <div css={{
+                fontSize: "0.8em",
+                textAlign: "center",
+                fontWeight: "900",
+                color: "#ff5800",
+              }}>Judge: {this.state.judgeOptions.find(judge => judge.value === this.state.judge).label}</div>
               {
                 this.state.slots.map((team, i) => (
                   <TeamList
-                    key={ i }
-                    score={ team.total || 0 }
-                    slot={ "#" + team.number }
-                    name={ team.team && team.team.name }
-                    backgroundColor={ team.number === this.state.selection ? "rgba(255, 209, 0, .2)" :
-                    (team.points.length!==0&&!team.points.includes(null)&&!team.points.includes("")?"rgba(255, 193, 167, 0.53)":"")
+                    key={i}
+                    score={team.total || 0}
+                    slot={"#" + team.number}
+                    name={team.team && team.team.name}
+                    backgroundColor={team.number === this.state.selection ? "rgba(255, 209, 0, .2)" :
+                      (team.points.length !== 0 && !team.points.includes(null) && !team.points.includes("") ? "rgba(255, 193, 167, 0.53)" : "")
                     }
-                    onClick={ () => this.changeTeam(team) }
+                    onClick={() => this.changeTeam(team)}
                   />
                 ))
               }
@@ -200,18 +221,19 @@ export default class Judge extends Component {
               flex: 3,
             }}>
               <div>
-                <h2>{ this.state.event.name } - { "Round" + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)) }</h2>
+                <h2>{this.state.event.name} - {"Round" + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1))}</h2>
                 <h3>
-                  Slot #{ this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].number }&ensp;
-                 
+                  Slot #{this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].number}&ensp;
+
                 </h3>
               </div>
               <div css={{
                 color: "#ff5800",
                 fontSize: "1.5em"
               }}>
-                { (this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].total && this.state.slots[this.getSlotIndex(this.state.selection)].total.toFixed(1)) || 0 } Points
+                {(this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].total && this.state.slots[this.getSlotIndex(this.state.selection)].total.toFixed(1)) || 0} Points
               </div>
+
 
               <div css={{
                 display: "flex",
@@ -221,46 +243,52 @@ export default class Judge extends Component {
               }}>
                 {
                   this.state.criteria.length === 0
-                  ? <CriteriaCard
+                    ? <CriteriaCard
                       title="Score"
-                      onChange={ this.handelCritriaChange }
-                      value={ ((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[0])||"") }
-                      name={ 0 }
+                      onChange={this.handelCritriaChange}
+                      value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[0]) || "")}
+                      name={0}
                     />
-                  : this.state.criteria.map((criterion, i) => (
+                    : this.state.criteria.map((criterion, i) => (
                       <CriteriaCard
-                        key={ i }
-                        title={ criterion }
-                        onChange={ this.handelCritriaChange }
-                        value={ ((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[i])||"") }
-                        name={ i }
-                        
+                        key={i}
+                        title={criterion}
+                        onChange={this.handelCritriaChange}
+                        value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[i]) || "")}
+                        name={i}
+
                       />
                     ))
                 }
               </div>
-              <div>
-                {this.state.submitVisible?<Button styles={{ marginTop: 16, }} onClick={ this.submitScore } style={{}}>Submit</Button>:<></>}
-              </div>
-                <textarea 
-                  onChange={this.handleNoteChange} 
-                  css={{margin:"20px auto",minWidth:"50%",maxWidth:"70%"}} 
-                  placeholder="Write your notes here"
-                  name={this.state.selection}
-                  value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].notes)||"")}
-                  ></textarea>
-                <p css={{
+
+              <textarea
+                onChange={this.handleNoteChange}
+                css={{ margin: "20px auto", minWidth: "50%", maxWidth: "70%" }}
+                placeholder="Write your notes here"
+                name={this.state.selection}
+                value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].notes) || "")}
+              ></textarea>
+              <Block show={this.state.submitVisible}>
+                <Button styles={{ marginTop: 16, }} onClick={this.submitScore} style={{}}>Submit</Button>
+              </Block>
+
+              <p css={{
                 display: "flex",
                 flexDirection: "column",
                 fontSize: "0.9em",
                 whiteSpace: "pre-wrap",
               }}>
+
                 {this.state.event.description}
               </p>
-             
+              <div>
+                <Button styles={{ marginTop: 16, backgroundColor: "#ff4a4a" }} onClick={this.cancelJudging} style={{}}>Cancel Judging</Button>
+              </div>
             </div>
+
           </div>
-        : <div css={{
+          : <div css={{
             width: "100%",
             height: "100%",
             display: "flex",
