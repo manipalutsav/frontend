@@ -1,6 +1,9 @@
 const repositories = [
   "backend",
   "frontend",
+  "android",
+  "manipalutsav.github.io",
+  "firebase-cloud-functions"
 ];
 
 export default () => {
