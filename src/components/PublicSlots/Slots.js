@@ -3,6 +3,7 @@ import Select from "react-select";
 
 import eventsService from "../../services/events";
 import LBList from "../../commons/LBList";
+import { getTeamName, setSlotCollege } from "../../utils/common";
 
 export default class extends React.Component {
   constructor(props) {
@@ -34,41 +35,20 @@ export default class extends React.Component {
       }))
     });
 
+    this.fetchRoundSlots();
+  }
+
+  fetchRoundSlots = async () => {
     let slots = await eventsService.getSlots2(this.props.event, this.state.round);
     let teams = await eventsService.getTeams(this.props.event)
-    const registeredTeamsSlots = slots.filter(slot => teams.find(team => team.name === slot.teamName.replace(",", "")))
-    //let newSlots = [];
-    // for (let i = 0; i < slots.length; i++) {
-    //   let slot = slots[i];
-    //   let number = slot.number;
-    //   let name = slot.teamName;
-    //   if (event.maxMembersPerTeam === 1) {
-    //     let participants = await collegesService.getParticipants(slot.team.college)
-    //     let participant = participants.find(participant => slot.team.members.includes(participant.id));
-    //     let college = name.match(/[\w\s-,.]*/)[0];
-    //     name = `${participant.name}, ${college}`;
-    //   }
-    //   if (event.maxTeamsPerCollege === 1) {
-    //     name = name.match(/[\w\s-,.]*/)[0];
-
-    //   }
-    //   newSlots.push({ number, name });
-    // }
-    await this.setState({ slotted: !!slots.length, slots: registeredTeamsSlots });
-    this.setState({ loaded: true });
-
+    console.log(slots, teams)
+    slots.forEach(setSlotCollege);
+    const registeredTeamsSlots = slots.filter(slot => teams.find(team => team.name === slot.teamName && team.college.name === slot.college.name && team.college.location === slot.college.location))
+    this.setState({ slotted: !!slots.length, slots: registeredTeamsSlots, loaded: true });
   }
 
   handleRoundChange = (e) => {
-    this.setState(
-      { round: e.value, loaded: false, },
-      () =>
-        eventsService.getSlots2(this.props.event, this.state.round).then(slots =>
-          this.setState({ slotted: !!slots.length, slots }, () =>
-            this.setState({ loaded: true })
-          )
-        )
-    );
+    this.setState({ round: e.value, loaded: false, }, this.fetchRoundSlots);
   }
 
   showPDF = () => {
@@ -152,7 +132,7 @@ export default class extends React.Component {
                       <LBList
                         key={i}
                         position={slot.number}
-                        title={slot.teamName}
+                        title={getTeamName(slot)}
                       />
                     )
                   }
