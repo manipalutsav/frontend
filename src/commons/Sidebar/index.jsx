@@ -40,7 +40,7 @@ const SidebarItem = (props) => (
   </li>
 );
 
-const SidebarItems = () => (
+const SidebarItems = ({ backupName, backupData }) => (
   <ul css={{
     display: "flex",
     flexDirection: "column",
@@ -54,16 +54,16 @@ const SidebarItems = () => (
     <SidebarItem to="/teams" title="Teams" />
     <SidebarItem to="/slots" title="Slots" />
     <SidebarItem to="/volunteers" title="Volunteer" />
-    {/* <SidebarItem to="/leaderboard/public" title="Leaderboard" />
-    <SidebarItem to="/certificates" title="Certificates" /> */}
+    <SidebarItem to="/leaderboard/public" title="Leaderboard" />
+    <SidebarItem to="/certificates" title="Certificates" />
     <SidebarSeparator />
     <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li>
     <SidebarItem to="/users" title="Users" />
     <SidebarItem to="/colleges" title="Colleges" />
     <SidebarItem to="/events" title="Events" />
-    {/* <SidebarItem to="/judges" title="Judges" />
+    <SidebarItem to="/judges" title="Judges" />
     <SidebarItem to="/winners" title="Winners" />
-    <SidebarItem to="/leaderboard" title="Leaderboard" /> */}
+    <SidebarItem to="/leaderboard" title="Leaderboard" />
 
     <SidebarSeparator />
     <li>
@@ -79,6 +79,21 @@ const SidebarItems = () => (
       </a>
     </li>
     <SidebarItem to="/stats" title="Stats" />
+    <a href={backupData} download={backupName}>
+      <div css={{
+        display: "block",
+        marginTop: 10,
+        padding: 10,
+        paddingLeft: 20,
+        fontSize: ".9em",
+        cursor: "pointer",
+        ":hover": {
+          color: "#ff5800",
+        }
+      }}
+      >
+        <span css={{ padding: 5 }}>🗂</span>Backup
+      </div></a>
   </ul>
 );
 
@@ -90,14 +105,25 @@ export default class Sidebar extends Component {
   componentDidMount() {
     store.subscribe(() => {
       this.setState({ open: store.getState() === "open" });
+      this.updateBackup();
     });
+    setInterval(this.updateBackup, 5000);
+    this.updateBackup();
+  }
+
+  updateBackup = () => {
+    this.setState({
+      backupData: "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage)),
+      backupName: "mucapp-" + new Date().toJSON() + ".json"
+    })
   }
 
   render = () => (
     <div className="no-print" css={{
       display: "block",
       height: "100vh",
-      overflow: "hidden",
+      overflowX: "scroll",
+      overflowY: "visible",
       minWidth: 200,
       marginLeft: this.state.open ? 0 : -200,
       minHeight: "100vh",
@@ -107,7 +133,7 @@ export default class Sidebar extends Component {
         overflowY: "auto",
       },
     }}>
-      <SidebarItems />
+      <SidebarItems backupName={this.state.backupName} backupData={this.state.backupData} />
     </div>
   );
 }
