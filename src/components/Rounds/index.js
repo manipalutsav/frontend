@@ -53,7 +53,7 @@ export default class Rounds extends React.Component {
             <div>
               <div>
                 <h3>Rounds</h3>
-                <Link to="add"><button>Add Event</button></Link>
+                <Link to="add"><button>Add Round</button></Link>
                 <p>A total of {this.state.event.rounds && this.state.event.rounds.length} rounds are there.</p>
               </div>
               <div>
