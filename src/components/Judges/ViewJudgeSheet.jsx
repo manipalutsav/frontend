@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { navigate } from "gatsby";
 
 import { Button } from "../../commons/Form";
 import Select from "react-select";
@@ -8,7 +7,6 @@ import { TeamList } from "../../commons/List";
 import judges from "../../services/judges";
 import events from "../../services/events";
 import { toast } from "../../actions/toastActions";
-import Block from "../../commons/Block";
 
 export default class ViewJudgeSheet extends Component {
   constructor(props) {
@@ -42,7 +40,7 @@ export default class ViewJudgeSheet extends Component {
 
       let scores = await events.getScores(this.props.event, this.props.round);
       this.setState({
-        judgeOptions: judgesList.filter(i => scores[0].judges.find(judge => judge.id == i.id)).map(judge => ({ value: judge.id, label: judge.name })),
+        judgeOptions: judgesList.filter(i => scores[0].judges.find(judge => judge.id === i.id)).map(judge => ({ value: judge.id, label: judge.name })),
       })
 
       let slots = await events.getSlots2(this.props.event, this.props.round);
@@ -55,7 +53,7 @@ export default class ViewJudgeSheet extends Component {
       });
 
       slots.forEach(slot => {
-        let score = scores.find(score => score.team == slot.id)
+        let score = scores.find(score => score.team === slot.id)
         slot.judges = score.judges;
       })
 
@@ -156,7 +154,7 @@ export default class ViewJudgeSheet extends Component {
                 color: "#ff5800",
                 fontSize: "1.5em"
               }}>
-                {this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()].points.reduce((acc, cur) => acc + cur) || 0} Points
+                {(this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()].points.reduce((acc, cur) => acc + cur)) || 0} Points
               </div>
 
 
