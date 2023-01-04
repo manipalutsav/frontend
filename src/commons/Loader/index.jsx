@@ -10,7 +10,7 @@ export default () => (
     justifyContent: "center",
     flexDirection: "column",
   }}>
-    <img src={ loader } alt="..." width="300" />
+    <img className="mucapp" src={loader} alt="..." width="300" />
     <p css={{ margin: 0 }}>Loading...</p>
   </div>
 );

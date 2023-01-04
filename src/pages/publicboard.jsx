@@ -124,7 +124,7 @@ export default class extends React.Component {
   }
   render = () => (
     <Layout>
-      <h1>Leaderboard</h1>
+      <h1 className="mucapp"> Leaderboard</h1>
       <div className="no-print">
         {this.state.status}
         {this.state.showButton ? <Button onClick={this.sortByRank} styles={{ marginLeft: 20 }}>Sort By Rank</Button> : ''}

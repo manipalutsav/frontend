@@ -7,6 +7,9 @@ import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
 import { Button } from "../../commons/Form";
 import LoadContent from "../../commons/LoadContent";
+import participationStatus from "../../services/participationStatus";
+import { toast } from "../../actions/toastActions";
+import Block from "../../commons/Block";
 
 const EventCard = ({ event }) => {
   let registrationStatus = event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents;
@@ -95,56 +98,141 @@ export default class Events extends React.Component {
     this.state = {
       events: [],
       teams: [],
+      college: {
+        isOutStationed: false
+      },
+      participationStatus: {},
       loading: true,
+      disableSubmit: false
     };
   }
 
-  componentWillMount = async () => {
-    let user = getUser();
-    collegesService.getTeams(user.college).then(teams => {
-      teams = teams.map(team => team);
+  async init() {
 
-      this.setState({ teams });
-
-      eventsService.getAll().then(events => {
-        events = events.map(event => ({
-          id: event.id,
-          name: event.name,
-          description: event.description,
-          college: event.college,
-          venue: event.venue,
-          rounds: event.rounds,
-          startDate: event.startDate,
-          endDate: event.endDate,
-          maxTeamsPerCollege: event.maxTeamsPerCollege,
-          unregistered: !teams.some(team => team.event._id === event.id),
-          registeredCount: teams.filter(team => team.event._id === event.id).length,
-          faculty: event.faculty,
-        }));
-        events.sort((a, b) => {
-          return new Date(a.startDate) - new Date(b.startDate);
-        });
-
-        this.setState({ events, loading: false });
+    try {
+      let user = getUser();
+      let college = await collegesService.get(user.college);
+      let teams = await collegesService.getTeams(college.id);
+      let events = await eventsService.getAll();
+      let statues = await participationStatus.getByCollege(college.id);
+      let participationStatusObj = {};
+      let disableSubmit = statues.length > 0;
+      statues.forEach(obj => {
+        participationStatusObj[obj.event] = obj.status;
       });
-    });
+      events = events.map(event => ({
+        id: event.id,
+        name: event.name,
+        description: event.description,
+        college: event.college,
+        venue: event.venue,
+        rounds: event.rounds,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        maxTeamsPerCollege: event.maxTeamsPerCollege,
+        unregistered: !teams.some(team => team.event._id === event.id),
+        registeredCount: teams.filter(team => team.event._id === event.id).length,
+        faculty: event.faculty,
+      }));
+      events.sort((a, b) => {
+        return new Date(a.startDate) - new Date(b.startDate);
+      });
 
+      this.setState({ college, teams, events, participationStatus: participationStatusObj, loading: false, disableSubmit });
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
+  componentWillMount() {
+    this.init();
   };
 
+
+  handleChange = ({ eventId, state }) => {
+    this.state.participationStatus[eventId] = state;
+    console.log(this.state);
+    this.forceUpdate();
+  }
+
+  handleSave = async () => {
+    try {
+      let college = getUser().college;
+      let statues = Object.keys(this.state.participationStatus).map(event => ({
+        event,
+        college,
+        status: this.state.participationStatus[event] || "No"
+      }))
+
+      await participationStatus.create(statues);
+    } catch (e) {
+      toast(e.message);
+    }
+
+  }
+
   render = () => (
-    <div>
-      <div>
-        <h2>Registration</h2>
-        <p>Register teams for the events in Utsav</p>
-      </div>
-      <div css={{
-        display: "flex",
-        flexWrap: "wrap",
-      }}>
+    <div data-theme="lofi">
+
+      <div className="justify-center flex flex-wrap flex-col">
         <LoadContent loading={this.state.loading} noDiv={true}>
-          {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+          <Block show={this.state.college.isOutStationed} id="1">
+            <div>
+              <h2 className="mucapp">Tentative participation information</h2>
+              <Block show={!this.state.disableSubmit} id="2">
+                <p>Please select your participation status</p>
+              </Block>
+            </div>
+            <table className="table w-full table-zebra" >
+              <thead><tr><th>Event</th><th>Participation Status</th></tr></thead>
+              <tbody>
+                {this.state.events.map(event => <tr>
+                  <td>{event.name}</td>
+                  <td>
+
+                    <Switch eventId={event.id} state={this.state.participationStatus[event.id]} onChange={this.handleChange} disabled={this.state.disableSubmit} />
+
+                  </td>
+                </tr>)}
+              </tbody>
+            </table>
+            <Block show={!this.state.disableSubmit} id="3">
+              <div className="text-center p-5">
+                <button className="mucapp" onClick={this.handleSave}>Submit</button>
+              </div>
+            </Block>
+            <Block show={this.state.disableSubmit} id="4">
+              Participation Status already submitted. Please contact administrators if any change is required.
+            </Block>
+          </Block>
+
+          <Block show={!this.state.college.isOutStationed} id="5">
+            <div>
+              <h2 className="mucapp">Registration</h2>
+              <p>Register teams for the events in Utsav</p>
+            </div>
+            <div className="flex flex-wrap">
+              {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+            </div>
+          </Block>
         </LoadContent>
       </div>
     </div>
   );
 };
+
+const Switch = ({ eventId, state, onChange, disabled }) => {
+
+  const onClick = (state) => {
+    if (disabled)
+      return;
+    onChange({ eventId, state });
+  }
+
+  return <div className="btn-group" data-theme="bumblebee">
+    <button disabled={disabled} onClick={() => onClick("Yes")} className={`btn ` + (state == "Yes" ? "btn-active" : "")}>Yes</button>
+    <button disabled={disabled} onClick={() => onClick("Maybe")} className={`btn ` + (state == "Maybe" ? "btn-active" : "")}>Maybe</button>
+    <button disabled={disabled} onClick={() => onClick("No")} className={`btn ` + (state == "No" || state == undefined ? "btn-active" : "")}>No</button>
+  </div>
+}

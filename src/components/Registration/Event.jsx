@@ -114,7 +114,7 @@ export default class Events extends React.Component {
     <LoadContent loading={!this.state.event.name}>
       <div>
 
-        <h2>{this.state.event.name} Registration</h2>
+        <h2 className="mucapp">{this.state.event.name} Registration</h2>
         <p>Register teams for the {this.state.event.name} event in Utsav</p>
         <p>You can register at most {this.state.event.maxTeamsPerCollege} teams for this event.</p>
         <p>Minimum participants: {this.state.event.minMembersPerTeam} </p>

@@ -115,7 +115,7 @@ export default class Colleges extends React.Component {
 
   render = () => (
     <div>
-      <h2>Colleges</h2>
+      <h2 className="mucapp">Colleges</h2>
       <p>Colleges participating in Utsav.</p>
       <LoadContent loading={this.state.loading}>
         <CollegeList colleges={this.state.colleges} stats={this.state.stats} />

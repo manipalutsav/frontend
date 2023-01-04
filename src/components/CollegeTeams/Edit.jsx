@@ -33,14 +33,14 @@ export default class EditMember extends React.Component {
       buttonText: this.UPDATING
     }, () => {
       participantsService.update(this.props.member, this.state.participant)
-      .then(() => navigate("/teams"))
-      .catch(() => this.setState({ buttonText: this.UPDATE }));
+        .then(() => navigate("/teams"))
+        .catch(() => this.setState({ buttonText: this.UPDATE }));
     });
   };
 
   componentWillMount() {
     participantsService.get(this.props.member).then(participant => {
-      
+
       this.setState({ participant: participant || {} })
     });
   }
@@ -48,18 +48,18 @@ export default class EditMember extends React.Component {
   render = () => (
     <div>
       <div>
-        <h2>Edit Participant {this.state.participant.name }</h2>
+        <h2 className="mucapp">Edit Participant {this.state.participant.name}</h2>
       </div>
 
       <div>
         <div>
           <div>Name</div>
           <input
-            onChange = { this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="name"
             type="text"
-            value={ this.state.participant.name }
+            value={this.state.participant.name}
             placeholder="Name"
             css={{ width: 300 }}
           />
@@ -68,11 +68,11 @@ export default class EditMember extends React.Component {
         <div>
           <div>Registration Number</div>
           <input
-            onChange = { this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="registrationID"
             type="text"
-            value={ this.state.participant.registrationID }
+            value={this.state.participant.registrationID}
             placeholder="Registration Number"
             css={{ width: 300 }}
           />
@@ -80,10 +80,10 @@ export default class EditMember extends React.Component {
 
         <div>
           <Button
-            onClick={ this.handleClick }
-            disabled={ this.state.buttonText === this.UPDATING }
+            onClick={this.handleClick}
+            disabled={this.state.buttonText === this.UPDATING}
           >
-            { this.state.buttonText }
+            {this.state.buttonText}
           </Button>
         </div>
       </div>

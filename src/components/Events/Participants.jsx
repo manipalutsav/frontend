@@ -25,22 +25,22 @@ const styles = {
 
 
 const ParticipantCard = ({ participant }) => (
-  
+
   <div css={{
     ...styles.participantCard,
   }}>
     <div css={{
       fontSize: "1.3em",
     }}>
-      { participant.name }
+      {participant.name}
     </div>
     <div css={{
       color: "rgba(0, 0, 0, .5)",
     }}>
-      { participant.registrationID} 
+      {participant.registrationID}
     </div>
-    </div>
- 
+  </div>
+
 );
 
 
@@ -50,19 +50,19 @@ export default class Events extends React.Component {
 
     this.state = {
       team: [],
-      participants:[]
+      participants: []
     };
   }
 
   componentWillMount = () => {
-   /****WORK TO DO HERE!! */
+    /****WORK TO DO HERE!! */
     collegesService.getTeams(this.props.college).then(teams => {
-      let team = teams.find(team => team.id === this.props.team );
-      collegesService.getParticipants(this.props.college).then(participants=>{
-        participants=participants.filter(participant=>team.members.includes(participant.id));
-        this.setState({ team,participants });
+      let team = teams.find(team => team.id === this.props.team);
+      collegesService.getParticipants(this.props.college).then(participants => {
+        participants = participants.filter(participant => team.members.includes(participant.id));
+        this.setState({ team, participants });
       })
-      
+
     });
   };
 
@@ -70,19 +70,19 @@ export default class Events extends React.Component {
     <div>
       <div>
 
-      <h2>Participants List</h2>
-        <p>{ this.state.participants.length } participant{ this.state.participants.length === 1 ? "" : "s" }</p>
+        <h2 className="mucapp">Participants List</h2>
+        <p>{this.state.participants.length} participant{this.state.participants.length === 1 ? "" : "s"}</p>
       </div>
-        <div style={{display:'flex'}}>
-       {
+      <div style={{ display: 'flex' }}>
+        {
           this.state.participants.map((participant, i) => (
-             <ParticipantCard key={i} participant={participant} />
-            ))
+            <ParticipantCard key={i} participant={participant} />
+          ))
         }
-        </div>
-        <div>
-          <Button styles={{marginTop: "10px"}} onClick={() => { navigate("/register")} }>Back</Button>
-        </div>
+      </div>
+      <div>
+        <Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register") }}>Back</Button>
+      </div>
     </div>
   );
 };

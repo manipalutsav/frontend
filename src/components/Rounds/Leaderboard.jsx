@@ -62,7 +62,7 @@ export default class extends React.Component {
   render = () => (
     <div>
       <div>
-        <h1 style={{ textAlign: "center" }}>{this.state.event.name}</h1>
+        <h1 className="mucapp" style={{ textAlign: "center" }}>{this.state.event.name}</h1>
         <h2 style={{ textAlign: "center" }}>Round {this.state.event.rounds && this.state.event.rounds.indexOf(this.props.round) + 1} Leaderboard</h2>
       </div>
       <div>
@@ -96,9 +96,9 @@ export default class extends React.Component {
                 <Link to={`/events/${this.props.event}/rounds/${this.props.round}/leaderboard/download`}><Button styles={{ marginLeft: 20 }}>Download</Button></Link>
               </div>
             </>
-            : <h1 style={{ textAlign: "center" }}>No results</h1>
+            : <h1 className="mucapp" style={{ textAlign: "center" }}>No results</h1>
         }
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };

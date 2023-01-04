@@ -65,7 +65,7 @@ export default class Events extends React.Component {
         {
           this.state.event
             ? <>
-              <h2>{this.state.event.name}</h2>
+              <h2 className="mucapp">{this.state.event.name}</h2>
               <p>
                 {this.state.event.faculty ? "Faculty Event" : "Student Event"} organized by {this.state.event.college && this.state.event.college.name + ", " + this.state.event.college.location}
               </p>
@@ -90,6 +90,7 @@ export default class Events extends React.Component {
                 whiteSpace: "pre-wrap",
               }}>
                 <button
+                  className="mucapp"
                   onClick={this.toggleDescription}
                   css={{
                     marginBottom: 10,
@@ -112,10 +113,10 @@ export default class Events extends React.Component {
                 <Link to={"/events/" + this.props.event + "/rounds"} css={{
                   marginRight: 10,
                 }}>
-                  <button>View Rounds</button>
+                  <button className="mucapp">View Rounds</button>
                 </Link>
                 <Link to={"/events/" + this.props.event + "/edit"}>
-                  <button>Edit Event</button>
+                  <button className="mucapp">Edit Event</button>
                 </Link>
               </div>
             </>
@@ -124,7 +125,7 @@ export default class Events extends React.Component {
       </div>
       <div>
         <div>
-          <h3>Participating Teams</h3>
+          <h3 className="mucapp">Participating Teams</h3>
           <p>A total of {this.state.teams.length} teams are participating.</p>
         </div>
         <div css={{

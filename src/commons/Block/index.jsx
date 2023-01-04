@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export default ({ show, children }) => {
-    console.log({ show });
-    return (show ? <div>{children}</div> : <></>);
+export default ({ show, children, id = null }) => {
+    console.log(show, id)
+    return (show ? <>{children}</> : <></>);
 }

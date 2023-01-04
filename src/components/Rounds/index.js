@@ -45,14 +45,14 @@ export default class Rounds extends React.Component {
         this.state.event
           ? <>
             <div>
-              <h2>{this.state.event.name}</h2>
+              <h2 className="mucapp">{this.state.event.name}</h2>
               <p>
                 {this.state.event.faculty ? "Faculty Event" : "Student Event"} organized by {this.state.event.college && this.state.event.college.name + ", " + this.state.event.college.location}
               </p>
             </div>
             <div>
               <div>
-                <h3>Rounds</h3>
+                <h3 className="mucapp">Rounds</h3>
                 <Link to="add"><button>Add Round</button></Link>
                 <p>A total of {this.state.event.rounds && this.state.event.rounds.length} rounds are there.</p>
               </div>

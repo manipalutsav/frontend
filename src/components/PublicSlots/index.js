@@ -24,13 +24,13 @@ const styles = {
 };
 
 const EventCard = ({ event }) => (
-  <Link to={ "/slots/" + event.id } css={{
+  <Link to={"/slots/" + event.id} css={{
     ...styles.eventCard,
   }}>
     <div css={{
       fontSize: "1.3em",
     }}>
-      { event.name }
+      {event.name}
     </div>
     <div css={{
       fontSize: "0.9em",
@@ -38,17 +38,17 @@ const EventCard = ({ event }) => (
     }}>
       {
         new Date() > new Date(event.endDate)
-        ? "ended " + (new Date(event.endDate)).toLocaleString()
-        : new Date() >= new Date(event.startDate) && new Date() < new Date(event.endDate)
-          ? "ends " + (new Date(event.endDate)).toLocaleString()
-          : "starts " + (new Date(event.startDate)).toLocaleString() + " at " + event.venue
+          ? "ended " + (new Date(event.endDate)).toLocaleString()
+          : new Date() >= new Date(event.startDate) && new Date() < new Date(event.endDate)
+            ? "ends " + (new Date(event.endDate)).toLocaleString()
+            : "starts " + (new Date(event.startDate)).toLocaleString() + " at " + event.venue
       }
     </div>
     <div css={{
       fontSize: "0.8em",
       color: "rgba(0, 0, 0, .5)",
     }}>
-      { event.rounds.length } Round{ event.rounds.length === 1 ? "" : "s" }
+      {event.rounds.length} Round{event.rounds.length === 1 ? "" : "s"}
     </div>
   </Link>
 );
@@ -66,9 +66,9 @@ export default class Events extends React.Component {
   componentWillMount = async () => {
     get();
 
-    this.unsubscribe=reducer.subscribe(() => {
+    this.unsubscribe = reducer.subscribe(() => {
       reducer.getState().then(state => {
-        let events = state.data.list.map(event=>({
+        let events = state.data.list.map(event => ({
           id: event.id,
           name: event.name,
           description: event.description,
@@ -79,7 +79,7 @@ export default class Events extends React.Component {
           endDate: event.endDate,
         }));
 
-        events.sort((a,b) => {
+        events.sort((a, b) => {
           return new Date(a.startDate) - new Date(b.startDate);
         });
 
@@ -87,14 +87,14 @@ export default class Events extends React.Component {
       });
     });
   };
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.unsubscribe();
   }
 
   render = () => (
     <div>
       <div>
-        <h2>Event Slots</h2>
+        <h2 className="mucapp">Event Slots</h2>
         <p>Go to the event for which you want to see the slotting</p>
       </div>
       <div css={{
@@ -104,8 +104,8 @@ export default class Events extends React.Component {
       }}>
         {
           this.state.loading
-          ? <Loader />
-          : this.state.events.map((event, i) => <EventCard key={i} event={event} />)
+            ? <Loader />
+            : this.state.events.map((event, i) => <EventCard key={i} event={event} />)
         }
       </div>
     </div>

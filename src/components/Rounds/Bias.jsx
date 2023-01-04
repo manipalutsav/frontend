@@ -117,7 +117,7 @@ export default class Bias extends React.Component {
   render = () => (
     <div>
       <div>
-        <h1 style={{ textAlign: "center" }}>{this.state.event.name} - Round {this.state.event.rounds && this.state.event.rounds.indexOf(this.props.round) + 1}</h1>
+        <h1 className="mucapp" style={{ textAlign: "center" }}>{this.state.event.name} - Round {this.state.event.rounds && this.state.event.rounds.indexOf(this.props.round) + 1}</h1>
       </div>
       <div>
         {
@@ -184,7 +184,7 @@ export default class Bias extends React.Component {
                 <Button onClick={this.handleSave} disabled={this.state.button === this.BUTTON_CLICKED}>{this.state.button}</Button>
               </div>
             </>
-            : <h1 style={{ textAlign: "center" }}>No results</h1>
+            : <h1 className="mucapp" style={{ textAlign: "center" }}>No results</h1>
         }
 
         <Dialog
@@ -199,7 +199,7 @@ export default class Bias extends React.Component {
           }}
           show={this.state.showDialog}
         />
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };

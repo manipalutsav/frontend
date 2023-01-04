@@ -23,7 +23,7 @@ export default class AddVolunteer extends React.Component {
     render() {
         return (
             <div>
-                <h1>Volunteers</h1>
+                <h1 className="mucapp"> Volunteers</h1>
                 <p>Select the type of volunteers you want to see</p>
                 <div css={{
                     display: "flex",
@@ -40,7 +40,7 @@ export default class AddVolunteer extends React.Component {
                         }
                     }}>
                         Core Volunteers
-                </Link>
+                    </Link>
                     <Link to="/volunteers/event" css={{
                         ...styles.volunteerCard,
                         backgroundColor: "#ff5800",
@@ -51,9 +51,9 @@ export default class AddVolunteer extends React.Component {
                         }
                     }}>
                         Event Volunteers
-                </Link>
+                    </Link>
                 </div>
-            </div>
+            </div >
         )
     }
 }

@@ -107,7 +107,7 @@ export default class AddEvent extends React.Component {
 
   render = () => (
     <div>
-      <h2>Add Event</h2>
+      <h2 className="mucapp">Add Event</h2>
       <p>Add a new event to MUCAPP.</p>
       <div>
         <div>

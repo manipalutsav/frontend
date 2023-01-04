@@ -97,20 +97,20 @@ export default class Profile extends React.Component {
         textAlign: "center",
       }}>
         <div>
-          <img src={avatar} alt="Avatar" height="200" width="200" />
+          <img className="mucapp" src={avatar} alt="Avatar" height="200" width="200" />
         </div>
         <div>
-          <h1>{name || "..."}</h1>
+          <h1 className="mucapp"> {name || "..."}</h1>
           <p css={{ color: "rgba(0, 0, 0, .7)" }}>{email || "..."}</p>
           <p css={{ color: "truergba(0, 0, 0, .5)" }}>{type ? constants.getUserType(type) : "..."}</p>
           <p css={{ color: "rgba(0, 0, 0, .7)" }}>{collegeName}</p>
         </div>
         <div>
-          {getUser().type && getUser().type === 1 ? <Link to={`/users/${this.props.user}/edit`}><button css={{ margin: 5, }}>Edit</button></Link> : ''}
-          <Link to="/users"><button css={{ margin: 5, }}>Go Back</button></Link>
+          {getUser().type && getUser().type === 1 ? <Link to={`/users/${this.props.user}/edit`}><button className="mucapp" css={{ margin: 5, }}>Edit</button></Link> : ''}
+          <Link to="/users"><button className="mucapp" css={{ margin: 5, }}>Go Back</button></Link>
         </div>
 
-      </div>
+      </div >
     );
   }
 }

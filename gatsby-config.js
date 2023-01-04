@@ -6,5 +6,6 @@ module.exports = {
   },
   plugins: [
     "gatsby-plugin-glamor",
+    'gatsby-plugin-postcss',
   ],
 };

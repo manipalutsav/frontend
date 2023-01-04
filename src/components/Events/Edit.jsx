@@ -100,7 +100,7 @@ export default class EditEvent extends React.Component {
   render = () => (
     <div>
       <div>
-        <h2>Edit Event</h2>
+        <h2 className="mucapp">Edit Event</h2>
         <p>Editing the event {this.state.event.name}.</p>
       </div>
 

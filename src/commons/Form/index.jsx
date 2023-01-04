@@ -2,6 +2,7 @@ import React from 'react';
 
 const Input = (props) => (
   <input
+    className="mucapp"
     onChange={(e) => props.onChange(e.target)}
     autoComplete="off"
     name={props.name}
@@ -29,6 +30,7 @@ class TextArea extends React.Component {
     let props = this.props;
     return (
       <textarea
+        className="mucapp"
         onChange={(e) => props.onChange(e.target)}
         autoComplete="off"
         name={props.name}
@@ -88,6 +90,7 @@ const Button = (props) => (
       ...props.styles,
       margin: 2
     }}
+    className="mucapp"
     onClick={props.onClick}
     disabled={props.disabled ? "disabled" : false}
   >

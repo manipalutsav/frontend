@@ -66,8 +66,8 @@ export default class Members extends React.Component {
   render = () => (
     <div>
       <div>
-        <h2>{this.state.team.event && this.state.team.event.name} </h2>
-        <h3>{this.state.team.college.name} {this.state.team.college.location} ({this.state.team.name})</h3>
+        <h2 className="mucapp">{this.state.team.event && this.state.team.event.name} </h2>
+        <h3 className="mucapp">{this.state.team.college.name} {this.state.team.college.location} ({this.state.team.name})</h3>
         <p>{this.state.members.length} member{this.state.members.length === 1 ? "" : "s"}</p>
       </div>
       <div style={{

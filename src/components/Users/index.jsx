@@ -48,27 +48,27 @@ const User = (props) => {
   }
 
   return (
-    <Link to={ "/users/" + props.info.id } css={{
+    <Link to={"/users/" + props.info.id} css={{
       ...styles.userCard,
     }}>
       <div css={{
         display: "flex",
         justifyContent: "space-between",
       }}>
-        <span>{ props.info.name }</span>
+        <span>{props.info.name}</span>
         <span css={{
           cursor: "pointer",
           ":hover": {
             color: "red",
           },
         }}>
-          <FiX onClick={ () => handleDelete(props.info) } />
+          <FiX onClick={() => handleDelete(props.info)} />
         </span>
       </div>
       <div css={{
         fontSize: ".7em",
         color: "grey",
-      }}>{ getUserType(props.info.type) }</div>
+      }}>{getUserType(props.info.type)}</div>
     </Link>
   )
 };
@@ -91,10 +91,10 @@ const UsersList = (props) => (
     </Link>
     {
       props.users
-      ? props.users.map((user, i) => (
+        ? props.users.map((user, i) => (
           <User info={user} key={i} />
         ))
-      : null
+        : null
     }
   </div>
 );
@@ -108,25 +108,25 @@ export default class Users extends React.Component {
   componentWillMount() {
     getAll();
 
-    this.unsubscribe=reducer.subscribe(() => {
+    this.unsubscribe = reducer.subscribe(() => {
       reducer.getState().then(state => {
         this.setState({ users: state.data.list, loading: false });
       });
     });
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.unsubscribe();
   }
 
   render = () => (
     <div>
-      <h2>Users</h2>
+      <h2 className="mucapp">Users</h2>
       <p>Users of MUCAPP.</p>
       <div>
         {
           this.state.loading
-          ? <Loader/>
-          : <UsersList users={ this.state.users } />
+            ? <Loader />
+            : <UsersList users={this.state.users} />
         }
       </div>
     </div>

@@ -28,17 +28,17 @@ const MemberCard = ({ member, team }) => (
     <div css={{
       fontSize: "1.3em",
     }}>
-      { member.name }
+      {member.name}
     </div>
     <div css={{
       color: "rgba(0, 0, 0, .5)",
     }}>
-      { member.registrationID }
+      {member.registrationID}
     </div>
     <div css={{
       color: "#ff5800",
     }}>
-      { team.slice(-7).substring(0, 6) }
+      {team.slice(-7).substring(0, 6)}
     </div>
   </div>
 );
@@ -80,31 +80,31 @@ export default class Teams extends React.Component {
     return (
       <div>
         <div>
-          <h2>{ this.state.college.name + " " + this.state.college.location } Teams</h2>
+          <h2 className="mucapp">{this.state.college.name + " " + this.state.college.location} Teams</h2>
         </div>
         <div>
           {
             this.state.events.length
-            ? this.state.events.map((event, i) => (
-                <div key={ i }>
+              ? this.state.events.map((event, i) => (
+                <div key={i}>
                   <div>
-                    <h3>{ event }</h3>
-                    <p>{ this.state.teams[event].length } Teams</p>
+                    <h3 className="mucapp">{event}</h3>
+                    <p>{this.state.teams[event].length} Teams</p>
                   </div>
                   <div>
                     {
                       this.state.teams[event].map((team, i) =>
                         team.members.map((member, i) => (
-                          <MemberCard key={ i } member={ member } team={ team.name } />
+                          <MemberCard key={i} member={member} team={team.name} />
                         ))
                       )
                     }
                   </div>
                 </div>
               ))
-            : <div>
-              No teams have been registered yet.
-            </div>
+              : <div>
+                No teams have been registered yet.
+              </div>
           }
         </div>
       </div>

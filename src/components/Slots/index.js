@@ -108,10 +108,10 @@ export default class extends React.Component {
             textAlign: "center",
             marginBottom: 30,
           }}>
-            <h2>
+            <h2 className="mucapp">
               {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)} Slots
             </h2>
-            <button onClick={this.deleteSlots}>Reset Slots</button>
+            <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
           </div>
           <div css={{ textAlign: "center" }}>
             <input type="checkbox" id="slotsFilter" defaultChecked={this.state.showOnlyRegistered} onChange={(e) => { this.setState({ showOnlyRegistered: e.target.checked }, this.filterVisibleSlots); }} /> <label htmlFor="slotsFilter">Show only registered teams</label>
@@ -134,10 +134,10 @@ export default class extends React.Component {
               textAlign: "center",
               marginBottom: 30,
             }}>
-              <h2>
+              <h2 className="mucapp">
                 Slotting teams for {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}
               </h2>
-              <button onClick={this.deleteSlots}>Reset Slots</button>
+              <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
 
             </div>
 
@@ -181,12 +181,12 @@ export default class extends React.Component {
             justifyContent: "center",
             alignItems: "center",
           }}>
-            <h2>{this.state.event.name}</h2>
+            <h2 className="mucapp">{this.state.event.name}</h2>
             <div css={{ color: "rgba(0, 0, 0, .5)" }}>
               Teams haven't been slotted for Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}
             </div>
             <p css={{ color: "green" }}>Generate slots now!</p>
-            <button onClick={this.startSlotting}>
+            <button className="mucapp" onClick={this.startSlotting}>
               {
                 this.state.slotting
                   ? "Slotting..."

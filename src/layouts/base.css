@@ -1,5 +1,8 @@
 @import "./fonts.css";
-*, ::before, ::after {
+
+*,
+::before,
+::after {
   box-sizing: border-box;
 }
 
@@ -13,16 +16,20 @@ body {
 }
 
 a {
+  text-decoration: none !important;
+}
+
+a.mucapp {
   color: #ff5800;
   text-decoration: none;
   transition: color .25s ease-out;
 }
 
-a:hover {
+a.mucapp:hover {
   color: #ffd100;
 }
 
-button {
+button.mucapp {
   display: inline-flex;
   padding: 10px 15px;
   border-radius: 3px;
@@ -38,17 +45,18 @@ button {
   transition: .15s ease-out;
 }
 
-button:hover {
+button.mucapp:hover {
   background-color: #ffd100;
   color: black;
 }
 
-button:disabled {
+button.mucapp:disabled {
   background-color: #ffa593;
   color: #fff;
 }
 
-input, textarea {
+input.mucapp,
+textarea.mucapp {
   margin-bottom: 10px;
   padding: 10px 15px;
   border-radius: 3px;
@@ -56,32 +64,49 @@ input, textarea {
   border: 1px solid rgba(0, 0, 0, .1);
 }
 
-input:hover, textarea:hover, input:focus, textarea:focus {
+input.mucapp:hover,
+textarea.mucapp:hover,
+input.mucapp:focus,
+textarea.mucapp:focus {
   box-shadow: 0 3px 10px -5px rgba(0, 0, 0, .3);
 }
 
-input:hover, textarea:hover {
+input.mucapp:hover,
+textarea.mucapp:hover {
   border-color: #ff5800;
 }
 
-input:focus, textarea:focus {
+input.mucapp:focus,
+textarea.mucapp:focus {
   border-color: #ffd100;
 }
 
-input, button, option, textarea {
+input.mucapp,
+button.mucapp,
+option.mucapp,
+textarea.mucapp {
   font-family: inherit;
 }
 
-a, input, button {
+a.mucapp,
+input.mucapp,
+button.mucapp {
   outline: 0;
 }
 
+img.mucapp {
+  margin: auto;
+}
+
 @media print {
-  .no-print, .no-print * {
+
+  .no-print,
+  .no-print * {
     display: none !important;
   }
+
   .leaderboardContainer {
-    overflow: visible!important;
+    overflow: visible !important;
   }
 }
 
@@ -91,27 +116,28 @@ a, input, button {
   margin: 10px;
 }
 
-.leaderboard th, td {
+.leaderboard th,
+.leaderboard td {
   width: 100px;
   border: 1px solid #000;
   padding: 5px;
 }
 
-th:first-child {
+.leaderboard th:first-child {
   position: sticky;
   left: 0px;
   background: #fff;
 }
 
-tr:nth-child(odd) {
+.leaderboard tr:nth-child(odd) {
   background: #eee;
 }
 
-tr:nth-child(odd) th:first-child {
+.leaderboard tr:nth-child(odd) th:first-child {
   background: #eee;
 }
 
-thead th {
+.leaderboard thead th {
   position: sticky;
   top: 0px;
 }
@@ -129,18 +155,19 @@ thead th {
   font-size: 20px;
 }
 
-.table td, .table th {
+.mucapp.table td,
+.mucapp.table th {
   width: auto;
   padding: 10px;
 }
 
-.table {
+.mucapp.table {
   border-collapse: collapse;
   margin: auto;
 }
 
-.table thead th {
-  background: #555!important;
+.mucapp.table thead th {
+  background: #555 !important;
   color: #fff;
 }
 
@@ -160,7 +187,8 @@ thead th {
   padding: 10px;
 }
 
-.vtable th, .vtable td {
+.vtable th,
+.vtable td {
   padding: 10px 2px;
   text-align: center;
 }
@@ -173,7 +201,8 @@ thead th {
 
 /* Chrome, Safari, Edge, Opera */
 
-.vtable input::-webkit-outer-spin-button, .vtable input::-webkit-inner-spin-button {
+.vtable input::-webkit-outer-spin-button,
+.vtable input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

@@ -34,17 +34,17 @@ const StatsCard = (props) => (
       fontSize: "3em",
       color: "#ff5800",
     }}>
-      { props.count }
+      {props.count}
     </div>
     <div css={{
       fontSize: "1.5em",
     }}>
-      { props.name }
+      {props.name}
     </div>
     <div css={{
       color: "grey",
     }}>
-      { props.meta }
+      {props.meta}
     </div>
   </div>
 );
@@ -65,7 +65,7 @@ export default class extends React.PureComponent {
       <div css={{
         textAlign: "center",
       }}>
-        <h1>UTSAV { new Date().getFullYear() } Statistics</h1>
+        <h1 className="mucapp"> UTSAV {new Date().getFullYear()} Statistics</h1>
       </div>
       <div css={{
         display: "flex",
@@ -76,27 +76,27 @@ export default class extends React.PureComponent {
       }}>
         <StatsCard
           name="Colleges"
-          count={ this.state.stats.colleges && this.state.stats.colleges.total }
-          meta={ "From " + (this.state.stats.colleges && this.state.stats.colleges.locations) + " locations" }
+          count={this.state.stats.colleges && this.state.stats.colleges.total}
+          meta={"From " + (this.state.stats.colleges && this.state.stats.colleges.locations) + " locations"}
         />
         <StatsCard
           name="Events"
-          count={ this.state.stats.events && this.state.stats.events.total }
-          meta={ "In " + (this.state.stats.events && this.state.stats.events.venues) + " venues" }
+          count={this.state.stats.events && this.state.stats.events.total}
+          meta={"In " + (this.state.stats.events && this.state.stats.events.venues) + " venues"}
         />
         <StatsCard
           name="Staff Events"
-          count={ this.state.stats.events && this.state.stats.events.staff }
-          meta={ (this.state.stats.participants && this.state.stats.participants.staff) + " participanting staff" }
+          count={this.state.stats.events && this.state.stats.events.staff}
+          meta={(this.state.stats.participants && this.state.stats.participants.staff) + " participanting staff"}
         />
         <StatsCard
           name="Individual Participants"
-          count={ this.state.stats.participants && (this.state.stats.participants.total - this.state.stats.participants.staff) }
-          meta={ "Excluding staff" }
+          count={this.state.stats.participants && (this.state.stats.participants.total - this.state.stats.participants.staff)}
+          meta={"Excluding staff"}
         />
         <StatsCard
           name="Group Participants"
-          count={ this.state.stats.teams && this.state.stats.teams.total }
+          count={this.state.stats.teams && this.state.stats.teams.total}
         />
         <StatsCard
           name="Days"

@@ -53,7 +53,7 @@ export default class extends React.PureComponent {
 
     this.state.submitted === false ?
       <div style={{ padding: 20 }} className="feedback">
-        <h1>Feedback for Utsav {new Date().getFullYear()}</h1>
+        <h1 className="mucapp"> Feedback for Utsav {new Date().getFullYear()}</h1>
         <form
           // acceptCharset="UTF-8"
           // action="https://usebasin.com/f/71436ab3ce6c"
@@ -137,8 +137,8 @@ export default class extends React.PureComponent {
           </div>
         </form>
       </div> : <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <h1>Thank you for your valuable feedback :)</h1>
+        <h1 className="mucapp"> Thank you for your valuable feedback :)</h1>
 
-      </div>
+      </div >
   );
 };

@@ -44,32 +44,32 @@ export default class extends React.PureComponent {
   render = () => (
     <div>
       <div css={{ textAlign: "center" }}>
-        <h1>College Leaderboard</h1>
-       
+        <h1 className="mucapp">College Leaderboard</h1>
+
 
         <div>
-        <Link to="/board"><Button>View Table</Button></Link>
+          <Link to="/board"><Button>View Table</Button></Link>
           {
             this.state.published
-            ? "Published"
-            : <button style={{marginLeft:20}} onClick={ this.handlePublish }>Publish</button>
+              ? "Published"
+              : <button className="mucapp" style={{ marginLeft: 20 }} onClick={this.handlePublish}>Publish</button>
           }
         </div>
       </div>
       <div>
         {
           this.state.leaderboard.length
-          ? this.state.leaderboard.map((team, i) => (
+            ? this.state.leaderboard.map((team, i) => (
               <LBList
                 main={false}
-                key={ i }
-                position={ this.getRank(team.points) }
-                title={ team.college.name }
-                description={ team.college.location }
-                points={ team.points }
+                key={i}
+                position={this.getRank(team.points)}
+                title={team.college.name}
+                description={team.college.location}
+                points={team.points}
               />
             ))
-          : <h1 style={{ textAlign:"center" }}>No results</h1>
+            : <h1 className="mucapp" style={{ textAlign: "center" }}>No results</h1>
         }
       </div>
     </div>

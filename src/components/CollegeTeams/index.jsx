@@ -89,7 +89,7 @@ export default class Teams extends React.Component {
     return (
       <LoadContent loading={this.state.collegeLoading}>
         <div>
-          <h2>{this.state.college ? (this.state.college.name + " " + this.state.college.location) : ""} Teams</h2>
+          <h2 className="mucapp">{this.state.college ? (this.state.college.name + " " + this.state.college.location) : ""} Teams</h2>
         </div>
         <LoadContent loading={this.state.teamsLoading}>
           {
@@ -97,7 +97,7 @@ export default class Teams extends React.Component {
               ? this.state.events.map((event, i) => (
                 <div key={i}>
                   <div>
-                    <h3>{event}</h3>
+                    <h3 className="mucapp">{event}</h3>
                     <p>{this.state.teams[event].length} Teams</p>
                   </div>
                   <div>

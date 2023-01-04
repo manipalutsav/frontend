@@ -1,9 +1,15 @@
 import React from "react";
 import { Link } from "gatsby";
 
-import { get } from "../../services/eventService";
-import reducer from "../../reducers/commonReducer";
-import Loader from "../../commons/Loader";
+import eventsService from "../../services/events";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTable, faTableList } from '@fortawesome/free-solid-svg-icons'
+import LoadContent from "../../commons/LoadContent";
+import participationStatus from "../../services/participationStatus";
+
+
+
+
 
 const styles = {
   eventCard: {
@@ -24,13 +30,13 @@ const styles = {
 };
 
 const EventCard = ({ event }) => (
-  <Link to={ "/events/" + event.id } css={{
+  <Link to={"/events/" + event.id} css={{
     ...styles.eventCard,
   }}>
     <div css={{
       fontSize: "1.3em",
     }}>
-      { event.name }
+      {event.name}
     </div>
     <div css={{
       fontSize: "0.9em",
@@ -38,17 +44,17 @@ const EventCard = ({ event }) => (
     }}>
       {
         new Date() > new Date(event.endDate)
-        ? "ended " + (new Date(event.endDate)).toLocaleString()
-        : new Date() >= new Date(event.startDate) && new Date() < new Date(event.endDate)
-          ? "ends " + (new Date(event.endDate)).toLocaleString()
-          : "starts " + (new Date(event.startDate)).toLocaleString() + " at " + event.venue
+          ? "ended " + (new Date(event.endDate)).toLocaleString()
+          : new Date() >= new Date(event.startDate) && new Date() < new Date(event.endDate)
+            ? "ends " + (new Date(event.endDate)).toLocaleString()
+            : "starts " + (new Date(event.startDate)).toLocaleString() + " at " + event.venue
       }
     </div>
     <div css={{
       fontSize: "0.8em",
       color: "rgba(0, 0, 0, .5)",
     }}>
-      { event.rounds.length } Round{ event.rounds.length === 1 ? "" : "s" }
+      {event.rounds.length} Round{event.rounds.length === 1 ? "" : "s"}
     </div>
   </Link>
 );
@@ -60,57 +66,142 @@ export default class Events extends React.Component {
     this.state = {
       events: [],
       loading: true,
+      mode: "card"
     };
   }
 
-  componentWillMount = async () => {
-    get();
 
-    this.unsubscribe=reducer.subscribe(() => {
-      reducer.getState().then(state => {
-        let events = state.data.list.map(event=>({
-          id: event.id,
-          name: event.name,
-          description: event.description,
-          college: event.college,
-          venue: event.venue,
-          rounds: event.rounds,
-          startDate: event.startDate,
-          endDate: event.endDate,
-        }));
+  async init() {
 
-        events.sort((a,b) => {
-          return new Date(a.startDate) - new Date(b.startDate);
-        });
-
-        this.setState({ events, loading: false });
+    try {
+      let events = await eventsService.getAll();
+      let statues = await participationStatus.get();
+      let participationStatusObj = {};
+      console.log({ statues })
+      statues.forEach(obj => {
+        if (!participationStatusObj[obj.event]) {
+          participationStatusObj[obj.event] = {
+            yes: 0,
+            no: 0,
+            maybe: 0
+          }
+        }
+        if (obj.status === "Yes")
+          participationStatusObj[obj.event].yes++;
+        else if (obj.status == "Maybe")
+          participationStatusObj[obj.event].maybe++;
+        else
+          participationStatusObj[obj.event].no++;
       });
-    });
+      events = events.map(event => ({
+        id: event.id,
+        name: event.name,
+        description: event.description,
+        college: event.college,
+        venue: event.venue,
+        rounds: event.rounds,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        maxTeamsPerCollege: event.maxTeamsPerCollege,
+        faculty: event.faculty,
+        participationStatus: participationStatusObj[event.id]
+      }));
+      events.sort((a, b) => {
+        return new Date(a.startDate) - new Date(b.startDate);
+      });
+
+      this.setState({ events, loading: false });
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
+  componentWillMount = async () => {
+
+    this.init();
+    // get();
+
+    // this.unsubscribe = reducer.subscribe(() => {
+    //   reducer.getState().then(state => {
+    //     let events = state.data.list.map(event => ({
+    //       id: event.id,
+    //       name: event.name,
+    //       description: event.description,
+    //       college: event.college,
+    //       venue: event.venue,
+    //       rounds: event.rounds,
+    //       startDate: event.startDate,
+    //       endDate: event.endDate,
+    //     }));
+
+    //     events.sort((a, b) => {
+    //       return new Date(a.startDate) - new Date(b.startDate);
+    //     });
+
+    //     this.setState({ events, loading: false });
+    //   });
+    // });
 
     // if (!response) return toast("Failed to load events, refresh to try again.");
     // if (response.status !== 200) return toast(response.message);
   };
-  componentWillUnmount(){
-    this.unsubscribe();
-  }
+
 
   render = () => (
     <div>
       <div>
-        <h2>Events</h2>
+        <h2 className="mucapp ">Events</h2>
         <Link to="/events/add"><button>Add Event</button></Link>
       </div>
-      <div css={{
-        marginTop: 20,
-        display: "flex",
-        flexWrap: "wrap",
-      }}>
-        {
-          this.state.loading
-          ? <Loader />
-          : this.state.events.map((event, i) => <EventCard key={i} event={event} />)
-        }
+      <div class="text-center">
+        <FontAwesomeIcon icon={faTable} style={{ padding: 4, color: "grey" }} />
+        <input type="checkbox" className="toggle" data-theme="light" onClick={() => this.setState({ mode: this.state.mode == "table" ? "card" : "table" })} />
+        <FontAwesomeIcon icon={faTableList} style={{ padding: 4, color: "grey" }} />
+
       </div>
+
+      <LoadContent loading={this.state.loading} noDiv={true}>
+        {this.state.mode == "table" ? <>
+          <table className="table w-full table-zebra" >
+            <thead><tr>
+              <th>Event Name</th>
+              <th>Venue</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Rounds</th>
+              <th>Max Teams Per college</th>
+              <th>Is Faculty Event</th>
+              <th>OutStationed Campuses</th>
+            </tr></thead>
+            <tbody>
+              {this.state.events.map(event => <tr>
+                <td>{event.name}</td>
+                <td>{event.venue}</td>
+                <td>{event.startDate}</td>
+                <td>{event.endDate}</td>
+                <td>{event.rounds.length}</td>
+                <td>{event.maxTeamsPerCollege}</td>
+                <td>{event.faculty ? "true" : ""}</td>
+                <td>{event.participationStatus ? (`${event.participationStatus.yes} Yes, ${event.participationStatus.maybe} Maybe,${event.participationStatus.no} No`) : ""}</td>
+                <td>
+                </td>
+              </tr>)}
+            </tbody>
+          </table>
+
+
+        </>
+          :
+          <div css={{
+            marginTop: 20,
+            display: "flex",
+            flexWrap: "wrap",
+          }}>
+            {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+          </div>}
+      </LoadContent>
     </div>
+
   );
 };

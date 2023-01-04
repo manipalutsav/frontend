@@ -15,19 +15,19 @@ export default class AddJudge extends React.Component {
     let response = judgesService.create({
       name: this.state.name,
     });
-    if(!response)
+    if (!response)
       return;
     navigate("/judges");
   };
 
   render = () => (
     <div>
-      <h2>Add Judge</h2>
+      <h2 className="mucapp">Add Judge</h2>
       <p>Add a new judge for Utsav events.</p>
       <div>
         <div>
           <Input
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="name"
             type="text"
@@ -37,7 +37,7 @@ export default class AddJudge extends React.Component {
           />
         </div>
         <div>
-          <Button onClick={ this.handleClick }>Add</Button>
+          <Button onClick={this.handleClick}>Add</Button>
         </div>
       </div>
     </div>

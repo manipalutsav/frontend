@@ -45,7 +45,7 @@ export default class Profile extends React.Component {
       changePassword: !this.state.changePassword,
     });
 
-    if(this.state["password:new"]!==this.state["password:new:confirm"]){
+    if (this.state["password:new"] !== this.state["password:new:confirm"]) {
       return toast("Confirm pasword does not match");
     }
 
@@ -69,11 +69,13 @@ export default class Profile extends React.Component {
     let user = getUser();
 
     this.setState({ user }, () =>
-      this.state.user.college && collegeService.get(this.state.user.college).then(college =>college&&
-        this.setState({ user: {
-          ...this.state.user,
-          collegeName: college.name + ", " + college.location
-        } })
+      this.state.user.college && collegeService.get(this.state.user.college).then(college => college &&
+        this.setState({
+          user: {
+            ...this.state.user,
+            collegeName: college.name + ", " + college.location
+          }
+        })
       )
     );
   }
@@ -85,33 +87,33 @@ export default class Profile extends React.Component {
         textAlign: "center",
       }}>
         <div>
-          <img src={ avatar } alt="Avatar" height="200" width="200" />
+          <img className="mucapp" src={avatar} alt="Avatar" height="200" width="200" />
         </div>
         <div>
-          <h1>{ this.state.user.name || "..." }</h1>
-          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{ this.state.user.email || "..." }</p>
-          <p css={{ color: "truergba(0, 0, 0, .5)" }}>{ this.state.user.type ? constants.getUserType(this.state.user.type) : "..." }</p>
-          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{ this.state.user.collegeName }</p>
+          <h1 className="mucapp"> {this.state.user.name || "..."}</h1>
+          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{this.state.user.email || "..."}</p>
+          <p css={{ color: "truergba(0, 0, 0, .5)" }}>{this.state.user.type ? constants.getUserType(this.state.user.type) : "..."}</p>
+          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{this.state.user.collegeName}</p>
         </div>
         <div>
-          <button css={{ margin: 5, }} onClick={ () => this.handleLogout() }>{ this.state.logoutClicks ? "Sure?" : "Logout" }</button>
-          <button css={{ margin: 5, }} onClick={ () => this.handleChangePassword() }>{ this.state.changePassword ? "Change?" : "Change Password" }</button>
+          <button className="mucapp" css={{ margin: 5, }} onClick={() => this.handleLogout()}>{this.state.logoutClicks ? "Sure?" : "Logout"}</button>
+          <button className="mucapp" css={{ margin: 5, }} onClick={() => this.handleChangePassword()}>{this.state.changePassword ? "Change?" : "Change Password"}</button>
         </div>
         <div>
           {
             this.state.changePassword
-            ? <div>
+              ? <div>
                 <br />
-                <Input onChange={ this.handleChange } type="password" name="password:old" placeholder="Old Password" />
+                <Input onChange={this.handleChange} type="password" name="password:old" placeholder="Old Password" />
                 <br />
-                <Input onChange={ this.handleChange } type="password" name="password:new" placeholder="New Password" />
+                <Input onChange={this.handleChange} type="password" name="password:new" placeholder="New Password" />
                 <br />
-                <Input onChange={ this.handleChange } type="password" name="password:new:confirm" placeholder="Confirm Password" />
+                <Input onChange={this.handleChange} type="password" name="password:new:confirm" placeholder="Confirm Password" />
               </div>
-            : null
+              : null
           }
         </div>
-      </div>
+      </div >
     );
   }
 }

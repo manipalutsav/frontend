@@ -3,11 +3,11 @@ import { Link } from "gatsby";
 import { FiMenu, FiX, FiUser } from 'react-icons/fi'
 import sidebarStore from '../../reducers/sidebarReducer';
 import userStore from '../../reducers/userReducer';
-import {open,close} from '../../actions/sidebarActions';
+import { open, close } from '../../actions/sidebarActions';
 
 const HeaderLogo = () => (
-  <Link to="/">
-    <div css = {{
+  <Link to="/" className="mucapp">
+    <div css={{
       display: "flex",
       position: "absolute",
       top: 0,
@@ -36,7 +36,7 @@ class UserLink extends Component {
     this.setState({ loggedIn: !!userState });
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.checkLoggedIn();
 
     userStore.subscribe(() => {
@@ -45,11 +45,11 @@ class UserLink extends Component {
   }
 
   render = () => (
-    <Link to = { this.state.loggedIn ? "/profile" : "/login" }>
-      <button css = {{
+    <Link to={this.state.loggedIn ? "/profile" : "/login"} css={{ textDecoration: "none" }}>
+      <button className="mucapp" css={{
         margin: "0 20px",
       }}>
-        <FiUser />&ensp;{ this.state.loggedIn ? "Profile" : "Login" }
+        <FiUser />&ensp;{this.state.loggedIn ? "Profile" : "Login"}
       </button>
     </Link>
   );
@@ -63,30 +63,30 @@ class NavigationToggle extends Component {
   componentDidMount() {
     sidebarStore.subscribe(() => {
       let storeState = sidebarStore.getState();
-      this.setState({ menu:storeState });
+      this.setState({ menu: storeState });
     });
   }
 
   render = () => (
     <button
-      css = {{
+      css={{
         fontSize: "1em",
         margin: "0 20px",
       }}
-      onClick = { this.state.menu === "close" ? open : close }
+      onClick={this.state.menu === "close" ? open : close}
     >
       {
         this.state.menu === "close"
-        ? <FiMenu />
-        : <FiX />
+          ? <FiMenu />
+          : <FiX />
       }
     </button>
   );
 }
 
-export default class Header extends Component{
+export default class Header extends Component {
   render = () => (
-    <header className="no-print" css = {{
+    <header className="no-print" css={{
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",

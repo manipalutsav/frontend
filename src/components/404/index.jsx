@@ -1,3 +1,3 @@
 import React from "react";
 
-export default () => <h1>404: Page Not Found</h1>;
+export default () => <h1 className="mucapp"> 404: Page Not Found</h1>;

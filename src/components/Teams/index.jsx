@@ -23,15 +23,15 @@ const styles = {
 };
 
 const TeamCard = (props) => (
-  <Link to={ "/colleges/" + props.college + "/teams/" + props.id + "/members" } css={{
+  <Link to={"/colleges/" + props.college + "/teams/" + props.id + "/members"} css={{
     ...styles.teamCard,
   }}>
-    <div>{ props.name }</div>
+    <div>{props.name}</div>
     <div css={{
       fontSize: ".7em",
       color: "grey",
     }}>
-      { props.members + " member" + (props.members === 1 ? "" : "s") }
+      {props.members + " member" + (props.members === 1 ? "" : "s")}
     </div>
   </Link>
 );
@@ -62,34 +62,34 @@ export default class Teams extends React.Component {
     return (
       <div>
         <div>
-          <h2>Teams</h2>
+          <h2 className="mucapp">Teams</h2>
         </div>
         <div>
           {
             this.state.events.length
-            ? this.state.events.map((event, i) => (
-                <div key={ i }>
+              ? this.state.events.map((event, i) => (
+                <div key={i}>
                   <div>
-                    <h3>{ event }</h3>
+                    <h3 className="mucapp">{event}</h3>
                   </div>
                   <div>
                     {
                       this.state.teams[event].map((team, i) => (
                         <TeamCard
-                          key={ i }
-                          id = { team.id }
-                          college = { this.props.college }
-                          name = { team.name }
-                          members = { team.members.length }
+                          key={i}
+                          id={team.id}
+                          college={this.props.college}
+                          name={team.name}
+                          members={team.members.length}
                         />
                       ))
                     }
                   </div>
                 </div>
               ))
-            : <div>
-              No teams have been registered yet.
-            </div>
+              : <div>
+                No teams have been registered yet.
+              </div>
           }
         </div>
       </div>

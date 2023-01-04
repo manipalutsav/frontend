@@ -28,16 +28,16 @@ export default class AddRound extends React.Component {
 
   handleClick = () => {
     if (!this.state.round.criteria1) return toast("Please enter criteria 1");
-    
-    let criteria=[this.state.round.criteria1];
 
-    if(this.state.round.criteria2&&this.state.round.criteria2.trim().length)
+    let criteria = [this.state.round.criteria1];
+
+    if (this.state.round.criteria2 && this.state.round.criteria2.trim().length)
       criteria.push(this.state.round.criteria2.trim());
-    if(this.state.round.criteria3&&this.state.round.criteria3.trim().length)
+    if (this.state.round.criteria3 && this.state.round.criteria3.trim().length)
       criteria.push(this.state.round.criteria3.trim());
-    if(this.state.round.criteria4&&this.state.round.criteria4.trim().length)
+    if (this.state.round.criteria4 && this.state.round.criteria4.trim().length)
       criteria.push(this.state.round.criteria4.trim());
-    
+
 
     this.setState({
       buttonText: this.ADDING
@@ -64,18 +64,18 @@ export default class AddRound extends React.Component {
   render = () => (
     <div>
       <div>
-        <h2>Add rounds to {this.state.event.name }</h2>
+        <h2 className="mucapp">Add rounds to {this.state.event.name}</h2>
       </div>
 
       <div>
         <div>
           <div>Criteria 1</div>
           <input
-            onChange = { this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria1"
             type="text"
-            value={ this.state.round.criteria1 || "" }
+            value={this.state.round.criteria1 || ""}
             placeholder="Criteria 1"
             css={{ width: 300 }}
           />
@@ -84,11 +84,11 @@ export default class AddRound extends React.Component {
         <div>
           <div>Criteria 2</div>
           <input
-            onChange = { this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria2"
             type="text"
-            value={ this.state.round.criteria2 || "" }
+            value={this.state.round.criteria2 || ""}
             placeholder="Criteria 1"
             css={{ width: 300 }}
           />
@@ -97,11 +97,11 @@ export default class AddRound extends React.Component {
         <div>
           <div>Criteria 3</div>
           <input
-            onChange = { this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria3"
             type="text"
-            value={ this.state.round.criteria3 || "" }
+            value={this.state.round.criteria3 || ""}
             placeholder="Criteria 1"
             css={{ width: 300 }}
           />
@@ -110,11 +110,11 @@ export default class AddRound extends React.Component {
         <div>
           <div>Criteria 4</div>
           <input
-            onChange = { this.handleChange }
+            onChange={this.handleChange}
             autoComplete="off"
             name="criteria4"
             type="text"
-            value={ this.state.round.criteria4 || "" }
+            value={this.state.round.criteria4 || ""}
             placeholder="Criteria 1"
             css={{ width: 300 }}
           />
@@ -123,7 +123,7 @@ export default class AddRound extends React.Component {
         <div>
           <div>Slottable</div>
           <Select
-            isSearchable={ false }
+            isSearchable={false}
             name="slottable"
             placeholder="Slottable"
             value={{
@@ -134,7 +134,7 @@ export default class AddRound extends React.Component {
               { label: "Slottable", value: true },
               { label: "Not Slottable", value: false },
             ]}
-            onChange={ (e) => this.setState({ round: { ...this.state.round, slottable: e.value } }) }
+            onChange={(e) => this.setState({ round: { ...this.state.round, slottable: e.value } })}
             styles={{
               control: (provided, state) => ({
                 ...provided,
@@ -155,20 +155,20 @@ export default class AddRound extends React.Component {
                 },
               }),
             }}
-            css = {{
+            css={{
               fontSize: "16px",
               width: 300,
-              display:'inline-block'
+              display: 'inline-block'
             }}
           />
         </div>
 
         <div>
           <Button
-            onClick={ this.handleClick }
-            disabled={ this.state.buttonText === this.ADDING }
+            onClick={this.handleClick}
+            disabled={this.state.buttonText === this.ADDING}
           >
-            { this.state.buttonText }
+            {this.state.buttonText}
           </Button>
         </div>
       </div>

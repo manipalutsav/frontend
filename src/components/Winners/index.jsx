@@ -35,12 +35,12 @@ const Member = (props) => (
 
 const College = (props) => (
   <div>
-    <h2>{props.info.name + ", " + props.info.location}</h2>
+    <h2 className="mucapp">{props.info.name + ", " + props.info.location}</h2>
     <div>
       {
         props.winners && props.winners.map((winner) => (
           <div>
-            <h3>{winner.team && winner.team.event.name} - {winner.rank + (winner.rank === 1 ? "st" : winner.rank === 2 ? "nd" : winner.rank === 3 ? "rd" : "th")} Prize</h3>
+            <h3 className="mucapp">{winner.team && winner.team.event.name} - {winner.rank + (winner.rank === 1 ? "st" : winner.rank === 2 ? "nd" : winner.rank === 3 ? "rd" : "th")} Prize</h3>
             <div>
               {
                 winner && winner.team && winner.team.members.map((member, i) => (
@@ -93,7 +93,7 @@ export default class Colleges extends React.Component {
 
   render = () => (
     <div>
-      <h2>Winners</h2>
+      <h2 className="mucapp">Winners</h2>
       <p>Winners of Utsav 2019.</p>
       <div>
         {

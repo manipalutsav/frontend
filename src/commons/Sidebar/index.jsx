@@ -27,6 +27,7 @@ const SidebarItem = (props) => (
       padding: 10,
       paddingLeft: 50,
       fontSize: ".9em",
+      textDecoration: "none",
       color: path() === props.to ? "#ff5800" : "inherit",
       backgroundColor: path() === props.to ? "rgba(255, 209, 0, .2)" : "",
       borderRight: "3px solid",
@@ -52,18 +53,18 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/" title="Home" />
     <SidebarItem to="/register" title="Register" />
     <SidebarItem to="/teams" title="Teams" />
-    <SidebarItem to="/slots" title="Slots" />
-    <SidebarItem to="/volunteers" title="Volunteer" />
-    <SidebarItem to="/leaderboard/public" title="Leaderboard" />
-    <SidebarItem to="/certificates" title="Certificates" />
+    {/* <SidebarItem to="/slots" title="Slots" /> */}
+    {/* <SidebarItem to="/volunteers" title="Volunteer" /> */}
+    {/* <SidebarItem to="/leaderboard/public" title="Leaderboard" /> */}
+    {/* <SidebarItem to="/certificates" title="Certificates" /> */}
     <SidebarSeparator />
     <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li>
     <SidebarItem to="/users" title="Users" />
     <SidebarItem to="/colleges" title="Colleges" />
     <SidebarItem to="/events" title="Events" />
-    <SidebarItem to="/judges" title="Judges" />
-    <SidebarItem to="/winners" title="Winners" />
-    <SidebarItem to="/leaderboard" title="Leaderboard" />
+    {/* <SidebarItem to="/judges" title="Judges" /> */}
+    {/* <SidebarItem to="/winners" title="Winners" /> */}
+    {/* <SidebarItem to="/leaderboard" title="Leaderboard" /> */}
 
     <SidebarSeparator />
     <li>

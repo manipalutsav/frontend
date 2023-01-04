@@ -100,7 +100,7 @@ class CoreVolunteer extends React.Component {
             <div >
                 <div>
                     <div>
-                        <h2>Core Volunteers</h2>
+                        <h2 className="mucapp">Core Volunteers</h2>
                     </div>
                 </div>
                 <div className="coreVolunteers">

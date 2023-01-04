@@ -107,7 +107,7 @@ export default class Judges extends React.Component {
 
   render = () => (
     <div>
-      <h2>Judges</h2>
+      <h2 className="mucapp">Judges</h2>
       <div>
         {
           this.state.loading

@@ -11,7 +11,7 @@ export default () => (
     flexDirection: "column",
     filter: "hue-rotate(245deg)"
   }}>
-    <img src={ shuffle } alt="..." width="300" />
+    <img className="mucapp" src={shuffle} alt="..." width="300" />
     <p css={{ margin: 0 }}>Shuffling...</p>
   </div>
 );

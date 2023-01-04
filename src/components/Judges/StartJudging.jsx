@@ -234,8 +234,8 @@ export default class Judge extends Component {
               flex: 3,
             }}>
               <div>
-                <h2>{this.state.event.name} - {"Round" + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1))}</h2>
-                <h3>
+                <h2 className="mucapp">{this.state.event.name} - {"Round" + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1))}</h2>
+                <h3 className="mucapp">
                   Slot #{this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].number}&ensp;
 
                 </h3>

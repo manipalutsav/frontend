@@ -88,7 +88,7 @@ class EventVolunteer extends React.Component {
             <div >
                 <div>
                     <div>
-                        <h2>Event Volunteers</h2>
+                        <h2 className="mucapp">Event Volunteers</h2>
                     </div>
                 </div>
                 <div className="coreVolunteers">

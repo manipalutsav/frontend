@@ -60,7 +60,7 @@ export default class extends React.Component {
       printWindow.document.write("<title>" + this.state.event.name + " Round " + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.state.round) + 1)) + " - Slots</title>");
       printWindow.document.write("<style>body{font-family:sans-serif;}body>div{display:flex;justify-content:space-between;padding:5px;border-bottom:1px dashed #bbb;}h1{text-align:center;}</style>");
       printWindow.document.write("</head><body>");
-      printWindow.document.write("<h1>" + this.state.event.name + " Round " + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.state.round) + 1)) + " - Slots</h1>");
+      printWindow.document.write("<h1> " + this.state.event.name + " Round " + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.state.round) + 1)) + " - Slots</h1>");
       printWindow.document.write(slots);
       printWindow.document.write("</body></html>");
       printWindow.document.close();
@@ -75,7 +75,7 @@ export default class extends React.Component {
         textAlign: "center",
         marginBottom: 30,
       }}>
-        <h2>
+        <h2 className="mucapp">
           {this.state.event.name} Slots
         </h2>
         <div>
@@ -124,7 +124,7 @@ export default class extends React.Component {
                   textAlign: "center",
                   marginBottom: 30,
                 }}>
-                  <button onClick={this.showPDF}>Generate PDF</button>
+                  <button className="mucapp" onClick={this.showPDF}>Generate PDF</button>
                 </div>
                 <div id="slots">
                   {
@@ -145,7 +145,7 @@ export default class extends React.Component {
                 justifyContent: "center",
                 alignItems: "center",
               }}>
-                <h2>{this.state.event.name}</h2>
+                <h2 className="mucapp">{this.state.event.name}</h2>
                 <div css={{ color: "rgba(0, 0, 0, .5)" }}>
                   Teams haven't been slotted for Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.state.round) + 1)}
                 </div>

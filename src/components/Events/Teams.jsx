@@ -74,7 +74,7 @@ export default class Teams extends React.Component {
     return (
       <div>
         <div>
-          <h2>Teams</h2>
+          <h2 className="mucapp">Teams</h2>
         </div>
         <div>
           {this.state.loaded ? <>

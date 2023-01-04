@@ -26,8 +26,8 @@ const styles = {
 
 const UserCard = (props) => (
   <a
-    href={ props.url }
-    title={ props.username }
+    href={props.url}
+    title={props.username}
     target="_blank"
     rel="noopener noreferrer"
     css={{
@@ -43,8 +43,8 @@ const UserCard = (props) => (
       height: 100,
     }}>
       <img
-        src={ props.avatar }
-        alt={ props.username }
+        src={props.avatar}
+        alt={props.username}
         height="100"
         width="100"
         css={{
@@ -56,8 +56,8 @@ const UserCard = (props) => (
       />
     </div>
     <div>
-      <div>{ props.username }</div>
-      <div css={{ color: "rgba(0, 0, 0, .5)", fontSize: "0.8em" }}>{ props.contributions }</div>
+      <div>{props.username}</div>
+      <div css={{ color: "rgba(0, 0, 0, .5)", fontSize: "0.8em" }}>{props.contributions}</div>
     </div>
   </a>
 );
@@ -84,7 +84,7 @@ export default class extends React.Component {
       <div css={{
         textAlign: "center",
       }}>
-        <h2>Developers</h2>
+        <h2 className="mucapp">Developers</h2>
         <p css={{
           display: "flex",
           justifyContent: "center",
@@ -100,16 +100,16 @@ export default class extends React.Component {
       }}>
         {
           this.state.contributors.length
-          ? this.state.contributors.map((user, i) => (
+            ? this.state.contributors.map((user, i) => (
               <UserCard
-                key={ i }
-                username={ user.login }
-                contributions={ user.contributions + " Contributions" }
-                avatar={ user.avatar }
-                url={ user.url }
+                key={i}
+                username={user.login}
+                contributions={user.contributions + " Contributions"}
+                avatar={user.avatar}
+                url={user.url}
               />
             ))
-          : <Loader />
+            : <Loader />
         }
       </div>
     </Layout>
