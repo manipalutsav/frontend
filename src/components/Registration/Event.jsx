@@ -43,7 +43,7 @@ const TeamCard = ({ team, college }) => {
   }
 
   return (
-    <Link to={"/register/" + team.event._id + "/teams/" + team.id} css={{
+    <Link to={"/register/" + team.event._id + "/teams/" + team._id} css={{
       ...styles.teamCard,
     }}>
       <div css={{

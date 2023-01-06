@@ -52,16 +52,18 @@ export default class Members extends React.Component {
     };
   }
 
-  componentWillMount = () => {
-    collegesService.getTeams(this.props.college).then(teams => {
-      let team = teams.find(team => team.id === this.props.team);
+  async init() {
+    let teams = await collegesService.getTeams(this.props.college);
+    let team = teams.find(team => team._id === this.props.team);
+    let members = await collegesService.getParticipants(this.props.college);
+    members = members.filter(member => team.members.includes(member.id));
+    this.setState({ team, members, });
 
-      collegesService.getParticipants(this.props.college).then(members => {
-        members = members.filter(member => team.members.includes(member.id));
-        this.setState({ team, members, });
-      });
-    });
-  };
+  }
+
+  componentDidMount() {
+    this.init();
+  }
 
   render = () => (
     <div>

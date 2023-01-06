@@ -28,7 +28,7 @@ const styles = {
 };
 
 const College = (props) => (
-  <Link to={"/colleges/" + props.college.id + "/teams"} css={{
+  <div css={{
     ...styles.collegeCard,
   }}>
     <div>{props.college.name}</div>
@@ -43,8 +43,14 @@ const College = (props) => (
       {console.log(props)}
       <Block show={props.college.teams}>{toUnitText(props.college.teams && props.college.teams.length, "Team")}</Block>
       <Block show={props.college.events}>{toUnitText(props.college.events && props.college.events.size, "Event")}</Block>
+
     </div>
-  </Link>
+    <div>
+      <Link to={"/colleges/" + props.college.id + "/edit"} className="p-2"><button className="mucapp" >Edit</button></Link>
+      <Link to={"/colleges/" + props.college.id + "/teams"}><button className="mucapp">Teams</button></Link>
+    </div>
+  </div>
+
 );
 
 const CollegeList = (props) => (

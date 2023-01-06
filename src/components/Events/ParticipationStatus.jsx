@@ -56,7 +56,6 @@ const EventCard = ({ event }) => (
     }}>
       {event.rounds.length} Round{event.rounds.length === 1 ? "" : "s"}
     </div>
-
   </Link>
 );
 
@@ -78,6 +77,7 @@ export default class Events extends React.Component {
       let events = await eventsService.getAll();
       let statues = await participationStatus.get();
       let participationStatusObj = {};
+      console.log({ statues })
       statues.forEach(obj => {
         if (!participationStatusObj[obj.event]) {
           participationStatusObj[obj.event] = {

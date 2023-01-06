@@ -155,7 +155,8 @@ const getAll = async () => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    toast(response.message);
+    if (response && response.status === "401")
+      toast("Your session has expired, please logout and login again.")
     return [];
   }
 };

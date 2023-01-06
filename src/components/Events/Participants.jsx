@@ -3,6 +3,8 @@ import { navigate } from "gatsby";
 
 import { Button } from "../../commons/Form";
 import collegesService from "../../services/colleges";
+import { toast } from "../../actions/toastActions";
+import LoadContent from "../../commons/LoadContent";
 
 const styles = {
   participantCard: {
@@ -50,39 +52,46 @@ export default class Events extends React.Component {
 
     this.state = {
       team: [],
-      participants: []
+      participants: [],
+      loading: true
     };
   }
 
-  componentWillMount = () => {
-    /****WORK TO DO HERE!! */
-    collegesService.getTeams(this.props.college).then(teams => {
-      let team = teams.find(team => team.id === this.props.team);
-      collegesService.getParticipants(this.props.college).then(participants => {
-        participants = participants.filter(participant => team.members.includes(participant.id));
-        this.setState({ team, participants });
-      })
+  async init() {
 
-    });
-  };
+    try {
+      let teams = await collegesService.getTeams(this.props.college);
+      let team = teams.find(team => team.id === this.props.team);
+      let participants = await collegesService.getParticipants(this.props.college);
+      participants = participants.filter(participant => team.members.includes(participant.id));
+      this.setState({ team, participants, loading: false });
+    } catch (e) {
+      toast(e.message);
+    }
+  }
+
+  componentDidMount() {
+    this.init();
+  }
 
   render = () => (
-    <div>
+    <LoadContent loading={this.state.loading}>
       <div>
-
-        <h2 className="mucapp">Participants List</h2>
-        <p>{this.state.participants.length} participant{this.state.participants.length === 1 ? "" : "s"}</p>
+        <div>
+          <h2 className="mucapp">Participants List</h2>
+          <p>{this.state.participants.length} participant{this.state.participants.length === 1 ? "" : "s"}</p>
+        </div>
+        <div style={{ display: 'flex' }}>
+          {
+            this.state.participants.map((participant, i) => (
+              <ParticipantCard key={i} participant={participant} />
+            ))
+          }
+        </div>
+        <div>
+          <Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register") }}>Back</Button>
+        </div>
       </div>
-      <div style={{ display: 'flex' }}>
-        {
-          this.state.participants.map((participant, i) => (
-            <ParticipantCard key={i} participant={participant} />
-          ))
-        }
-      </div>
-      <div>
-        <Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register") }}>Back</Button>
-      </div>
-    </div>
+    </LoadContent>
   );
 };

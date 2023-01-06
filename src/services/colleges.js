@@ -8,12 +8,23 @@ const create = async (college) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
 };
 
+const update = async (college) => {
+  let response = await request("/colleges", "PATCH", college);
+
+  if (response && response.status === 200) {
+    return response;
+  } else {
+    if (response && response.status === "401")
+      toast("Your session has expired, please logout and login again.")
+    return null;
+  }
+};
 
 const get = async (collegeID) => {
   let response = await request("/colleges/" + collegeID);
@@ -21,7 +32,7 @@ const get = async (collegeID) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
@@ -33,25 +44,25 @@ const getAll = async () => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return [];
   }
 };
 
-const getCollege = async(college)=>{
-  try{
-  
-  let response = typeof window !== "undefined" && await window.fetch(`${constants.server}/colleges/${college}`,{
-    credentials:"include"
-  });
-  let json = await response.json();
-  if(json.status===200)
-    return json.data;
-  else
-    toast(json.message);
+const getCollege = async (college) => {
+  try {
+
+    let response = typeof window !== "undefined" && await window.fetch(`${constants.server}/colleges/${college}`, {
+      credentials: "include"
+    });
+    let json = await response.json();
+    if (json.status === 200)
+      return json.data;
+    else
+      toast(json.message);
   }
-  catch(err){
+  catch (err) {
     toast(err.message);
   }
 
@@ -69,7 +80,7 @@ const getTeams = async (collegeID) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return [];
   }
@@ -88,13 +99,14 @@ const getParticipants = async (collegeID) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return [];
   }
 };
 export default {
   create,
+  update,
   get,
   getAll,
   getTeams,

@@ -59,6 +59,7 @@ import EventVolunteer from "../components/Volunteer/EventVolunteer";
 import Layout from "../layouts/app";
 import EditRound from "../components/Rounds/Edit";
 import AddVolunteer from "../components/Volunteer";
+import EditCollege from "../components/Colleges/Edit";
 
 if (typeof (document) != 'undefined')
   document.title = "MUCAPP";
@@ -96,6 +97,7 @@ export default () =>
 
       <PrivateRoute path="/colleges" component={Colleges} type={2} />
       <PrivateRoute path="/colleges/add" component={AddCollege} type={1} />
+      <PrivateRoute path="/colleges/:college/edit" component={EditCollege} type={1} />
       <PrivateRoute path="/colleges/:college/teams" component={Teams} type={2} />
       <PrivateRoute path="/colleges/:college/teams/:team/members" component={Members} type={1} />
 
