@@ -10,6 +10,7 @@ import LoadContent from "../../commons/LoadContent";
 import participationStatus from "../../services/participationStatus";
 import { toast } from "../../actions/toastActions";
 import Block from "../../commons/Block";
+import { Tab, Tabs } from "../../commons/Tabs";
 
 const EventCard = ({ event }) => {
   let registrationStatus = event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents;
@@ -103,7 +104,8 @@ export default class Events extends React.Component {
       },
       participationStatus: {},
       loading: true,
-      disableSubmit: false
+      disableSubmit: false,
+      tabIndex: 0
     };
   }
 
@@ -183,12 +185,31 @@ export default class Events extends React.Component {
               <Block show={!this.state.disableSubmit} id="2">
                 <p>Please select your participation status</p>
               </Block>
+              <Tabs onChange={(tabIndex) => this.setState({ tabIndex })}>
+                <Tab>All</Tab>
+                <Tab>Students only</Tab>
+                <Tab>Staff Only</Tab>
+
+              </Tabs>
+
             </div>
             <table className="table w-full table-zebra" >
-              <thead><tr><th>Event</th><th>Participation Status</th></tr></thead>
+              <thead><tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Participation Status</th>
+              </tr></thead>
               <tbody>
-                {this.state.events.map(event => <tr>
+                {this.state.events.filter(event => {
+                  if (this.state.tabIndex == 0)
+                    return true;
+                  if (this.state.tabIndex == 1 && !event.faculty)
+                    return true;
+                  if (this.state.tabIndex == 2 && event.faculty)
+                    return true;
+                }).map(event => <tr>
                   <td>{event.name}</td>
+                  <td className="text-xs">{(new Date(event.startDate)).toLocaleString()} to {(new Date(event.endDate)).toLocaleString()}</td>
                   <td>
 
                     <Switch eventId={event.id} state={this.state.participationStatus[event.id]} onChange={this.handleChange} disabled={this.state.disableSubmit} />
@@ -236,3 +257,4 @@ const Switch = ({ eventId, state, onChange, disabled }) => {
     <button disabled={disabled} onClick={() => onClick("No")} className={`btn ` + (state == "No" || state == undefined ? "btn-active" : "")}>No</button>
   </div>
 }
+
