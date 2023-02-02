@@ -28,7 +28,7 @@
     "gatsby-plugin-typography": "^2.3.23",
     "glamor": "^2.20.40",
     "html2canvas": "^1.0.0-alpha.12",
-    "jszip": "^3.2.2",
+    "jszip": "^3.8.0",
     "postcss": "^8.4.20",
     "react": "^16.8.3",
     "react-datepicker": "^2.1.0",
