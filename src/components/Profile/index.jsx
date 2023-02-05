@@ -13,7 +13,6 @@ import { toast } from "../../actions/toastActions";
 export default class Profile extends React.Component {
   state = {
     user: {},
-    logoutClicks: 0,
     changePassword: false,
   };
 
@@ -24,16 +23,8 @@ export default class Profile extends React.Component {
   }
 
   handleLogout() {
-    if (!this.state.logoutClicks) {
-      this.setState({
-        logoutClicks: this.state.logoutClicks + 1,
-      });
-    } else {
-      this.setState({
-        logoutClicks: this.state.logoutClicks - 1,
-      });
-
-      logout(() => {
+    if(window.confirm('Are you sure you want to logout?')) {
+     logout(() => {
         navigate("/");
         return null;
       });
@@ -96,7 +87,7 @@ export default class Profile extends React.Component {
           <p css={{ color: "rgba(0, 0, 0, .7)" }}>{this.state.user.collegeName}</p>
         </div>
         <div>
-          <button className="mucapp" css={{ margin: 5, }} onClick={() => this.handleLogout()}>{this.state.logoutClicks ? "Sure?" : "Logout"}</button>
+          <button className="mucapp" css={{ margin: 5, }} onClick={() => this.handleLogout()}>{"Logout"}</button>
           <button className="mucapp" css={{ margin: 5, }} onClick={() => this.handleChangePassword()}>{this.state.changePassword ? "Change?" : "Change Password"}</button>
         </div>
         <div>
