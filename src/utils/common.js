@@ -18,7 +18,6 @@ export const extractTeamName = (teamName) => {
         return teamName;
     }
 }
-
 export const setSlotCollege = (slot) => {
 
     if (!slot.college) {
