@@ -21,6 +21,7 @@ class CoreVolunteer extends React.Component {
         buttonText: this.ADD_VOLUNTEER,
         name: "",
         registerNumber: "",
+        phoneNumber: "",
         shirtSize: null,
         college: null,
         volunteers: []
@@ -53,13 +54,15 @@ class CoreVolunteer extends React.Component {
     addVolunteer = async () => {
         try {
             await this.setState({ buttonText: this.ADDING_VOLUNTEER });
-            let { name, registerNumber, shirtSize, college } = this.state;
+            let { name, registerNumber, phoneNumber, shirtSize, college } = this.state;
             name = name.trim();
             if (!name || name.length === 0)
                 throw Error("Please enter name.");
             if (!registerNumber || registerNumber.length === 0)
                 throw Error("Please enter register number.");
             if (!registerNumber.match(/^\d{4,}$/))
+                throw Error("Please enter valid register number.");
+            if (!phoneNumber.match(/^\d{4,}$/))
                 throw Error("Please enter valid register number.");
             if (!shirtSize || shirtSize.length === 0)
                 throw Error("Please select shirt size.");
@@ -72,6 +75,7 @@ class CoreVolunteer extends React.Component {
             let response = await addCoreVolunteer({
                 name,
                 registerNumber,
+                phoneNumber,
                 shirtSize,
                 college
             });
@@ -80,7 +84,7 @@ class CoreVolunteer extends React.Component {
             })
             toast(response.message);
             this.getVolunteers();
-            this.setState({ name: "", registerNumber: "" })
+            this.setState({ name: "", registerNumber: "", phoneNumber: "" })
 
         }
         catch (err) {
@@ -114,6 +118,7 @@ class CoreVolunteer extends React.Component {
                                 <th>Sl. No.</th>
                                 <th>Name</th>
                                 <th>Register Number</th>
+                                <th>Phone Number</th>
                                 <th>Shirt Size</th>
                                 <th>College</th>
                                 <th>Actions</th>
@@ -146,6 +151,22 @@ class CoreVolunteer extends React.Component {
                                         type="number"
                                         placeholder="Enter Register Number"
                                         value={this.state.registerNumber}
+                                        required
+                                        styles={{ width: 300 }}
+                                        css={{
+                                            float: "left",
+
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    <Input
+                                        onChange={this.handleChange}
+                                        autoComplete="off"
+                                        name={`phoneNumber`}
+                                        type="number"
+                                        placeholder="Enter Phone Number"
+                                        value={this.state.phoneNumber}
                                         required
                                         styles={{ width: 300 }}
                                         css={{
@@ -232,6 +253,7 @@ class CoreVolunteer extends React.Component {
                                         <td>{index + 1}</td>
                                         <td>{volunteer.name}</td>
                                         <td>{volunteer.registerNumber}</td>
+                                        <td>{volunteer.phoneNumber}</td>
                                         <td>{volunteer.shirtSize}</td>
                                         <td>{volunteer.college ? (volunteer.college.name || volunteer.college) : ""}</td>
                                         <td></td>

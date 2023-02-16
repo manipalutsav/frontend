@@ -53,6 +53,7 @@ export default class EditUser extends React.Component {
       let response = await updateUser(this.props.user, {
         name: this.state.name,
         email: this.state.email,
+        mobile: this.state.mobile,
         college: this.state.college,
         type: this.state.type,
       });
@@ -116,6 +117,17 @@ export default class EditUser extends React.Component {
             placeholder="Email"
             required
             value={this.state.email}
+            styles={{ width: 300 }}
+          />
+        </div>
+        <div>
+          <Input
+            onChange={this.handleChange}
+            autoComplete="off"
+            name="mobile"
+            type="mobile"
+            placeholder="Mobile"
+            required
             styles={{ width: 300 }}
           />
         </div>

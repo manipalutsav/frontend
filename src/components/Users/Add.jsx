@@ -54,6 +54,7 @@ export default class AddUser extends React.Component {
       let response = await create({
         name: this.state.name,
         email: this.state.email,
+        mobile: this.state.mobile,
         password: this.state.password,
         college: this.state.college,
         type: this.state.type,
@@ -106,6 +107,17 @@ export default class AddUser extends React.Component {
             name="email"
             type="email"
             placeholder="Email"
+            required
+            styles={{ width: 300 }}
+          />
+        </div>
+        <div>
+          <Input
+            onChange={this.handleChange}
+            autoComplete="off"
+            name="mobile"
+            type="mobile"
+            placeholder="Mobile"
             required
             styles={{ width: 300 }}
           />

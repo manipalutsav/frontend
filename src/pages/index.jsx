@@ -122,10 +122,10 @@ export default () =>
       <PrivateRoute path="/certificates" component={Certificates} type={4} />
 
       {/* For volunteers */}
-      <PrivateRoute path="/volunteers" component={Volunteer} type={4} />
-      <PrivateRoute path="/volunteers/core" component={CoreVolunteer} type={4} />
-      <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={4} />
-      <PrivateRoute path="/addVolunteer" component={AddVolunteer} type={4} />
+      <PrivateRoute path="/volunteers" component={Volunteer} type={1 << 3} />
+      <PrivateRoute path="/volunteers/core" component={CoreVolunteer} type={1 << 3} />
+      <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} />
+      <PrivateRoute path="/addVolunteer" component={AddVolunteer} type={1 << 3} />
       {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
 
