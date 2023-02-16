@@ -65,6 +65,10 @@ class CoreVolunteer extends React.Component {
                 throw Error("Please select shirt size.");
             if (!college || college.length === 0)
                 throw Error("Please select the college.");
+            console.log(this.state.volunteers, college)
+            if (this.state.volunteers.filter(vol => vol.college._id == college).length + 1 > 8) {
+                throw Error("College already has 8 volunteers")
+            }
             let response = await addCoreVolunteer({
                 name,
                 registerNumber,
