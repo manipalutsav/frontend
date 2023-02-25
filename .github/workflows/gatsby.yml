@@ -33,6 +33,7 @@ jobs:
   build:
     environment:
         name: prod
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Modify CNAME
