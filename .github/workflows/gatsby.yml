@@ -33,6 +33,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Modify CNAME
+        uses: jaywcjlove/github-action-modify-file-content@main
+        with:
+          path: CNAME
+          body: "${{ vars.SITE_URL }}"
+          overwrite: 'true'
       - name: Checkout
         uses: actions/checkout@v3
       - name: Detect package manager
