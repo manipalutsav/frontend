@@ -5,6 +5,8 @@ import { addCoreVolunteer, getCoreVolunteers } from "../../services/volunteerSer
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
+import LoadContent from "../../commons/LoadContent";
+import { Link } from "gatsby";
 
 const sizes = [
     { value: 'XS', label: 'Extra Small' },
@@ -17,13 +19,15 @@ const sizes = [
 
 class CoreVolunteer extends React.Component {
     ADD_VOLUNTEER = "Add";
+    ADDING_VOLUNTEER = "Adding...";
     state = {
         buttonText: this.ADD_VOLUNTEER,
         name: "",
         registerNumber: "",
         phoneNumber: "",
         shirtSize: null,
-        college: null,
+        collegeId: null,
+        colleges: [],
         volunteers: []
     };
 
@@ -54,7 +58,7 @@ class CoreVolunteer extends React.Component {
     addVolunteer = async () => {
         try {
             await this.setState({ buttonText: this.ADDING_VOLUNTEER });
-            let { name, registerNumber, phoneNumber, shirtSize, college } = this.state;
+            let { name, registerNumber, phoneNumber, shirtSize, collegeId } = this.state;
             name = name.trim();
             if (!name || name.length === 0)
                 throw Error("Please enter name.");
@@ -66,23 +70,21 @@ class CoreVolunteer extends React.Component {
                 throw Error("Please enter valid register number.");
             if (!shirtSize || shirtSize.length === 0)
                 throw Error("Please select shirt size.");
-            if (!college || college.length === 0)
+            if (!collegeId || collegeId.length === 0)
                 throw Error("Please select the college.");
-            console.log(this.state.volunteers, college)
-            if (this.state.volunteers.filter(vol => vol.college._id == college).length + 1 > 8) {
-                throw Error("College already has 8 volunteers")
-            }
+
             let response = await addCoreVolunteer({
                 name,
                 registerNumber,
                 phoneNumber,
                 shirtSize,
-                college
+                collegeId
             });
             this.setState({
                 buttonText: this.ADD_VOLUNTEER,
             })
-            toast(response.message);
+            if (response.status != 200)
+                toast(response.message + ": " + response.data);
             this.getVolunteers();
             this.setState({ name: "", registerNumber: "", phoneNumber: "" })
 
@@ -215,7 +217,7 @@ class CoreVolunteer extends React.Component {
                                         name="college"
                                         placeholder="College"
                                         options={this.state.colleges}
-                                        onChange={(e) => this.setState({ college: e.value })}
+                                        onChange={(e) => this.setState({ collegeId: e.value })}
 
                                         styles={{
                                             control: (provided, state) => ({
@@ -248,15 +250,15 @@ class CoreVolunteer extends React.Component {
                                 </td>
                             </tr>
                             {
-                                this.state.volunteers.map((volunteer, index) => (
+                                this.state.colleges.length > 0 && this.state.volunteers.map((volunteer, index) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{volunteer.name}</td>
                                         <td>{volunteer.registerNumber}</td>
                                         <td>{volunteer.phoneNumber}</td>
                                         <td>{volunteer.shirtSize}</td>
-                                        <td>{volunteer.college ? (volunteer.college.name || volunteer.college) : ""}</td>
-                                        <td></td>
+                                        <td>{this.state.colleges.find(college => college.value == volunteer.collegeId).label}</td>
+                                        <td><Link to={"/volunteers/core/" + volunteer._id}><button className="mucapp">Edit</button></Link></td>
                                     </tr>
                                 ))
                             }
