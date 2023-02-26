@@ -87,13 +87,17 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Configure CNAME
-        run: echo "prod.manipalutav.com" > CNAME
+        run: echo "prod.manipalutav.com" > static/CNAME
+      - name: Check  CNAME
+        run: cat ./static/CNAME
       - name: Check config
         run: cat gatsby-config.js
       - name: Build with Gatsby
         env:
           PREFIX_PATHS: 'false'
         run: ${{ steps.detect-package-manager.outputs.manager }} run build
+      - name: Check public CNAME
+        run: cat ./public/CNAME
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
