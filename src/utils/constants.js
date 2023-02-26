@@ -1,9 +1,15 @@
+import serverUrl from './serverUrl'
+
 const userTypes = {
   ADMINISTRATOR: 1 << 0,
   SUPPORT_TEAM: 1 << 1,
   FACULTY_COORDINATOR: 1 << 2,
   STUDENT_COORDINATOR: 1 << 3,
 };
+
+if (window.location.hostname == "localhost" && !serverUrl.startsWith("http://localhost")) {
+  window.alert("CAUTION: BACKEND IS SET TO " + serverUrl)
+}
 
 export const servers = {
   development: "http://localhost:3003",
@@ -43,5 +49,5 @@ export default {
     light: "#f5f5f5",
     white: "#ffffff",
   },
-  server: servers[process.env.NODE_ENV],
+  server: serverUrl,
 };
