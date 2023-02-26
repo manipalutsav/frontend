@@ -52,29 +52,39 @@ jobs:
         run: npm run build
       - name: Move build folder
         run: mv ./public ../build
-      - name: Move to build folder
-        run: cd ../build
+      - name: Check working directory
+        run: echo $(pwd)
+        working-directory: ../build
       - name: Initialize git
         run: git init
+        working-directory: ../build
       - name: Set user email
         run: git config --local user.email "service-account@manipalutsav.com"
+        working-directory: ../build
       - name: Set user name
         run: git config --local user.name "manipalutsav-svc"
+        working-directory: ../build
       - name: Set user password
+        working-directory: ../build
         run: git config --local user.password ${{ secrets.SVC_TOKEN }}
       - name: Set remote url
+        working-directory: ../build
         run: git remote add origin https://github.com/ManipalUtsav/test.manipalutsav.com.git
       - name: Fetch from remote url
+        working-directory: ../build
         run: git fetch
       - name: Add all files
+        working-directory: ../build
         run: git add .
       - name: Commit to master
+        working-directory: ../build
         run: git commit -m "Updated code"
       - name: Push code to origin
+        working-directory: ../build
         run: git push -f origin master
       - name: Check site deployed
+        working-directory: ../build
         run:  echo "Site deployed ${{ vars.SITE_URL }}"
       - name: Delete build folder
-        run: |
-            cd ../
-            rm -rf build
+        working-directory: ../
+        run: rm -rf build
