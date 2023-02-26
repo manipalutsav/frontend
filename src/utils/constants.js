@@ -7,7 +7,7 @@ const userTypes = {
   STUDENT_COORDINATOR: 1 << 3,
 };
 
-if (window.location.hostname == "localhost" && !serverUrl.startsWith("http://localhost")) {
+if (typeof window != "undefined" && window.location.hostname == "localhost" && !serverUrl.startsWith("http://localhost")) {
   window.alert("CAUTION: BACKEND IS SET TO " + serverUrl)
 }
 
