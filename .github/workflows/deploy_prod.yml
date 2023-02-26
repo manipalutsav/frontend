@@ -76,5 +76,5 @@ jobs:
         run:  echo "Site deployed: ${{ vars.SITE_URL }}"
       - name: Delete build folder
         run: |
-              cd ../
-              rm -rf build
+            cd ../
+            rm -rf build
