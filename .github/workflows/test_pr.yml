@@ -5,7 +5,7 @@
 name: Test PR
 
 on:
-  # Runs on prs for main
+  # Runs on prs for testing
   pull_request:
     branches:
     - '**'        # matches every branch
