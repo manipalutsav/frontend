@@ -7,7 +7,9 @@ name: Test PR
 on:
   # Runs on prs for main
   pull_request:
-    branches: [ main ]
+    branches:
+    - '**'        # matches every branch
+    - '!main'   # excludes master
 
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
