@@ -73,7 +73,7 @@ jobs:
       - name: Push code to origin
         run: git push -f origin master
       - name: Check site deployed
-        run:  echo "Site deployed: ${{ vars.SITE_URL }}"
+        run:  echo "Site deployed ${{ vars.SITE_URL }}"
       - name: Delete build folder
         run: |
             cd ../
