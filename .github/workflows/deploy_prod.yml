@@ -50,23 +50,13 @@ jobs:
         env:
           NODE_ENV: testing
         run: npm run build
-      - name: Setup git credentials
-        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
-        with:
-          # token: '${{ secrets.GITHUB_TOKEN }}'
-          global: true
-          name: 'manipalutsav-svc'
-          email: 'service-account@manipalutsav.com'
-          actor: 'manipalutsav-svc'
-          token: '${{ secrets.SVC_TOKEN }}'
-      - name: Check git config
-        run: git config --list
-      - name: Setup GH Pages
-        run: npm i -g gh-pages
       - name: Publish site
         run: |
           mv ./public ../build
           cd ../build
+          git config user.email "service-account@manipalutsav.com"
+          git config user.name "manipalutsav-svc"
+          git config user.password {{ secrets.SVC_TOKEN }}
           git init
           git remote add origin https://github.com/ManipalUtsav/test.manipalutsav.com.git
           git fetch
