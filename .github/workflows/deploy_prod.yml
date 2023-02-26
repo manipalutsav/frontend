@@ -59,20 +59,20 @@ jobs:
         run: git init
         working-directory: ../build
       - name: Set user email
-        run: git config --local user.email "r21meghashyam@gmail.com"
+        run: git config --local user.email "${{ vars.SVC_EMAIL }}"
         working-directory: ../build
       - name: Set user name
-        run: git config --local user.name "r21meghashyam"
+        run: git config --local user.name "${{ vars.SVC_NAME }}"
         working-directory: ../build
       - name: Set user password
         working-directory: ../build
-        run: git config --local user.password ${{ secrets.MEGH_TOKEN }}
+        run: git config --local user.password ${{ secrets.SVC_TOKEN }}
       - name: Configure git env
         working-directory: ../build
-        run: echo "GIT_USER=r21meghashyam:${{ secrets.MEGH_TOKEN }}" >> $GITHUB_ENV
+        run: echo "GIT_USER=${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}" >> $GITHUB_ENV
       - name: Set remote url
         working-directory: ../build
-        run: git remote add origin https://r21meghashyam:${{ secrets.MEGH_TOKEN }}@github.com/manipalutsav/test.manipalutsav.com.git
+        run: git remote add origin https://${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}@github.com/manipalutsav/test.manipalutsav.com.git
       - name: Fetch from remote url
         working-directory: ../build
         run: git fetch
