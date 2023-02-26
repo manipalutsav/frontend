@@ -61,7 +61,7 @@ jobs:
       - name: Set user name
         run: git config --local user.name "manipalutsav-svc"
       - name: Set user password
-        run: git config --local user.password {{ secrets.SVC_TOKEN }}
+        run: git config --local user.password ${{ secrets.SVC_TOKEN }}
       - name: Set remote url
         run: git remote add origin https://github.com/ManipalUtsav/test.manipalutsav.com.git
       - name: Fetch from remote url
