@@ -72,7 +72,7 @@ jobs:
         run: echo "GIT_USER=r21meghashyam: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" >> $GITHUB_ENV
       - name: Set remote url
         working-directory: ../build
-        run: git remote add origin git@github.com:ManipalUtsav/test.manipalutsav.com.git
+        run: git remote add origin https://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@github.com/ManipalUtsav/test.manipalutsav.com.git
       - name: Fetch from remote url
         working-directory: ../build
         run: git fetch
