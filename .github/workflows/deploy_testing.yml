@@ -30,7 +30,7 @@ jobs:
   # Build job
   build:
     environment:
-        name: test
+        name: testing
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -50,15 +50,44 @@ jobs:
         env:
           NODE_ENV: testing
         run: npm run build
-      - name: Setup git credentials
-        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
-        with:
-          global: true
-          name: 'manipalutsav-svc'
-          email: 'service-account@manipalutsav.com'
-          actor: 'manipalutsav-svc2'
-          token: '${{ secrets.SVC_TOKEN }}'
-      - name: Setup GH Pages
-        run: npm i -g gh-pages
-      - name: Publish site
-        run: gh-pages -d public -r https://github.com/ManipalUtsav/test.manipalutsav.com -b master -m \"Testing App Updated\"
+      - name: Move build folder
+        run: mv ./public ../build
+      - name: Check working directory
+        run: echo $(pwd)
+        working-directory: ../build
+      - name: Initialize git
+        run: git init
+        working-directory: ../build
+      - name: Set user email
+        run: git config --local user.email "${{ vars.SVC_EMAIL }}"
+        working-directory: ../build
+      - name: Set user name
+        run: git config --local user.name "${{ vars.SVC_NAME }}"
+        working-directory: ../build
+      - name: Set user password
+        working-directory: ../build
+        run: git config --local user.password ${{ secrets.SVC_TOKEN }}
+      - name: Configure git env
+        working-directory: ../build
+        run: echo "GIT_USER=${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}" >> $GITHUB_ENV
+      - name: Set remote url
+        working-directory: ../build
+        run: git remote add origin https://${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}@github.com/manipalutsav/test.manipalutsav.com.git
+      - name: Fetch from remote url
+        working-directory: ../build
+        run: git fetch
+      - name: Add all files
+        working-directory: ../build
+        run: git add .
+      - name: Commit to master
+        working-directory: ../build
+        run: git commit -m "Updated code"
+      - name: Push code to origin
+        working-directory: ../build
+        run: git push -f origin master
+      - name: Check site deployed
+        working-directory: ../build
+        run:  echo "Site deployed ${{ vars.SITE_URL }}"
+      - name: Delete build folder
+        working-directory: ../
+        run: rm -rf build
