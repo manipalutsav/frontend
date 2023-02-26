@@ -58,7 +58,7 @@ jobs:
           name: 'manipalutsav-svc'
           email: 'service-account@manipalutsav.com'
           actor: 'manipalutsav-svc'
-          # token: '${{ secrets.SVC_TOKEN }}'
+          token: '${{ secrets.SVC_TOKEN }}'
       - name: Check git config
         run: git config --list
       - name: Setup GH Pages
