@@ -50,17 +50,31 @@ jobs:
         env:
           NODE_ENV: testing
         run: npm run build
-      - name: Publish site
+      - name: Move build folder
+        run: mv ./public ../build
+      - name: Move to build folder
+        run: cd ../build
+      - name: Initialize git
+        run: git init
+      - name: Set user email
+        run: git config --local user.email "service-account@manipalutsav.com"
+      - name: Set user name
+        run: git config --local user.name "manipalutsav-svc"
+      - name: Set user password
+        run: git config --local user.password {{ secrets.SVC_TOKEN }}
+      - name: Set remote url
+        run: git remote add origin https://github.com/ManipalUtsav/test.manipalutsav.com.git
+      - name: Fetch from remote url
+        run: git fetch
+      - name: Add all files
+        run: git add .
+      - name: Commit to master
+        run: git commit -m "Updated code"
+      - name: Push code to origin
+        run: git push -f origin master
+      - name: Check site deployed
+        run:  echo "Site deployed: ${{ vars.SITE_URL }}"
+      - name: Delete build folder
         run: |
-          mv ./public ../build
-          cd ../build
-          git init
-          git config --local user.email "service-account@manipalutsav.com"
-          git config --local user.name "manipalutsav-svc"
-          git config --local user.password {{ secrets.SVC_TOKEN }}
-          git remote add origin https://github.com/ManipalUtsav/test.manipalutsav.com.git
-          git fetch
-          git add .
-          git commit -m "Updated code"
-          git push -f origin master
-          echo "Site deployed: ${{ vars.SITE_URL }}"
+              cd ../
+              rm -rf build
