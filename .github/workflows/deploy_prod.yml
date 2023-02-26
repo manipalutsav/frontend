@@ -56,7 +56,7 @@ jobs:
           global: true
           name: 'manipalutsav-svc'
           email: 'service-account@manipalutsav.com'
-          actor: 'manipalutsav-svc2'
+          actor: 'manipalutsav-svc'
           token: '${{ secrets.SVC_TOKEN }}'
       - name: Setup GH Pages
         run: npm i -g gh-pages
