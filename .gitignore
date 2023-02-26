@@ -80,6 +80,3 @@ constants.js
 .idea
 
 ssl/
-
-prod/
-testing/

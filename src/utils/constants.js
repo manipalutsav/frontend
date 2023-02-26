@@ -43,5 +43,5 @@ export default {
     light: "#f5f5f5",
     white: "#ffffff",
   },
-  server: servers.testing,
+  server: servers[process.env.NODE_ENV],
 };
