@@ -46,6 +46,8 @@ jobs:
         run: npm run test
       - name: Configure CNAME
         run: echo "${{ vars.SITE_URL }}" > static/CNAME
+      - name: Set backend server
+        run: echo "${{ vars.BACKEND_URL }}" > src/utils/serverUrl.js
       - name: Build project
         env:
           NODE_ENV: production
@@ -72,7 +74,7 @@ jobs:
         run: echo "GIT_USER=${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}" >> $GITHUB_ENV
       - name: Set remote url
         working-directory: ../build
-        run: git remote add origin https://${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}@github.com/manipalutsav/manipalutsav.github.io.git
+        run: git remote add origin https://${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}@${{ vars.GH_PAGES_REPO }}
       - name: Fetch from remote url
         working-directory: ../build
         run: git fetch
