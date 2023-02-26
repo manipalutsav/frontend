@@ -49,7 +49,7 @@ jobs:
       - name: Build project
         env:
           NODE_ENV: testing
-        run: npm run build
+        run: NODE_ENV=testing npm run build
       - name: Move build folder
         run: mv ./public ../build
       - name: Check working directory
