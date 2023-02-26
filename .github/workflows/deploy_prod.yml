@@ -53,11 +53,11 @@ jobs:
       - name: Setup git credentials
         uses: oleksiyrudenko/gha-git-credentials@v2.1.1
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          # global: true
-          # name: 'manipalutsav-svc'
-          # email: 'service-account@manipalutsav.com'
-          # actor: 'manipalutsav-svc'
+          # token: '${{ secrets.GITHUB_TOKEN }}'
+          global: true
+          name: 'manipalutsav-svc'
+          email: 'service-account@manipalutsav.com'
+          actor: 'manipalutsav-svc'
           # token: '${{ secrets.SVC_TOKEN }}'
       - name: Check git config
         run: git config --list
