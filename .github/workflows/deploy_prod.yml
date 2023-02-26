@@ -59,14 +59,14 @@ jobs:
         run: git init
         working-directory: ../build
       - name: Set user email
-        run: git config --local user.email "service-account@manipalutsav.com"
+        run: git config --local user.email "r21meghashyam@gmail.com"
         working-directory: ../build
       - name: Set user name
-        run: git config --local user.name "manipalutsav-svc"
+        run: git config --local user.name "r21meghashyam"
         working-directory: ../build
       - name: Set user password
         working-directory: ../build
-        run: git config --local user.password ${{ secrets.SVC_TOKEN }}
+        run: git config --local user.password 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
       - name: Set remote url
         working-directory: ../build
         run: git remote add origin https://github.com/ManipalUtsav/test.manipalutsav.com.git
