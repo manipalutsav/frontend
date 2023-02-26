@@ -55,9 +55,9 @@ jobs:
           mv ./public ../build
           cd ../build
           git init
-          git config user.email "service-account@manipalutsav.com"
-          git config user.name "manipalutsav-svc"
-          git config user.password {{ secrets.SVC_TOKEN }}
+          git config --local user.email "service-account@manipalutsav.com"
+          git config --local user.name "manipalutsav-svc"
+          git config --local user.password {{ secrets.SVC_TOKEN }}
           git remote add origin https://github.com/ManipalUtsav/test.manipalutsav.com.git
           git fetch
           git add .
