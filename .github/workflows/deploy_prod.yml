@@ -48,7 +48,7 @@ jobs:
         run: echo "${{ vars.SITE_URL }}" > static/CNAME
       - name: Build project
         env:
-          NODE_ENV: testing
+          NODE_ENV: production
         run: npm run build
       - name: Move build folder
         run: mv ./public ../build
@@ -72,7 +72,7 @@ jobs:
         run: echo "GIT_USER=${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}" >> $GITHUB_ENV
       - name: Set remote url
         working-directory: ../build
-        run: git remote add origin https://${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}@github.com/manipalutsav/manipalutsav.com.git
+        run: git remote add origin https://${{ vars.SVC_NAME }}:${{ secrets.SVC_TOKEN }}@github.com/manipalutsav/manipalutsav.github.io.git
       - name: Fetch from remote url
         working-directory: ../build
         run: git fetch
