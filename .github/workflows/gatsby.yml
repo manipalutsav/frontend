@@ -88,6 +88,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Configure CNAME
         run: echo "prod.manipalutav.com" > CNAME
+      - name: Check config
+        run: cat gatsby-config.js >> $GITHUB_OUTPUT
       - name: Build with Gatsby
         env:
           PREFIX_PATHS: 'false'
