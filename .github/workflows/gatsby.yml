@@ -89,7 +89,7 @@ jobs:
       - name: Configure CNAME
         run: echo "prod.manipalutav.com" > CNAME
       - name: Check config
-        run: cat gatsby-config.js >> $GITHUB_OUTPUT
+        run: cat gatsby-config.js
       - name: Build with Gatsby
         env:
           PREFIX_PATHS: 'false'
