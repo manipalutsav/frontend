@@ -9,8 +9,6 @@ on:
   push:
     branches: ["testing"]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -52,5 +50,15 @@ jobs:
         env:
           NODE_ENV: testing
         run: npm run build
+      - name: Setup git credentials
+        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
+        with:
+          global: true
+          name: 'manipalutsav-svc'
+          email: 'service-account@manipalutsav.com'
+          actor: 'manipalutsav-svc2'
+          token: '${{ secrets.SVC_TOKEN }}'
+      - name: Setup GH Pages
+        run: npm i -g gh-pages
       - name: Publish site
-        run: npm run deploy-test
+        run: gh-pages -d public -r https://github.com/ManipalUtsav/test.manipalutsav.com -b master -m \"Testing App Updated\"

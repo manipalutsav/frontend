@@ -9,11 +9,7 @@
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": " npm run develop",
     "serve": "gatsby serve",
-    "predeploy": "npm run build",
-    "deploy": "echo \"manipalutsav.com\" > ./public/CNAME  && gh-pages -d public -r https://github.com/ManipalUtsav/manipalutsav.github.io -b master -m \"Production App Updated\"",
-    "deploy-test": "npm run build && echo \"test.manipalutsav.com\" > ./public/CNAME && gh-pages -d public -r https://github.com/ManipalUtsav/test.manipalutsav.com -b master -m \"Testing App Updated\"",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
-    "getip": "node scripts/getip.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
