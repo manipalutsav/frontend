@@ -38,11 +38,8 @@ export default class Bias extends React.Component {
 
         for (let team of teams) {
 
-          let score = lb.find(score => {
-            console.log(getTeamName(score.team) === getTeamName(team), getTeamName(score.team), getTeamName(team));
-            return getTeamName(score.team) === getTeamName(team);
+          let score = lb.find(score => score.team.teamIndex === team.teamIndex && score.team.college._id == team.college._id);
 
-          });
 
           if (!score)
             continue;
@@ -52,6 +49,7 @@ export default class Bias extends React.Component {
           team.overtime = score.overtime || 0;
           team.bias = score.bias;
           team.total = score.points;
+          console.log(team);
         }
 
         this.setState({ teams, scoreStatus: true });
@@ -77,7 +75,7 @@ export default class Bias extends React.Component {
 
     this.setState({
       disqualifyNumber: number,
-      dialogBody: "Are you sure you want to disqualify " + slot.team.name + "?",
+      dialogBody: "Are you sure you want to disqualify " + getTeamName(slot) + "?",
       showDialog: true,
     });
   }
@@ -85,7 +83,8 @@ export default class Bias extends React.Component {
   handleDisqualifcation() {
     let slots = this.state.teams;
     let slot = slots.find(slot => slot.number === this.state.disqualifyNumber);
-    slot.team.disqualified = true;
+    console.log("DIS", slot)
+    slot.disqualified = true;
 
     this.setState({
       teams: slots,
@@ -95,16 +94,16 @@ export default class Bias extends React.Component {
 
   handleSave() {
     let teams = this.state.teams.map(slot => ({
-      id: slot.team._id,
+      id: slot.id,
       overtime: slot.overtime,
-      disqualified: slot.team.disqualified,
+      disqualified: slot.disqualified,
     }));
 
     this.setState(
       { button: this.BUTTON_CLICKED },
       () =>
         eventService.updateTeamScores(this.props.event, this.props.round, teams).then(res => {
-          if (res) navigate(`events/${this.props.event}/rounds`);
+          if (res) navigate(`/events/${this.props.event}/rounds`);
           this.setState({ button: this.BUTTON_NORMAL });
         })
     );
@@ -151,7 +150,8 @@ export default class Bias extends React.Component {
                         }
                       >
                         <td>{slot.number}</td>
-                        <td>{slot.teamName}</td>
+                        <td>{getTeamName(slot)}</td>
+                        {console.log({ slot })}
 
                         <td>{slot.points}</td>
                         <td>
@@ -167,9 +167,10 @@ export default class Bias extends React.Component {
                         </td>
                         <td>{slot.total}</td>
                         <td>
+                          {console.log("LOG", slot)}
                           {
-                            // slot.team.disqualified
-                            false
+                            slot.disqualified
+
                               ? "Disqualified"
                               : <Button onClick={() => this.confirmDisqualify(slot.number)}>Disqualify</Button>
                           }
