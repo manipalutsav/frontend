@@ -46,7 +46,6 @@ export default class extends React.Component {
     this.setState({ event });
 
 
-
     if (!lb.length) return;
 
     // let teams = slots;
@@ -114,12 +113,10 @@ export default class extends React.Component {
   }
   render = () => (
     <>
-      {console.log(this.state.ranks)}
       <div id="leaderboardContainer" style={{ width: this.state.width, margin: "auto" }}>
         <div id="leaderboard" css={{ maxWidth: 1000, background: "#eae8e3", margin: "auto" }}>
           <img src={Top} alt="top" style={{ width: "100%" }} />
           <h1 className="mucapp" css={{ color: "#900", fontSize: "3em", fontFamily: "'Cinzel Decorative', cursive", textAlign: "center" }} > {this.state.event.name}</h1>
-
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>FIRST POSITION</h2>
             {
