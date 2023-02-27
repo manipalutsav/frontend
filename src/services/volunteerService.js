@@ -1,7 +1,22 @@
 import request from "../utils/request";
 
 export const addCoreVolunteer = async (payload) => {
-  let response = await request(`/coreVolunteer/add`, "POST", payload);
+  let response = await request(`/coreVolunteer/`, "POST", payload);
+  return response;
+}
+
+export const updateCoreVolunteer = async (id, payload) => {
+  let response = await request(`/coreVolunteer/${id}`, "PATCH", payload);
+  return response;
+}
+
+export const deleteCoreVolunteer = async (id, payload) => {
+  let response = await request(`/coreVolunteer/${id}`, "DELETE", payload);
+  return response;
+}
+
+export const getCoreVolunteer = async (id) => {
+  let response = await request(`/coreVolunteer/${id}`);
   return response;
 }
 

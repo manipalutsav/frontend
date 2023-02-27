@@ -8,11 +8,12 @@ const LBList = (props) => (
     alignItems: "center",
     padding: 12,
     borderBottom: "1px dashed rgba(0, 0, 0, .1)",
+    color: props.color || "rgba(0, 0, 0, .5)"
   }}>
     <div css={{
       fontSize: "1.2em",
     }}>
-      { props.position }
+      {props.position}
     </div>
 
     <div css={{
@@ -20,29 +21,29 @@ const LBList = (props) => (
       <div css={{
         fontSize: "1.2em"
       }}>
-        { props.title }
+        {props.title}
       </div>
       <div css={{
         fontSize: "0.9em",
-        color: "rgba(0, 0, 0, .5)",
+        // color: "rgba(0, 0, 0, .5)",
       }}>
-        { props.description }
+        {props.description}
       </div>
     </div>
 
     <div css={{
       fontSize: "0.9em",
-      color: "rgba(0, 0, 0, .5)",
+      // color: "rgba(0, 0, 0, .5)",
     }}>
       {
         props.points === undefined
-        ? null
-        : <>
-        {props.main?'':<>
-            <div>{ props.points }</div>
-            <div>Points</div>
+          ? null
+          : <>
+            {props.main ? '' : <>
+              <div>{props.points}</div>
+              <div>Points</div>
             </>
-        }
+            }
           </>
       }
     </div>

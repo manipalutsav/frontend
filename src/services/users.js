@@ -8,7 +8,7 @@ const create = async (user) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
@@ -20,7 +20,7 @@ const remove = async (id) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
@@ -32,24 +32,21 @@ const get = async (id) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
 };
 
 const get2 = async (id) => {
-  try{
+  try {
 
-    let response = typeof window !== "undefined" && await window.fetch(`${constants.server}/users/${id}`,{
-      credentials:"include"
-    });
-    let json = await response.json();
-    if(json.staus)
-      return toast(json.message);
-    return json;
+    let response = await request("/users/" + id);
+    if (response.staus)
+      return toast(response.message);
+    return response;
   }
-  catch(err){
+  catch (err) {
     toast(err.message);
   }
 
@@ -73,7 +70,7 @@ const update = async (user) => {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    if(response&&response.status==="401")
+    if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
     return null;
   }
