@@ -72,8 +72,10 @@ ReactGA.initialize(TRACKING_ID);
 // Only checking for pageview every 30 seconds to avoid spamming GA
 ReactGA.pageview(window.location.pathname + window.location.search);
 setInterval(() => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
-  console.log("GA pageview: " + window.location.pathname + window.location.search);
+  if(typeof window != undefined) {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+    console.log("GA pageview: " + window.location.pathname + window.location.search);
+  }
 }, 1000 * 30);  
 
 export default () =>
