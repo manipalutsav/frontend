@@ -27,6 +27,7 @@
     "jszip": "^3.2.2",
     "postcss": "^8.4.20",
     "react": "^16.8.3",
+    "react-countdown": "^2.3.5",
     "react-datepicker": "^2.1.0",
     "react-dom": "^16.8.3",
     "react-icons": "^3.11.0",
@@ -42,7 +43,6 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.8",
     "autoprefixer": "^10.4.13",
-    "gh-pages": "^2.0.1",
     "prettier": "^1.16.4",
     "tailwindcss": "^3.2.4"
   },
