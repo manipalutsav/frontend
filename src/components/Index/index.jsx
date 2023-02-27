@@ -43,7 +43,7 @@ const RegistrationTimer = () => {
 export default () =>
   <div css={{ textAlign: "center" }}>
     <h2 className="mucapp">Welcome to MUCAPP!</h2>
-    <h1 className="mucapp"> UTSAV 2023</h1>
+    <h1 className="mucapp"> UTSAV 2023!</h1>
     <RegistrationTimer />
     <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} />
   </div >
