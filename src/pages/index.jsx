@@ -69,14 +69,14 @@ if (typeof (document) != 'undefined')
 const TRACKING_ID = "UA-183054936-1";
 ReactGA.initialize(TRACKING_ID);
 
-// Only checking for pageview every 30 seconds to avoid spamming GA
-ReactGA.pageview(window.location.pathname + window.location.search);
-setInterval(() => {
-  if(typeof window != undefined) {
-    ReactGA.pageview(window.location.pathname + window.location.search);
-    console.log("GA pageview: " + window.location.pathname + window.location.search);
-  }
-}, 1000 * 30);  
+if(typeof window != undefined) {
+  // Only checking for pageview every 30 seconds to avoid spamming GA
+  ReactGA.pageview(window.location.pathname + window.location.search);
+  setInterval(() => {
+      ReactGA.pageview(window.location.pathname + window.location.search);
+      console.log("GA pageview: " + window.location.pathname + window.location.search);
+  }, 1000 * 30);
+}  
 
 export default () =>
   <Layout>
