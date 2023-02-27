@@ -7,6 +7,7 @@ import { CriteriaCard } from "../../commons/Card";
 import { TeamList } from "../../commons/List";
 import judges from "../../services/judges";
 import events from "../../services/events";
+import eventsService from "../../services/events";
 import { toast } from "../../actions/toastActions";
 import Block from "../../commons/Block";
 
@@ -43,11 +44,17 @@ export default class Judge extends Component {
 
   selectJudge = async () => {
     if (this.state.judge) {
-      events.getSlots2(this.props.event, this.props.round).then(slots => {
-        slots.map(team => team.points = []);
-        this.setState({
-          slots,
-          selection: slots[0] && slots[0].number
+      //comment
+      eventsService.getSlots2(this.props.event, this.props.round).then(slots => {
+        eventsService.getTeams(this.props.event).then(teams => {
+
+          slots = slots.filter(slot => teams.find(team => team.index == slot.teamIndex && team.college._id == slot.college._id));
+
+          slots.map(team => team.points = []);
+          this.setState({
+            slots,
+            selection: slots[0] && slots[0].number
+          });
         });
       });
 
@@ -215,6 +222,7 @@ export default class Judge extends Component {
                 this.state.slots.map((team, i) => (
                   <TeamList
                     key={i}
+                    scoreVisibility={this.state.hideTotalScore ? "hidden" : "visible"}
                     score={team.total || 0}
                     slot={"#" + team.number}
                     name={team.team && team.team.name}
@@ -233,6 +241,9 @@ export default class Judge extends Component {
               textAlign: "center",
               flex: 3,
             }}>
+              <div css={{ textAlign: "left" }}>
+                <input type="checkbox" onClick={() => this.setState({ hideTotalScore: !this.state.hideTotalScore })} />Hide total scores
+              </div>
               <div>
                 <h2 className="mucapp">{this.state.event.name} - {"Round" + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1))}</h2>
                 <h3 className="mucapp">
@@ -242,7 +253,8 @@ export default class Judge extends Component {
               </div>
               <div css={{
                 color: "#ff5800",
-                fontSize: "1.5em"
+                fontSize: "1.5em",
+                visibility: this.state.hideTotalScore ? "hidden" : "visible"
               }}>
                 {(this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].total && this.state.slots[this.getSlotIndex(this.state.selection)].total.toFixed(1)) || 0} Points
               </div>
@@ -277,7 +289,7 @@ export default class Judge extends Component {
 
               <textarea
                 onChange={this.handleNoteChange}
-                css={{ margin: "20px auto", minWidth: "50%", maxWidth: "70%" }}
+                css={{ margin: "20px auto", minWidth: "50%", maxWidth: "70%", border: "1px solid #DDD", padding: 5, height: 200 }}
                 placeholder="Write your notes here"
                 name={this.state.selection}
                 value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].notes) || "")}
@@ -292,7 +304,7 @@ export default class Judge extends Component {
                 fontSize: "0.9em",
                 whiteSpace: "pre-wrap",
               }}>
-
+                <h3>Event Description:</h3>
                 {this.state.event.description}
               </p>
               <div>
