@@ -69,7 +69,7 @@ if (typeof (document) != 'undefined')
 const TRACKING_ID = "UA-183054936-1";
 ReactGA.initialize(TRACKING_ID);
 
-if(typeof window != undefined) {
+if(typeof window != "undefined") {
   // Only checking for pageview every 30 seconds to avoid spamming GA
   ReactGA.pageview(window.location.pathname + window.location.search);
   setInterval(() => {
