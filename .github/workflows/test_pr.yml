@@ -31,8 +31,6 @@ defaults:
 jobs:
   # Build job
   build:
-    environment:
-        name: prod
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
