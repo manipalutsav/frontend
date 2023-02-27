@@ -47,7 +47,6 @@ export default class extends React.Component {
       let score = lb.find(score => score.team._id === team.team._id);
 
       team.points = score.judgePoints || 0;
-      // team.points = score.points || 0;
       team.overtime = score.overtime || 0;
       team.bias = score.bias;
       team.total = score.points;
@@ -101,11 +100,10 @@ export default class extends React.Component {
   }
   render = () => (
     <>
-
       <div id="leaderboardContainer" style={{ width: this.state.width, margin: "auto" }}>
         <div id="leaderboard" css={{ maxWidth: 1000, background: "#eae8e3", margin: "auto" }}>
           <img src={Top} alt="top" style={{ width: "100%" }} />
-          <h1 className="mucapp"> css={{ color: "#900", fontSize: "3em", fontFamily: "'Cinzel Decorative', cursive", textAlign: "center" }}>{this.state.event.name}</h1>
+          <h1 className="mucapp"> css={{ color: "#900", fontSize: "3em", fontFamily: "'Cinzel Decorative', cursive", textAlign: "center" }}{this.state.event.name}</h1>
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>FIRST POSITION</h2>
             {
