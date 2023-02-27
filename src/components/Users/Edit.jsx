@@ -9,6 +9,8 @@ import constants from "../../utils/constants";
 import { getAll } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 import usersService from '../../services/users';
+import Loader from "../../commons/Loader";
+import LoadContent from "../../commons/LoadContent";
 
 export default class EditUser extends React.Component {
 
@@ -30,7 +32,8 @@ export default class EditUser extends React.Component {
   ADDING_USER = "Updating...";
   state = {
     colleges: [],
-    buttonText: this.ADD_USER
+    buttonText: this.ADD_USER,
+    user_loading: true
   };
 
   handleChange = (e) => {
@@ -53,6 +56,7 @@ export default class EditUser extends React.Component {
       let response = await updateUser(this.props.user, {
         name: this.state.name,
         email: this.state.email,
+        mobile: this.state.mobile,
         college: this.state.college,
         type: this.state.type,
       });
@@ -67,7 +71,8 @@ export default class EditUser extends React.Component {
   };
   getUser = async () => {
     let user = await usersService.get2(this.props.user);
-    this.setState(user);
+    this.setState({ ...user, user_loading: false });
+    this.forceUpdate();
   }
   componentWillMount() {
     getAll();
@@ -94,105 +99,119 @@ export default class EditUser extends React.Component {
     <div css={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <h2 className="mucapp">Edit User</h2>
       <p>Edit user of MUCAPP.</p>
-      <div>
+      <LoadContent loading={this.state.user_loading}>
         <div>
-          <Input
-            onChange={this.handleChange}
-            autoComplete="off"
-            name="name"
-            type="text"
-            placeholder="Name"
-            required
-            value={this.state.name}
-            styles={{ width: 300 }}
-          />
-        </div>
-        <div>
-          <Input
-            onChange={this.handleChange}
-            autoComplete="off"
-            name="email"
-            type="email"
-            placeholder="Email"
-            required
-            value={this.state.email}
-            styles={{ width: 300 }}
-          />
-        </div>
+          <div>
+            <Input
+              onChange={this.handleChange}
+              autoComplete="off"
+              name="name"
+              type="text"
+              placeholder="Name"
+              required
+              value={this.state.name}
+              styles={{ width: 300 }}
+            />
+          </div>
+          <div>
+            <Input
+              onChange={this.handleChange}
+              autoComplete="off"
+              name="email"
+              type="email"
+              placeholder="Email"
+              required
+              value={this.state.email}
+              styles={{ width: 300 }}
+            />
+          </div>
+          <div>
+            <Input
+              onChange={this.handleChange}
+              autoComplete="off"
+              name="mobile"
+              type="mobile"
+              placeholder="Mobile"
+              value={this.state.mobile}
+              required
+              styles={{ width: 300 }}
+            />
+          </div>
 
-        <div>
-          <Select
-            isSearchable={false}
-            name="college"
-            placeholder="College"
-            options={this.state.colleges}
-            value={this.getCollege()}
-            onChange={(e) => this.setState({ college: e.value })}
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                marginBottom: 10,
-                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                ":hover": {
-                  border: "1px solid #ff5800",
-                  boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                },
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                backgroundColor: state.isSelected ? "#ff5800" : "",
-                ":hover": {
-                  backgroundColor: "#ffd100",
-                  color: "black",
-                },
-              }),
-            }}
-            css={{
-              fontSize: "16px",
-              width: 300,
-            }}
-          />
+          <div>
+            <Select
+              isSearchable={false}
+              name="college"
+              placeholder="College"
+              options={this.state.colleges}
+              value={this.getCollege()}
+              onChange={(e) => this.setState({ college: e.value })}
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  marginBottom: 10,
+                  border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                  boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                  ":hover": {
+                    border: "1px solid #ff5800",
+                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                  },
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#ff5800" : "",
+                  ":hover": {
+                    backgroundColor: "#ffd100",
+                    color: "black",
+                  },
+                }),
+              }}
+              css={{
+                fontSize: "16px",
+                width: 300,
+              }}
+            />
+          </div>
+          <div>
+            <Select
+              isSearchable={false}
+              value={{ label: constants.getUserType(this.state.type), value: this.state.type }}
+              name="type"
+              placeholder="Account Type"
+              options={this.types}
+              onChange={(e) => this.setState({ type: e.value })}
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  marginBottom: 10,
+                  border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                  boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                  ":hover": {
+                    border: "1px solid #ff5800",
+                    boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                  },
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#ff5800" : "",
+                  ":hover": {
+                    backgroundColor: "#ffd100",
+                    color: "black",
+                  },
+                }),
+              }}
+              css={{
+                fontSize: "16px",
+                width: 300,
+              }}
+            />
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <Button onClick={this.handleClick} disabled={this.state.buttonText === this.ADDING_USER}>{this.state.buttonText}</Button>
+            <Link to="/users"><Button styles={{ marginLeft: 10 }}>Cancel</Button></Link>
+          </div>
         </div>
-        <div>
-          <Select
-            isSearchable={false}
-            value={{ label: constants.getUserType(this.state.type), value: this.state.type }}
-            name="type"
-            placeholder="Account Type"
-            options={this.types}
-            onChange={(e) => this.setState({ type: e.value })}
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                marginBottom: 10,
-                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-                ":hover": {
-                  border: "1px solid #ff5800",
-                  boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-                },
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                backgroundColor: state.isSelected ? "#ff5800" : "",
-                ":hover": {
-                  backgroundColor: "#ffd100",
-                  color: "black",
-                },
-              }),
-            }}
-            css={{
-              fontSize: "16px",
-              width: 300,
-            }}
-          />
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <Button onClick={this.handleClick} disabled={this.state.buttonText === this.ADDING_USER}>{this.state.buttonText}</Button>
-          <Link to="/users"><Button styles={{ marginLeft: 10 }}>Cancel</Button></Link>
-        </div>
-      </div>
+      </LoadContent>
     </div>
   );
 };

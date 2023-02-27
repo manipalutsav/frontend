@@ -70,7 +70,6 @@ export default class AddEvent extends React.Component {
         startDate: new Date(this.state.startDate),
         endDate: new Date(this.state.endDate),
         faculty: this.state.faculty,
-        criteria: [this.state.criteria1, this.state.criteria2, this.state.criteria3, this.state.criteria4],
         slottable: true
       });
       if (!response)
@@ -326,51 +325,6 @@ export default class AddEvent extends React.Component {
               width: 300,
               display: 'inline-block'
             }}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="criteria1">Criteria 1: </label>
-          <Input
-            onChange={this.handleChange}
-            autoComplete="off"
-            name="criteria1"
-            id="criteria1"
-            placeholder="Criteria 1 "
-            styles={{ width: 300 }}
-          />
-        </div>
-        <div>
-          <label htmlFor="criteria2">Criteria 2: </label>
-          <Input
-            onChange={this.handleChange}
-            autoComplete="off"
-            name="criteria2"
-            id="criteria2"
-            placeholder="Criteria 2 "
-            styles={{ width: 300 }}
-          />
-        </div>
-        <div>
-          <label htmlFor="criteria3">Criteria 3: </label>
-          <Input
-            onChange={this.handleChange}
-            autoComplete="off"
-            name="criteria3"
-            id="criteria3"
-            placeholder="Criteria 3 "
-            styles={{ width: 300 }}
-          />
-        </div>
-        <div>
-          <label htmlFor="criteria4">Criteria 4: </label>
-          <Input
-            onChange={this.handleChange}
-            autoComplete="off"
-            name="criteria4"
-            id="criteria4"
-            placeholder="Criteria 4 "
-            styles={{ width: 300 }}
           />
         </div>
         <div>

@@ -152,13 +152,12 @@ export default class Events extends React.Component {
     <div>
       <div>
         <h2 className="mucapp ">Events</h2>
-        <Link to="/events/add"><button>Add Event</button></Link>
+        <Link to="/events/add"><button className="mucapp">Add Event</button></Link>
       </div>
       <div className="text-center">
         <FontAwesomeIcon icon={faTable} style={{ padding: 4, color: "grey" }} />
         <input type="checkbox" className="toggle" data-theme="light" onClick={() => this.setState({ mode: this.state.mode == "table" ? "card" : "table" })} />
         <FontAwesomeIcon icon={faTableList} style={{ padding: 4, color: "grey" }} />
-
       </div>
 
       <LoadContent loading={this.state.loading} noDiv={true}>

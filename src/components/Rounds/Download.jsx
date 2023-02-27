@@ -6,6 +6,7 @@ import Top from "../../images/top.png"
 import Bottom from "../../images/bottom.png"
 import { Button } from "../../commons/Form";
 import collegesService from '../../services/colleges';
+import { getTeamName } from "../../utils/common";
 
 const html2canvas = typeof window !== `undefined` ? require("html2canvas") : null
 
@@ -34,42 +35,55 @@ export default class extends React.Component {
   componentWillMount = async () => {
     let event = await eventService.get(this.props.event);
 
-    await this.setState({ event });
-
-    let slots = await eventService.getSlots(this.props.event, this.props.round);
-
+    let slots = await eventService.getSlots2(this.props.event, this.props.round);
+    let teams2 = await eventService.getTeams(this.props.event);
     let lb = await leaderboardService.getRound(this.props.event, this.props.round);
+
+
+
+    console.log({ teams2, slots, lb })
+
+    this.setState({ event });
+
+
 
     if (!lb.length) return;
 
-    let teams = slots;
-    for (let team of teams) {
-      let score = lb.find(score => score.team._id === team.team._id);
+    // let teams = slots;
+    // console.log({ teams })
+    // for (let team of teams) {
+    //   let score = lb.find(score => score.team._id === team.id);
+    //   if (!score)
+    //     continue;
+    //   console.log({ score, lb, team })
 
-      team.points = score.judgePoints || 0;
-      team.overtime = score.overtime || 0;
-      team.bias = score.bias;
-      team.total = score.points;
-    }
-    teams = teams.filter(slot => !slot.team.disqualified).sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
-    let scores = Array.from(new Set(teams.map(team => team.total))).sort((a, b) => b - a);
+    //   team.points = score.judgePoints || 0;
+    //   // team.points = score.points || 0;
+    //   team.overtime = score.overtime || 0;
+    //   team.bias = score.bias;
+    //   team.total = score.points;
+    // }
+    lb = lb.filter(slot => !slot.disqualified).sort((a, b) => parseFloat(b.points) - parseFloat(a.points))
+    let scores = Array.from(new Set(lb.map(team => team.points))).sort((a, b) => b - a);
 
-    this.setState({ teams }, async () => {
+    this.setState({ lb }, async () => {
       let ranks = this.state.ranks;
 
 
-      for (let i = 0; i < teams.length; i++) {
-        let team = teams[i];
-        let rank = scores.indexOf(team.total) + 1;
+      for (let i = 0; i < lb.length; i++) {
+        let slot = lb[i];
+        let rank = scores.indexOf(slot.points) + 1;
+
+        console.log({ rank, slot })
 
         if (rank >= 1 && rank <= 3) {
-          let name = <>{"#" + team.number + " " + team.team.name.match(/[\w\s-]+/)[0]}</>;
+          let name = <>{"#" + slot.team.number + " " + getTeamName(slot.team)}</>;
 
-          if (team.team.members.length === 1) {
-            let participants = await collegesService.getParticipants(team.team.college)
-            let participant = participants.find(participant => team.team.members.includes(participant.id));
-            name = <>{"#" + team.number + " " + participant.name}<br /><small>{team.team.name.match(/[\w\s-]+/)[0]}</small></>;
-          }
+          // if (team.members.length === 1) {
+          //   let participants = await collegesService.getParticipants(team.college)
+          //   let participant = participants.find(participant => team.members.includes(participant.id));
+          //   name = <>{"#" + team.number + " " + participant.name}<br /><small>{team.name.match(/[\w\s-]+/)[0]}</small></>;
+          // }
           ranks[rank].push(name);
 
 
@@ -100,22 +114,26 @@ export default class extends React.Component {
   }
   render = () => (
     <>
+      {console.log(this.state.ranks)}
       <div id="leaderboardContainer" style={{ width: this.state.width, margin: "auto" }}>
         <div id="leaderboard" css={{ maxWidth: 1000, background: "#eae8e3", margin: "auto" }}>
           <img src={Top} alt="top" style={{ width: "100%" }} />
-          <h1 className="mucapp"> css={{ color: "#900", fontSize: "3em", fontFamily: "'Cinzel Decorative', cursive", textAlign: "center" }}{this.state.event.name}</h1>
+          <h1 className="mucapp" css={{ color: "#900", fontSize: "3em", fontFamily: "'Cinzel Decorative', cursive", textAlign: "center" }} > {this.state.event.name}</h1>
+
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>FIRST POSITION</h2>
             {
               this.state.ranks[1].map((i, j) => <h3 key={j}>{i}</h3>)
             }
           </div>
+
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>SECOND POSITION</h2>
             {
               this.state.ranks[2].map((i, j) => <h3 key={j}>{i}</h3>)
             }
           </div>
+
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>THIRD POSITION</h2>
             {

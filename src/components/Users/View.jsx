@@ -88,7 +88,7 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    let { name, email, collegeName, type } = this.state;
+    let { name, email, mobile, collegeName, type } = this.state;
 
 
     return (
@@ -102,6 +102,7 @@ export default class Profile extends React.Component {
         <div>
           <h1 className="mucapp"> {name || "..."}</h1>
           <p css={{ color: "rgba(0, 0, 0, .7)" }}>{email || "..."}</p>
+          <p css={{ color: "rgba(0, 0, 0, .7)" }}>{mobile || "..."}</p>
           <p css={{ color: "truergba(0, 0, 0, .5)" }}>{type ? constants.getUserType(type) : "..."}</p>
           <p css={{ color: "rgba(0, 0, 0, .7)" }}>{collegeName}</p>
         </div>
