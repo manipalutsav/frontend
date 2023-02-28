@@ -25,6 +25,31 @@ export const getCoreVolunteers = async () => {
   return response;
 }
 
+export const addVolunteer = async (payload) => {
+  let response = await request(`/volunteer/`, "POST", payload);
+  return response;
+}
+
+export const updateVolunteer = async (id, payload) => {
+  let response = await request(`/volunteer/${id}`, "PATCH", payload);
+  return response;
+}
+
+export const deleteVolunteer = async (id, payload) => {
+  let response = await request(`/volunteer/${id}`, "DELETE", payload);
+  return response;
+}
+
+export const getVolunteer = async (id) => {
+  let response = await request(`/volunteer/${id}`);
+  return response;
+}
+
+export const getVolunteers = async (type) => {
+  let response = await request(`/volunteer/all/${type}`);
+  return response;
+}
+
 export const addEventVolunteer = async (payload) => {
   let response = await request(`/eventVolunteer/add`, "POST", payload);
   return response;

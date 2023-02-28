@@ -46,9 +46,14 @@ import Winners from "../components/Winners";
 import Certificates from "../components/Certificates";
 
 //Imported for volunteer
-import Volunteer from "../components/Volunteer";
+import AddVolunteer from "../components/Volunteer";
+import Volunteer from "../components/Volunteer/Volunteer";
+import VolunteerEdit from "../components/Volunteer/VolunteerEdit";
 import CoreVolunteer from "../components/Volunteer/CoreVolunteer";
 import EventVolunteer from "../components/Volunteer/EventVolunteer";
+import EditRound from "../components/Rounds/Edit";
+import EditCollege from "../components/Colleges/Edit";
+import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
 // import AddVolunteer from "../components/Volunteer/AddVolunteer";
 // import ViewCoreVolunteer from "../components/Volunteer/ViewCoreVolunteer";
 // import ViewVolunteers from "../components/Volunteer/ViewVolunteers";
@@ -58,10 +63,7 @@ import EventVolunteer from "../components/Volunteer/EventVolunteer";
 // import configureStore from "../store";
 
 import Layout from "../layouts/app";
-import EditRound from "../components/Rounds/Edit";
-import AddVolunteer from "../components/Volunteer";
-import EditCollege from "../components/Colleges/Edit";
-import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
+
 
 if (typeof (document) != 'undefined')
   document.title = "MUCAPP";
@@ -69,14 +71,14 @@ if (typeof (document) != 'undefined')
 const TRACKING_ID = "UA-183054936-1";
 ReactGA.initialize(TRACKING_ID);
 
-if(typeof window != "undefined") {
+if (typeof window != "undefined") {
   // Only checking for pageview every 30 seconds to avoid spamming GA
   ReactGA.pageview(window.location.pathname + window.location.search);
   setInterval(() => {
-      ReactGA.pageview(window.location.pathname + window.location.search);
-      console.log("GA pageview: " + window.location.pathname + window.location.search);
+    ReactGA.pageview(window.location.pathname + window.location.search);
+    console.log("GA pageview: " + window.location.pathname + window.location.search);
   }, 1000 * 30);
-}  
+}
 
 export default () =>
   <Layout>
@@ -135,11 +137,12 @@ export default () =>
       <PrivateRoute path="/certificates" component={Certificates} type={4} />
 
       {/* For volunteers */}
-      <PrivateRoute path="/volunteers" component={Volunteer} type={1 << 3} />
+      <PrivateRoute path="/volunteers" component={AddVolunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/core" component={CoreVolunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/core/:volunteerId" component={CoreVolunteerEdit} type={1 << 3} />
+      <PrivateRoute path="/volunteers/:type" component={Volunteer} type={1 << 3} />
+      <PrivateRoute path="/volunteers/:type/:volunteerId" component={VolunteerEdit} type={1 << 3} />
       <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} />
-      <PrivateRoute path="/addVolunteer" component={AddVolunteer} type={1 << 3} />
       {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
 
