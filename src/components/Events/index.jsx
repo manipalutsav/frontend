@@ -88,7 +88,7 @@ export default class Events extends React.Component {
         }
         if (obj.status === "Yes")
           participationStatusObj[obj.event].yes++;
-        else if (obj.status == "Maybe")
+        else if (obj.status === "Maybe")
           participationStatusObj[obj.event].maybe++;
         else
           participationStatusObj[obj.event].no++;
@@ -156,12 +156,12 @@ export default class Events extends React.Component {
       </div>
       <div className="text-center">
         <FontAwesomeIcon icon={faTable} style={{ padding: 4, color: "grey" }} />
-        <input type="checkbox" className="toggle" data-theme="light" onClick={() => this.setState({ mode: this.state.mode == "table" ? "card" : "table" })} />
+        <input type="checkbox" className="toggle" data-theme="light" onClick={() => this.setState({ mode: this.state.mode === "table" ? "card" : "table" })} />
         <FontAwesomeIcon icon={faTableList} style={{ padding: 4, color: "grey" }} />
       </div>
 
       <LoadContent loading={this.state.loading} noDiv={true}>
-        {this.state.mode == "table" ? <>
+        {this.state.mode === "table" ? <>
           <table className="table w-full table-zebra" >
             <thead><tr>
               <th>Event Name</th>
