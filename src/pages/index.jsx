@@ -1,5 +1,6 @@
 import React from "react";
 import { Router } from "@reach/router";
+import ReactGA from "react-ga";
 
 import PrivateRoute from "../components/PrivateRoute";
 import Index from "../components/Index";
@@ -65,6 +66,17 @@ import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
 if (typeof (document) != 'undefined')
   document.title = "MUCAPP";
 
+const TRACKING_ID = "UA-183054936-1";
+ReactGA.initialize(TRACKING_ID);
+
+if(typeof window != "undefined") {
+  // Only checking for pageview every 30 seconds to avoid spamming GA
+  ReactGA.pageview(window.location.pathname + window.location.search);
+  setInterval(() => {
+      ReactGA.pageview(window.location.pathname + window.location.search);
+      console.log("GA pageview: " + window.location.pathname + window.location.search);
+  }, 1000 * 30);
+}  
 
 export default () =>
   <Layout>

@@ -4,7 +4,7 @@ import Scramble from "react-scramble";
 import eventsService from "../../services/events";
 import LBList from "../../commons/LBList";
 import Shuffle from "../../commons/Shuffle";
-import { getTeamName, setSlotCollege } from "../../utils/common";
+import { getTeamName } from "../../utils/common";
 
 export default class extends React.Component {
   constructor(props) {
@@ -37,7 +37,15 @@ export default class extends React.Component {
 
     eventsService.getSlots2(this.props.event, this.props.round).then(slots => {
       eventsService.getTeams(this.props.event).then(teams => {
-        slots.forEach(setSlotCollege);
+
+        slots.forEach(slot => {
+          let team = teams.find(team => team.index == slot.teamIndex && team.college._id == slot.college._id);
+
+          if (team) {
+            slot.registered = true;
+          }
+        })
+
         this.setState({ slotted: !!slots.length, slots, visibleSlots: slots, teams, loaded: true }, () => {
           this.filterVisibleSlots();
         })
@@ -48,7 +56,8 @@ export default class extends React.Component {
 
   filterVisibleSlots = () => {
     if (this.state.showOnlyRegistered) {
-      this.setState({ visibleSlots: this.state.slots.filter(slot => this.state.teams.find(team => team.name === slot.teamName && team.college.name === slot.college.name && team.college.location === slot.college.location)) });
+      //comment
+      this.setState({ visibleSlots: this.state.slots.filter(slot => slot.registered) });
     }
     else {
       this.setState({ visibleSlots: this.state.slots })
@@ -121,6 +130,7 @@ export default class extends React.Component {
               this.state.visibleSlots.map((slot, i) =>
                 <LBList
                   key={i}
+                  color={slot.registered ? "#444" : "#999"}
                   position={slot.number}
                   title={getTeamName(slot)}
                 />

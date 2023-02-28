@@ -31,8 +31,6 @@ defaults:
 jobs:
   # Build job
   build:
-    environment:
-        name: prod
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -46,3 +44,5 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm run test
+      - name: Build project
+        run: npm run build
