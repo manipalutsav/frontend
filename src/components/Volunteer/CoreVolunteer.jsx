@@ -5,7 +5,6 @@ import { addCoreVolunteer, getCoreVolunteers } from "../../services/volunteerSer
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
-import LoadContent from "../../commons/LoadContent";
 import { Link } from "gatsby";
 
 const sizes = [
@@ -83,7 +82,7 @@ class CoreVolunteer extends React.Component {
             this.setState({
                 buttonText: this.ADD_VOLUNTEER,
             })
-            if (response.status != 200)
+            if (response.status !== 200)
                 toast(response.message + ": " + response.data);
             this.getVolunteers();
             this.setState({ name: "", registerNumber: "", phoneNumber: "" })
@@ -257,7 +256,7 @@ class CoreVolunteer extends React.Component {
                                         <td>{volunteer.registerNumber}</td>
                                         <td>{volunteer.phoneNumber}</td>
                                         <td>{volunteer.shirtSize}</td>
-                                        <td>{this.state.colleges.find(college => college.value == volunteer.collegeId).label}</td>
+                                        <td>{this.state.colleges.find(college => college.value === volunteer.collegeId).label}</td>
                                         <td><Link to={"/volunteers/core/" + volunteer._id}><button className="mucapp">Edit</button></Link></td>
                                     </tr>
                                 ))

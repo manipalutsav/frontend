@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 export const Tabs = ({ children, onChange }) => {
 
   const [activeTab, setActiveTab] = useState(children.findIndex(child => child.props.active));
-  if (activeTab == -1)
+  if (activeTab === -1)
     setActiveTab(0);
 
   const mutableChildren = children.map(child => child);
@@ -15,7 +15,7 @@ export const Tabs = ({ children, onChange }) => {
   }
 
   mutableChildren.forEach((child, index) => {
-    let props = Object.assign({}, child.props, { active: activeTab == index, onClick, index })
+    let props = Object.assign({}, child.props, { active: activeTab === index, onClick, index })
     mutableChildren[index] = Object.assign({}, child, { props })
   });
 
@@ -24,7 +24,7 @@ export const Tabs = ({ children, onChange }) => {
   return <div className="tabs">
     {mutableChildren}
   </div>
-}//s
+}
 export const Tab = ({ children, active, onClick, index }) => {
-  return <a onClick={() => onClick(index)} className={"tab tab-bordered" + (active ? " tab-active" : "")}>{children}</a>
+  return <button onClick={() => onClick(index)} className={"tab tab-bordered" + (active ? " tab-active" : "")}>{children}</button>
 }

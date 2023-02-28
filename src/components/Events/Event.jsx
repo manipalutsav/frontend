@@ -63,7 +63,7 @@ export default class Events extends React.Component {
       let teams = await eventsService.getTeams(this.props.event);
       let statues = await participationStatus.getByEvent(this.props.event);
       let collegeList = await colleges.getAll();
-      statues = statues.map(status => ({ ...status, college: collegeList.find(college => college.id == status.college) }))
+      statues = statues.map(status => ({ ...status, college: collegeList.find(college => college.id === status.college) }))
       let participationStatusObj = {
         yes: 0,
         no: 0,
@@ -73,7 +73,7 @@ export default class Events extends React.Component {
 
         if (obj.status === "Yes")
           participationStatusObj.yes++;
-        else if (obj.status == "Maybe")
+        else if (obj.status === "Maybe")
           participationStatusObj.maybe++;
         else
           participationStatusObj.no++;

@@ -1,5 +1,4 @@
 import request from "../utils/request";
-import constants from "../utils/constants";
 import { toast } from "../actions/toastActions";
 
 const create = async (user) => {

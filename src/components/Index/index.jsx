@@ -11,11 +11,11 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     return <span>registrations are closed!</span>;
   } else {
-    if(days == 0 && hours == 0 && minutes == 0) {
+    if (days === 0 && hours === 0 && minutes === 0) {
       return <span>registrations close in: {seconds} seconds</span>;
-    } else if(days == 0 && hours == 0) {
+    } else if (days === 0 && hours === 0) {
       return <span>registrations close in: {minutes} minutes and {seconds} seconds</span>;
-    } else if (days == 0) {
+    } else if (days === 0) {
       return <span>registrations close in: {hours} hours, {minutes} minutes and {seconds} seconds</span>;
     } else {
       return <span>registrations close in: {days} days, {hours} hours, {minutes} minutes and {seconds} seconds</span>;
@@ -25,17 +25,17 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 
 const RegistrationTimer = () => {
   const current_date = new Date();
-  if(current_date >= studentEventsOpenDate) {
+  if (current_date >= studentEventsOpenDate) {
     return (<>
-              <span>Student event </span>
-              <Countdown date={studentEventsCloseDate} renderer={renderer} />
-          </>)
-  } else if(current_date >= cookingEventsOpenDate) {
-    return  (<>
-              <span>Cooking event </span>
-              <Countdown date={cookingEventsCloseDate} renderer={renderer} />
-          </>)
-  } 
+      <span>Student event </span>
+      <Countdown date={studentEventsCloseDate} renderer={renderer} />
+    </>)
+  } else if (current_date >= cookingEventsOpenDate) {
+    return (<>
+      <span>Cooking event </span>
+      <Countdown date={cookingEventsCloseDate} renderer={renderer} />
+    </>)
+  }
   return <></>
 
 }
