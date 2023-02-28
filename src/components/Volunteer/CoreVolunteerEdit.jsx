@@ -1,12 +1,11 @@
 import React from "react";
 import Select from "react-select";
 
-import { addCoreVolunteer, deleteCoreVolunteer, getCoreVolunteer, getCoreVolunteers, updateCoreVolunteer } from "../../services/volunteerService";
+import { deleteCoreVolunteer, getCoreVolunteer, updateCoreVolunteer } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
-import LoadContent from "../../commons/LoadContent";
-import { Link, navigate } from "gatsby";
+import { navigate } from "gatsby";
 import Loader from "../../commons/Loader";
 
 const sizes = [
@@ -87,7 +86,7 @@ class CoreVolunteerEdit extends React.Component {
             this.setState({
                 updateButtonText: this.UPDATE_VOLUNTEER,
             })
-            if (response.status != 200)
+            if (response.status !== 200)
                 toast(response.message + ": " + response.data);
             else {
                 navigate("../")
@@ -114,7 +113,7 @@ class CoreVolunteerEdit extends React.Component {
             this.setState({
                 deleteButtonText: this.DELETE_VOLUNTEER,
             })
-            if (response.status != 200)
+            if (response.status !== 200)
                 toast(response.message + ": " + response.data);
             else {
                 navigate("../")
@@ -140,7 +139,7 @@ class CoreVolunteerEdit extends React.Component {
 
     render() {
         console.log(this.state)
-        console.log(this.state.colleges.find(college => college.value == this.state.collegeId))
+        console.log(this.state.colleges.find(college => college.value === this.state.collegeId))
         return (
             <div >
                 <div>
@@ -218,7 +217,7 @@ class CoreVolunteerEdit extends React.Component {
                                             isSearchable={false}
                                             name={`shirtSize`}
                                             placeholder="T Shirt Sizes"
-                                            defaultValue={sizes[sizes.findIndex(size => size.value == this.state.shirtSize)]}
+                                            defaultValue={sizes[sizes.findIndex(size => size.value === this.state.shirtSize)]}
                                             options={sizes}
                                             onChange={(e) => this.setState({ [`shirtSize`]: e.value })}
                                             styles={{
@@ -252,7 +251,7 @@ class CoreVolunteerEdit extends React.Component {
                                             isSearchable={false}
                                             name="college"
                                             placeholder="College"
-                                            defaultValue={this.state.colleges[this.state.colleges.findIndex(college => college.value == this.state.collegeId)]}
+                                            defaultValue={this.state.colleges[this.state.colleges.findIndex(college => college.value === this.state.collegeId)]}
                                             options={this.state.colleges}
                                             onChange={(e) => this.setState({ collegeId: e.value })}
 

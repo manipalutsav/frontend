@@ -38,7 +38,7 @@ export default class Bias extends React.Component {
 
         for (let team of teams) {
 
-          let score = lb.find(score => score.team.teamIndex === team.teamIndex && score.team.college._id == team.college._id);
+          let score = lb.find(score => score.team.teamIndex === team.teamIndex && score.team.college._id === team.college._id);
 
 
           if (!score)
