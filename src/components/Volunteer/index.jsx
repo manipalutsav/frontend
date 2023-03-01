@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
+import { keyToDisplay } from "../../utils/common";
 
 const styles = {
     volunteerCard: {
@@ -19,7 +20,7 @@ const styles = {
         }
     },
 };
-export default class AddVolunteer extends React.Component {
+export default class Volunteer extends React.Component {
     render() {
         return (
             <div>
@@ -30,31 +31,27 @@ export default class AddVolunteer extends React.Component {
                     flexWrap: "wrap",
                 }}>
                     <br /><br /><br /><br />
-                    <Link to="/volunteers/core" css={{
-                        ...styles.volunteerCard,
-                        backgroundColor: "#ff5800",
-                        color: "white",
-                        ":hover": {
-                            color: "white",
-                            boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
-                        }
-                    }}>
-                        Core Volunteers
-                    </Link>
-                    <Link to="/volunteers/event" css={{
-                        ...styles.volunteerCard,
-                        backgroundColor: "#ff5800",
-                        color: "white",
-                        ":hover": {
-                            color: "white",
-                            boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
-                        }
-                    }}>
-                        Event Volunteers
-                    </Link>
+                    <AddVolunteer type={"core"} />
+                    <AddVolunteer type={"event"} />
+                    <AddVolunteer type={"mucapp"} />
+                    <AddVolunteer type={"design"} />
+                    <AddVolunteer type={"social-media"} />
                 </div>
             </div >
         )
     }
 }
 
+const AddVolunteer = ({ type }) => (
+    <Link to={`/volunteers/${type}`} css={{
+        ...styles.volunteerCard,
+        backgroundColor: "#ff5800",
+        color: "white",
+        ":hover": {
+            color: "white",
+            boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+        }
+    }}>
+        {keyToDisplay(type)} Volunteers
+    </Link>
+);

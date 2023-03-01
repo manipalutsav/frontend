@@ -1,12 +1,13 @@
 import React from "react";
 import Select from "react-select";
 
-import { deleteCoreVolunteer, getCoreVolunteer, updateCoreVolunteer } from "../../services/volunteerService";
+import { deleteVolunteer, getVolunteer, updateVolunteer } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 import { navigate } from "gatsby";
 import Loader from "../../commons/Loader";
+import { keyToDisplay } from "../../utils/common";
 
 const sizes = [
     { value: 'XS', label: 'Extra Small' },
@@ -17,7 +18,7 @@ const sizes = [
     { value: 'XXL', label: 'Extra Extra Large' },
 ];
 
-class CoreVolunteerEdit extends React.Component {
+class VolunteerEdit extends React.Component {
     UPDATE_VOLUNTEER = "Update";
     DELETE_VOLUNTEER = "Delete";
     UPDATING_VOLUNTEER = "Updating...";
@@ -76,12 +77,13 @@ class CoreVolunteerEdit extends React.Component {
             if (!collegeId || collegeId.length === 0)
                 throw Error("Please select the college.");
 
-            let response = await updateCoreVolunteer(this.state._id, {
+            let response = await updateVolunteer(this.state._id, {
                 name,
                 registerNumber,
                 phoneNumber,
                 shirtSize,
-                collegeId
+                collegeId,
+                type: this.props.type
             });
             this.setState({
                 updateButtonText: this.UPDATE_VOLUNTEER,
@@ -109,7 +111,7 @@ class CoreVolunteerEdit extends React.Component {
             }
             this.setState({ deleteButtonText: this.DELETING_VOLUNTEER });
 
-            let response = await deleteCoreVolunteer(this.state._id);
+            let response = await deleteVolunteer(this.state._id);
             this.setState({
                 deleteButtonText: this.DELETE_VOLUNTEER,
             })
@@ -128,7 +130,7 @@ class CoreVolunteerEdit extends React.Component {
     }
 
     getVolunteer = async () => {
-        const response = await getCoreVolunteer(this.props.volunteerId);
+        const response = await getVolunteer(this.props.volunteerId);
         if (response.status === 200) {
             const volunteer = response.data;
             this.setState({ ...volunteer })
@@ -142,7 +144,7 @@ class CoreVolunteerEdit extends React.Component {
             <div >
                 <div>
                     <div>
-                        <h2 className="mucapp">Edit Core Volunteer</h2>
+                        <h2 className="mucapp">Edit {keyToDisplay(this.props.type)}  Volunteer</h2>
                     </div>
                 </div>
                 <div className="coreVolunteers">
@@ -292,4 +294,4 @@ class CoreVolunteerEdit extends React.Component {
     }
 }
 
-export default CoreVolunteerEdit
+export default VolunteerEdit
