@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
 
-import constants from "../../utils/constants";
 import eventsService from "../../services/events";
 import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
@@ -13,10 +12,8 @@ import Block from "../../commons/Block";
 import { Tab, Tabs } from "../../commons/Tabs";
 
 const EventCard = ({ event }) => {
-  let registrationStatus = event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents;
-
   return (
-    <Link to={"/register/" + event.id} css={{
+    <Link to={event.name.match(/cooking/i) ? "/register/" + event.id : "#"} css={{
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
@@ -79,13 +76,17 @@ const EventCard = ({ event }) => {
           <span>{event.unregistered ? "Unregistered" : ""}</span>
         </div>
         <div>
-          {
-            registrationStatus === false
-              ? <span css={{ fontSize: "0.9em" }}>Registrations closed</span>
-              : event.registeredCount !== event.maxTeamsPerCollege
-                ? <Button>Register</Button>
-                : <span css={{ fontSize: "0.9em" }}>Slots full for college</span>
-          }
+          <Block show={!event.name.match(/cooking/i)}>
+            Registration not open
+          </Block>
+          <Block show={event.name.match(/cooking/i)}>
+            <Block show={event.registeredCount < event.maxTeamsPerCollege}>
+              <Button>Register</Button>
+            </Block>
+            <Block show={event.registeredCount === event.maxTeamsPerCollege}>
+              <span css={{ fontSize: "0.9em" }}>Slots full for college</span>
+            </Block>
+          </Block>
         </div>
       </div>
     </Link>
@@ -153,8 +154,9 @@ export default class Events extends React.Component {
 
 
   handleChange = ({ eventId, state }) => {
-    this.state.participationStatus[eventId] = state;
-    console.log(this.state);
+    let participationStatus = this.state.participationStatus;
+    participationStatus[eventId] = state;
+    this.setState({ participationStatus })
     this.forceUpdate();
   }
 
@@ -201,12 +203,13 @@ export default class Events extends React.Component {
               </tr></thead>
               <tbody>
                 {this.state.events.filter(event => {
-                  if (this.state.tabIndex == 0)
+                  if (this.state.tabIndex === 0)
                     return true;
-                  if (this.state.tabIndex == 1 && !event.faculty)
+                  if (this.state.tabIndex === 1 && !event.faculty)
                     return true;
-                  if (this.state.tabIndex == 2 && event.faculty)
+                  if (this.state.tabIndex === 2 && event.faculty)
                     return true;
+                  return false;
                 }).map(event => <tr>
                   <td>{event.name}</td>
                   <td className="text-xs">{(new Date(event.startDate)).toLocaleString()} to {(new Date(event.endDate)).toLocaleString()}</td>
@@ -252,9 +255,9 @@ const Switch = ({ eventId, state, onChange, disabled }) => {
   }
 
   return <div className="btn-group" data-theme="bumblebee">
-    <button disabled={disabled} onClick={() => onClick("Yes")} className={`btn ` + (state == "Yes" ? "btn-active" : "")}>Yes</button>
-    <button disabled={disabled} onClick={() => onClick("Maybe")} className={`btn ` + (state == "Maybe" ? "btn-active" : "")}>Maybe</button>
-    <button disabled={disabled} onClick={() => onClick("No")} className={`btn ` + (state == "No" || state == undefined ? "btn-active" : "")}>No</button>
+    <button disabled={disabled} onClick={() => onClick("Yes")} className={`btn ` + (state === "Yes" ? "btn-active" : "")}>Yes</button>
+    <button disabled={disabled} onClick={() => onClick("Maybe")} className={`btn ` + (state === "Maybe" ? "btn-active" : "")}>Maybe</button>
+    <button disabled={disabled} onClick={() => onClick("No")} className={`btn ` + (state === "No" || state === undefined ? "btn-active" : "")}>No</button>
   </div>
 }
 

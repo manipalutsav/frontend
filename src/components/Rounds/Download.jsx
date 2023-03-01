@@ -5,7 +5,6 @@ import eventService from '../../services/events';
 import Top from "../../images/top.png"
 import Bottom from "../../images/bottom.png"
 import { Button } from "../../commons/Form";
-import collegesService from '../../services/colleges';
 import { getTeamName } from "../../utils/common";
 
 const html2canvas = typeof window !== `undefined` ? require("html2canvas") : null

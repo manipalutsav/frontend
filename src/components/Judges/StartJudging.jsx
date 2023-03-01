@@ -48,7 +48,7 @@ export default class Judge extends Component {
       eventsService.getSlots2(this.props.event, this.props.round).then(slots => {
         eventsService.getTeams(this.props.event).then(teams => {
 
-          slots = slots.filter(slot => teams.find(team => team.index == slot.teamIndex && team.college._id == slot.college._id));
+          slots = slots.filter(slot => teams.find(team => team.index === slot.teamIndex && team.college._id === slot.college._id));
 
           slots.map(team => team.points = []);
           this.setState({

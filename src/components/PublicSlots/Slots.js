@@ -3,7 +3,7 @@ import Select from "react-select";
 
 import eventsService from "../../services/events";
 import LBList from "../../commons/LBList";
-import { getTeamName, setSlotCollege } from "../../utils/common";
+import { getTeamName } from "../../utils/common";
 
 export default class extends React.Component {
   constructor(props) {
@@ -42,7 +42,6 @@ export default class extends React.Component {
     let slots = await eventsService.getSlots2(this.props.event, this.state.round);
     let teams = await eventsService.getTeams(this.props.event)
     console.log(slots, teams)
-    slots.forEach(setSlotCollege);
     const registeredTeamsSlots = slots.filter(slot => teams.find(team => team.name === slot.teamName && team.college.name === slot.college.name && team.college.location === slot.college.location))
     this.setState({ slotted: !!slots.length, slots: registeredTeamsSlots, loaded: true });
   }
