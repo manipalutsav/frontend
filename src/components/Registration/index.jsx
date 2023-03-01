@@ -13,7 +13,7 @@ import { Tab, Tabs } from "../../commons/Tabs";
 
 const EventCard = ({ event }) => {
   return (
-    <Link to={"/register/" + event.id} css={{
+    <Link to={event.name.match(/cooking/i) ? "/register/" + event.id : "#"} css={{
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
