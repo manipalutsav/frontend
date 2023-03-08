@@ -1,6 +1,7 @@
 export const toUnitText = (quantity, unit) => `${quantity} ${quantity > 1 ? `${unit}s` : unit}`;
 
 export const getTeamName = (slot) => {
+    console.log(slot)
 
     const alphabets = ['A', 'B', 'C', 'D', 'E'];
 
@@ -13,3 +14,5 @@ export const getTeamName = (slot) => {
 }
 
 export const keyToDisplay = (key) => key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, " ")
+
+export const loop = (count) => Array(count).fill(undefined);

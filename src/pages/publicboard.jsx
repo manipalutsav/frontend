@@ -26,7 +26,7 @@ export default class extends React.Component {
   async init() {
     await this.setState({ status: "Fetching events..." });
     let events = await eventsService.getAll();
-    events = events.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
+    events = events.sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
     await this.setState({ status: "Fetching colleges", events });
     let colleges = await collegeService.getAll();
     colleges = colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
@@ -40,18 +40,19 @@ export default class extends React.Component {
       if (!round.published)
         continue;
       await this.setState({ status: "Fetching  " + event.name + " leaderboard..." });
-      let leaderboard = await leaderboardService.getRound(event.id, event.rounds[0]);
-      leaderboard = leaderboard.filter(team => !team.disqualified).sort((a, b) => b.points - a.points);
-      let rankingPoints = Array.from(new Set(leaderboard.map(team => team.points)));
-      leaderboard.forEach(team => {
+      //Fetch rounds leaderboard (only last)
+      if (event.rounds.length == 0)
+        continue;//skip if no rounds found
+      let leaderboard = await leaderboardService.getRound(event.id, event.rounds[event.rounds.length - 1]);
 
+      //Get rank
+      leaderboard.forEach(item => {
         // #TODO, two teams of same college winning in one event.
-        let rank = rankingPoints.indexOf(team.points);
-        if (rank < 3) {
+        if (item.rank <= 3) {
           set.push({
-            college: team.team.college,
+            college: item.slot.college,
             event: event.id,
-            rank: rank + 1
+            rank: item.rank
           });
         }
       });

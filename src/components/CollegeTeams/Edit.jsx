@@ -62,6 +62,7 @@ export default class EditMember extends React.Component {
             value={this.state.participant.name}
             placeholder="Name"
             css={{ width: 300 }}
+            className="input input-bordered"
           />
         </div>
 
@@ -75,6 +76,7 @@ export default class EditMember extends React.Component {
             value={this.state.participant.registrationID}
             placeholder="Registration Number"
             css={{ width: 300 }}
+            className="input input-bordered"
           />
         </div>
 

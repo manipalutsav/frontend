@@ -1,0 +1,194 @@
+import React from "react";
+import { navigate } from "gatsby";
+import Select from "react-select";
+
+import eventsService from "../../services/events";
+
+import { Button } from "../../commons/Form";
+import { toast } from "../../actions/toastActions";
+import { loop } from "../../utils/common";
+import { buttonState } from "../../utils/constants";
+
+export default class AddEditRound extends React.Component {
+  state = {
+    buttonText: this.getButtonState(buttonState.LOADED),
+    event: {},
+    slottable: false,
+    criteria: [],
+    criteriaCount: 4,
+    loaded: false
+  };
+
+  getButtonState(state) { return buttonState[this.props.round ? "UPDATE" : "ADD"][state] }
+
+  componentDidMount() {
+    this.init();
+  }
+
+  init = async () => {
+    let event = await eventsService.get(this.props.event);
+    this.setState({ event });
+    if (this.props.round) {
+      let round = await eventsService.getRound(this.props.event, this.props.round)
+      let criteriaCount = round.criteria.length;
+      this.setState({ ...round, criteriaCount, loaded: true })
+    }
+    else {
+      this.setState({ loaded: true })
+    }
+
+  }
+
+  handleCriteriaChange = (index, value) => {
+    let criteria = this.state.criteria;
+    if (!criteria[index])
+      criteria[index] = {};
+    criteria[index].criterion = value;
+    this.setState({ criteria });
+  }
+
+  handleWeightageChange = (index, value) => {
+    let criteria = this.state.criteria;
+    if (!criteria[index])
+      criteria[index] = {};
+    criteria[index].weightage = value;
+    this.setState({ criteria });
+  }
+
+  handleCriteriaCountChange = (value) => {
+    this.setState({ criteriaCount: Number(value) })
+  }
+
+  handleSlottableChange = (value) => {
+    this.setState({ slottable: Boolean(value) })
+  }
+
+  handleSubmit = async () => {
+    try {
+      this.setState({ buttonText: this.getButtonState(buttonState.LOADING) })
+
+      let { criteriaCount, criteria, slottable } = this.state;
+      for (let index = 0; index < criteriaCount; index++) {
+        if (!criteria[index] || !criteria[index].criterion)
+          throw Error("Please enter criteria " + (index + 1));
+        if (String(criteria[index].criterion).trim().length === 0)
+          throw Error("Criteria " + (index + 1) + " cannot be blank");
+      }
+
+      let round = {
+        criteria,
+        slottable
+      };
+
+      if (this.props.round) {
+        await eventsService.updateRound(this.props.event, this.props.round, round);
+      }
+      else {
+        await eventsService.createRound(this.props.event, round);
+      }
+      navigate(`/events/${this.props.event}/rounds`)
+    }
+    catch (error) {
+      toast(error.message);
+      this.setState({ buttonText: this.getButtonState(buttonState.LOADED) })
+    }
+  }
+
+  render = () => (
+    <div>
+      <div>
+        <h2 className="mucapp">Add rounds to {this.state.event.name}</h2>
+      </div>
+
+      <div className="pt-5 pb-5">
+        <div>Number of criteria</div>
+        <input
+          onChange={(e) => this.handleCriteriaCountChange(e.target.value)}
+          autoComplete="off"
+          name="criteriaCount"
+          type="number"
+          className="input input-bordered input-accent w-full max-w-xs"
+          min="0"
+          value={this.state.criteriaCount}
+          placeholder="Count"
+          css={{ width: 300 }}
+        />
+      </div>
+      {loop(this.state.criteriaCount).map((_, index) =>
+        <div key={index} className="pt-5 pb-5">
+          <div>Criteria {index + 1}</div>
+          <input
+            onChange={(e) => this.handleCriteriaChange(index, e.target.value)}
+            autoComplete="off"
+            type="text"
+            className="input input-bordered input-accent w-full max-w-xs"
+            defaultValue={this.state.criteria[index] ? this.state.criteria[index].criterion : ""}
+            placeholder={`Criteria ${index + 1}`}
+            css={{ width: 300 }}
+          />
+          <div>Weightage</div>
+          <input
+            onChange={(e) => this.handleWeightageChange(index, e.target.value)}
+            autoComplete="off"
+            type="text"
+            className="input input-bordered input-accent w-full max-w-xs"
+            defaultValue={this.state.criteria[index] ? this.state.criteria[index].weightage : "10"}
+            placeholder={`Weightage`}
+            css={{ width: 300 }}
+          />
+        </div>)}
+
+      <div>
+        <div>Slottable</div>
+        <Select
+          isSearchable={false}
+          name="slottable"
+          placeholder="Slottable"
+          value={{
+            label: this.state.slottable ? "Slottable" : "Not Slottable",
+            value: this.state.slottable ? true : false,
+          }}
+          options={[
+            { label: "Slottable", value: true },
+            { label: "Not Slottable", value: false },
+          ]}
+          onChange={(e) => this.handleSlottableChange(e.value)}
+          styles={{
+            control: (provided, state) => ({
+              ...provided,
+              marginBottom: 10,
+              border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+              boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+              ":hover": {
+                border: "1px solid #ff5800",
+                boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+              },
+            }),
+            option: (provided, state) => ({
+              ...provided,
+              backgroundColor: state.isSelected ? "#ff5800" : "",
+              ":hover": {
+                backgroundColor: "#ffd100",
+                color: "black",
+              },
+            }),
+          }}
+          css={{
+            fontSize: "16px",
+            width: 300,
+            display: 'inline-block'
+          }}
+        />
+      </div>
+
+      <div>
+        <Button
+          onClick={this.handleSubmit}
+          disabled={String(this.state.buttonText).endsWith("...")}
+        >
+          {this.state.buttonText}
+        </Button>
+      </div>
+    </div>
+  );
+};
