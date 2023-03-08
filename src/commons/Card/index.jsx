@@ -65,7 +65,8 @@ const CriteriaCard = (props) => (
         fontSize: "1em",
         textAlign: "center"
       }}
-    >{props.title} </div>
+    >{props.criterion.criterion} </div>
+    <div className='text-xs'>out of {props.criterion.weightage}</div>
 
     <div
       css={{

@@ -54,9 +54,9 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/register" title="Register" />
     <SidebarItem to="/teams" title="Teams" />
     <SidebarItem to="/volunteers" title="Volunteer" />
-    {/* <SidebarItem to="/slots" title="Slots" /> */}
-    {/* <SidebarItem to="/leaderboard/public" title="Leaderboard" /> */}
-    {/* <SidebarItem to="/certificates" title="Certificates" /> */}
+    <SidebarItem to="/slots" title="Slots" />
+    <SidebarItem to="/leaderboard/public" title="Leaderboard" />
+    <SidebarItem to="/certificates" title="Certificates" />
     <SidebarSeparator />
     <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li>
     <SidebarItem to="/users" title="Users" />
@@ -64,7 +64,7 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/events" title="Events" />
     <SidebarItem to="/judges" title="Judges" />
     {/* <SidebarItem to="/winners" title="Winners" /> */}
-    {/* <SidebarItem to="/leaderboard" title="Leaderboard" /> */}
+    <SidebarItem to="/leaderboard" title="Leaderboard" />
 
     <SidebarSeparator />
     <li>

@@ -7,6 +7,7 @@ import { TeamList } from "../../commons/List";
 import judges from "../../services/judges";
 import events from "../../services/events";
 import { toast } from "../../actions/toastActions";
+import { getTeamName } from "../../utils/common";
 
 export default class ViewJudgeSheet extends Component {
   constructor(props) {
@@ -36,31 +37,16 @@ export default class ViewJudgeSheet extends Component {
 
   init = async () => {
     try {
-      let judgesList = await judges.getAll();
-
-      let scores = await events.getScores(this.props.event, this.props.round);
+      let judgesList = await judges.getForRound(this.props.round);
+      let event = await events.get(this.props.event);
+      let round = await events.getRound(this.props.event, this.props.round);
       this.setState({
-        judgeOptions: judgesList.filter(i => scores[0].judges.find(judge => judge.id === i.id)).map(judge => ({ value: judge.id, label: judge.name })),
+        judgeOptions: judgesList.map(judge => ({ value: judge.id, label: judge.name })),
+        event,
+        round
       })
 
-      let slots = await events.getSlots2(this.props.event, this.props.round);
-      events.get(this.props.event).then(event => {
-        this.setState({ event });
-      });
 
-      events.getRound(this.props.event, this.props.round).then(round => {
-        this.setState({ round, criteria: round.criteria });
-      });
-
-      slots.forEach(slot => {
-        let score = scores.find(score => score.team === slot.id)
-        slot.judges = score.judges;
-      })
-
-      this.setState({
-        slots,
-        selection: slots[0].number
-      })
     } catch (e) {
       toast("Failed to load scoresheet: " + e);
       console.log(e);
@@ -75,23 +61,33 @@ export default class ViewJudgeSheet extends Component {
 
   selectJudge = async () => {
     if (this.state.judge) {
+      let scores = await events.getScores(this.props.event, this.props.round, this.state.judge);
+      let slots = await events.getSlots2(this.props.event, this.props.round);
+
+      scores.forEach(score => {
+        score.slot = slots.find(slot => slot.id == score.slot);
+      })
+
+      scores.sort((s1, s2) => s1.slot.number - s2.slot.number)
       this.setState({
-        judgeSelected: true
+        scores,
+        judgeSelected: true,
+        selection: scores.length > 0 ? scores[0].slot.number : 0
       })
     }
   };
 
 
-  changeTeam = (team) => {
+  changeTeam = (score) => {
     this.setState({
-      selection: team.number,
+      selection: score.slot.number,
     });
   };
 
   getSlotIndex = (number) => {
     let index = 0;
-    for (let slot of this.state.slots) {
-      if (slot.number === number) return index;
+    for (let score of this.state.scores) {
+      if (score.slot.number === number) return index;
       index++;
     }
   }
@@ -104,7 +100,8 @@ export default class ViewJudgeSheet extends Component {
   }
 
   render = () => (
-    <div>
+    <div >
+      {console.log(this.state)}
       {
         this.state.judgeSelected
           ? <div css={{
@@ -124,19 +121,17 @@ export default class ViewJudgeSheet extends Component {
                 color: "#ff5800",
               }}>Judge: {this.state.judgeOptions.find(judge => judge.value === this.state.judge).label}</div>
               {
-                this.state.slots.map((team, i) => (
+                this.state.scores.map((score, i) => (
                   <TeamList
                     key={i}
-                    score={team.judges[this.getJudgeIndex()].points.reduce((acc, cur) => acc + cur) || 0}
-                    slot={"#" + team.number}
-                    name={team.team && team.team.name}
-                    backgroundColor={team.number === this.state.selection ? "rgba(255, 209, 0, .2)" : "rgba(255, 193, 167, 0.53)"}
-                    onClick={() => this.changeTeam(team)}
+                    score={score.points.reduce((acc, cur) => acc + cur) || 0}
+                    slot={"#" + score.slot.number}
+                    backgroundColor={score.slot.number === this.state.selection ? "rgba(0, 209, 0, .2)" : "rgba(255, 193, 167, 0.53)"}
+                    onClick={() => this.changeTeam(score)}
                   />
                 ))
               }
             </div>
-
             <div css={{
               display: "flex",
               flexDirection: "column",
@@ -146,15 +141,14 @@ export default class ViewJudgeSheet extends Component {
               <div>
                 <h2 className="mucapp">{this.state.event.name} - {"Round" + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1))}</h2>
                 <h3 className="mucapp">
-                  Slot #{this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].number}&ensp;
-
+                  Slot #{this.state.scores.length && this.state.scores[this.getSlotIndex(this.state.selection)] && this.state.scores[this.getSlotIndex(this.state.selection)].slot.number}&ensp;
                 </h3>
               </div>
               <div css={{
                 color: "#ff5800",
                 fontSize: "1.5em"
               }}>
-                {(this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()] && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex()].points.reduce((acc, cur) => acc + cur)) || 0} Points
+                {this.state.scores[this.getSlotIndex(this.state.selection)].points.reduce((acc, cur) => acc + cur, 0)} out of {this.state.round.criteria.map(criterion => criterion.weightage).reduce((w1, w2) => w1 + w2, 0)}
               </div>
 
 
@@ -165,23 +159,16 @@ export default class ViewJudgeSheet extends Component {
                 alignItems: "center",
               }}>
                 {
-                  this.state.criteria.length === 0
-                    ? <CriteriaCard
-                      title="Score"
-                      onChange={this.handelCritriaChange}
-                      value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex(this.state.judge)].points[0]) || "0")}
-                      name={0}
-                    />
-                    : this.state.criteria.map((criterion, i) => (
-                      <CriteriaCard
-                        disabled={true}
-                        key={i}
-                        title={criterion}
-                        value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].judges[this.getJudgeIndex(this.state.judge)].points[i]) || "0")}
-                        name={i}
+                  this.state.round.criteria.map((criterionObj, i) => (
+                    <CriteriaCard
+                      disabled={true}
+                      key={i}
+                      criterion={criterionObj}
+                      value={((this.state.scores[this.getSlotIndex(this.state.selection)].points[i]) || "0")}
+                      name={i}
 
-                      />
-                    ))
+                    />
+                  ))
                 }
               </div>
 
