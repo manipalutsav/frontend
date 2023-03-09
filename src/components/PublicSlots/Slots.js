@@ -10,7 +10,7 @@ export default class extends React.Component {
     super(props);
 
     this.slots = [];
-    this.loadData = this.loadData.bind(this);
+    // this.loadData = this.loadData.bind(this);
     this.state = {
       loaded: false,
       event: {},
@@ -22,9 +22,9 @@ export default class extends React.Component {
   }
 
   componentWillMount() {
-    this.loadData();
+    this.init();
   }
-  async loadData() {
+  init = async () => {
     let event = await eventsService.get(this.props.event);
     await this.setState({
       event,
@@ -41,9 +41,16 @@ export default class extends React.Component {
   fetchRoundSlots = async () => {
     let slots = await eventsService.getSlots2(this.props.event, this.state.round);
     let teams = await eventsService.getTeams(this.props.event)
-    console.log(slots, teams)
-    const registeredTeamsSlots = slots.filter(slot => teams.find(team => team.name === slot.teamName && team.college.name === slot.college.name && team.college.location === slot.college.location))
-    this.setState({ slotted: !!slots.length, slots: registeredTeamsSlots, loaded: true });
+
+    slots.forEach(slot => {
+      let team = teams.find(team => team.index === slot.teamIndex && team.college._id === slot.college._id);
+
+      if (team) {
+        slot.registered = true;
+      }
+    })
+
+    this.setState({ slotted: !!slots.length, slots: slots, loaded: true });
   }
 
   handleRoundChange = (e) => {
@@ -144,7 +151,7 @@ export default class extends React.Component {
                 justifyContent: "center",
                 alignItems: "center",
               }}>
-                <h2 className="mucapp">{this.state.event.name}</h2>
+
                 <div css={{ color: "rgba(0, 0, 0, .5)" }}>
                   Teams haven't been slotted for Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.state.round) + 1)}
                 </div>

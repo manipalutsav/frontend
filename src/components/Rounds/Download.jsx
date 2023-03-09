@@ -34,63 +34,17 @@ export default class extends React.Component {
   componentWillMount = async () => {
     let event = await eventService.get(this.props.event);
 
-    let slots = await eventService.getSlots2(this.props.event, this.props.round);
-    let teams2 = await eventService.getTeams(this.props.event);
-    let lb = await leaderboardService.getRound(this.props.event, this.props.round);
+    let leaderboard = await leaderboardService.getRound(this.props.event, this.props.round);
 
+    let ranks = this.state.ranks;
 
+    ranks[1] = leaderboard.filter(item => item.rank == 1);
+    ranks[2] = leaderboard.filter(item => item.rank == 2);
+    ranks[3] = leaderboard.filter(item => item.rank == 3);
+    this.setState({ leaderboard, event });
 
-    console.log({ teams2, slots, lb })
-
-    this.setState({ event });
-
-
-    if (!lb.length) return;
-
-    // let teams = slots;
-    // console.log({ teams })
-    // for (let team of teams) {
-    //   let score = lb.find(score => score.team._id === team.id);
-    //   if (!score)
-    //     continue;
-    //   console.log({ score, lb, team })
-
-    //   team.points = score.judgePoints || 0;
-    //   // team.points = score.points || 0;
-    //   team.overtime = score.overtime || 0;
-    //   team.bias = score.bias;
-    //   team.total = score.points;
-    // }
-    lb = lb.filter(slot => !slot.disqualified).sort((a, b) => parseFloat(b.points) - parseFloat(a.points))
-    let scores = Array.from(new Set(lb.map(team => team.points))).sort((a, b) => b - a);
-
-    this.setState({ lb }, async () => {
-      let ranks = this.state.ranks;
-
-
-      for (let i = 0; i < lb.length; i++) {
-        let slot = lb[i];
-        let rank = scores.indexOf(slot.points) + 1;
-
-        console.log({ rank, slot })
-
-        if (rank >= 1 && rank <= 3) {
-          let name = <>{"#" + slot.team.number + " " + getTeamName(slot.team)}</>;
-
-          // if (team.members.length === 1) {
-          //   let participants = await collegesService.getParticipants(team.college)
-          //   let participant = participants.find(participant => team.members.includes(participant.id));
-          //   name = <>{"#" + team.number + " " + participant.name}<br /><small>{team.name.match(/[\w\s-]+/)[0]}</small></>;
-          // }
-          ranks[rank].push(name);
-
-
-        }
-      }
-
-      await this.setState({ scoreStatus: true, ranks });
-    });
   }
+
   resize(event) {
     let leaderboard = document.querySelector("#leaderboardContainer");
     event.target.innerHTML = "Done";
@@ -119,21 +73,21 @@ export default class extends React.Component {
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>FIRST POSITION</h2>
             {
-              this.state.ranks[1].map((i, j) => <h3 key={j}>{i}</h3>)
+              this.state.ranks[1].map((leaderboardItem, index) => <h3 key={index}>{getTeamName(leaderboardItem.slot)}</h3>)
             }
           </div>
 
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>SECOND POSITION</h2>
             {
-              this.state.ranks[2].map((i, j) => <h3 key={j}>{i}</h3>)
+              this.state.ranks[2].map((leaderboardItem, index) => <h3 key={index}>{getTeamName(leaderboardItem.slot)}</h3>)
             }
           </div>
 
           <div css={{ textAlign: "center" }}>
             <h2 css={{ color: "#900" }}>THIRD POSITION</h2>
             {
-              this.state.ranks[3].map((i, j) => <h3 key={j}>{i}</h3>)
+              this.state.ranks[3].map((leaderboardItem, index) => <h3 key={index}>{getTeamName(leaderboardItem.slot)}</h3>)
             }
           </div>
           <img src={Bottom} alt="top" style={{ width: "100%" }} />

@@ -31,7 +31,7 @@ import RegisterEvent from "../components/Registration/Event";
 import RegisterTeam from "../components/Registration/Team";
 import NotFound from "../components/404";
 import Rounds from "../components/Rounds";
-import AddRound from "../components/Rounds/Add";
+import AddEditRound from "../components/Rounds/AddEdit";
 import Slots from "../components/Slots";
 import PublicSlotsEvents from "../components/PublicSlots";
 import PublicSlots from "../components/PublicSlots/Slots";
@@ -51,7 +51,6 @@ import Volunteer from "../components/Volunteer/Volunteer";
 import VolunteerEdit from "../components/Volunteer/VolunteerEdit";
 import CoreVolunteer from "../components/Volunteer/CoreVolunteer";
 import EventVolunteer from "../components/Volunteer/EventVolunteer";
-import EditRound from "../components/Rounds/Edit";
 import EditCollege from "../components/Colleges/Edit";
 import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
 // import AddVolunteer from "../components/Volunteer/AddVolunteer";
@@ -103,9 +102,9 @@ export default () =>
       <PrivateRoute path="/events/:event/teams" component={EventTeams} type={2} />
       <PrivateRoute path="/events/:event/teams/:college/:team" component={EventParticipants} type={2} />
       <PrivateRoute path="/events/:event/rounds" exact component={Rounds} type={2} />
-      <PrivateRoute path="/events/:event/rounds/add" exact component={AddRound} type={1} />
+      <PrivateRoute path="/events/:event/rounds/add" exact component={AddEditRound} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/slot" exact component={Slots} type={2} />
-      <PrivateRoute path="/events/:event/rounds/:round/edit" exact component={EditRound} type={1} />
+      <PrivateRoute path="/events/:event/rounds/:round/edit" exact component={AddEditRound} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={2} />
       <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={2} />
       <PrivateRoute path="/events/:event/rounds/:round/leaderboard/download" exact component={Download} type={2} />

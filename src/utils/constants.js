@@ -18,6 +18,19 @@ export const servers = {
   production: "https://api.manipalutsav.com"
 }
 
+export const buttonState = {
+  LOADED: "LOADED",
+  LOADING: "LOADING",
+  ADD: {
+    LOADED: "Add",
+    LOADING: "Adding...",
+  },
+  UPDATE: {
+    LOADED: "Update",
+    LOADING: "Updating...",
+  }
+}
+
 export default {
   // Whether the registrations are open for the following type of events.
   registrations: {

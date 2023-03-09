@@ -23,29 +23,19 @@ export default class extends React.Component {
     };
   }
 
-  getRank = (points) => {
-    if (!this.state.leaderboard.length) return 0;
+  componentDidMount() {
+    this.init();
+  }
 
-    let scores = Array.from(new Set(this.state.leaderboard.map(team => team.points))).sort((a, b) => b - a);
-    return scores.indexOf(points) + 1;
-  };
-
-  componentWillMount = () => {
-    eventService.get(this.props.event).then(event => this.setState({ event }));
-
-    leaderboardService.getRound(this.props.event, this.props.round).then(lb => {
-      this.setState({
-        leaderboard: lb.sort((a, b) => parseFloat(b.points) - parseFloat(a.points)),
-      });
-    });
-
-    eventService.getRound(this.props.event, this.props.round).then(round => this.setState({ published: round.published }));
-
-    leaderboardService.getRound(this.props.event, this.props.round).then(leaderboard => {
-      this.setState({
-        leaderboard: leaderboard.filter(slot => !slot.disqualified).sort((a, b) => parseFloat(b.points) - parseFloat(a.points)),
-      });
-    });
+  init = async () => {
+    try {
+      let event = await eventService.get(this.props.event);
+      let round = await eventService.getRound(this.props.event, this.props.round);
+      let leaderboard = await leaderboardService.getRound(this.props.event, this.props.round);
+      this.setState({ event, round, leaderboard, published: round.published })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   handlePublish = () => {
@@ -70,13 +60,13 @@ export default class extends React.Component {
           this.state.leaderboard.length
             ? <>
               {
-                this.state.leaderboard.map((slot, i) => (
+                this.state.leaderboard.map((item, i) => (
                   <LBList
                     key={i}
-                    position={this.getRank(slot.points)}
-                    title={getTeamName(slot.team)}
+                    position={item.rank}
+                    title={getTeamName(item.slot)}
                     description={""}
-                    points={slot.points}
+                    points={item.total}
                   />
                 ))
               }
@@ -84,7 +74,7 @@ export default class extends React.Component {
                 {
                   this.state.published
                     ? <>
-                      <div style={{ color: "#090" }}>Published</div>
+                      <div style={{ color: "#090" }}>This leaderboard is now visible to everyone</div>
                     </>
                     : <Button
                       onClick={this.handlePublish}
