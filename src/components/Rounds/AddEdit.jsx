@@ -6,14 +6,15 @@ import eventsService from "../../services/events";
 
 import { Button } from "../../commons/Form";
 import { toast } from "../../actions/toastActions";
-import { loop } from "../../utils/common";
+import { keyToDisplay, loop } from "../../utils/common";
 import { buttonState } from "../../utils/constants";
 
 export default class AddEditRound extends React.Component {
   state = {
     buttonText: this.getButtonState(buttonState.LOADED),
     event: {},
-    slottable: false,
+    slotType: "all",
+    slotOrder: "random",
     criteria: [],
     criteriaCount: 4,
     loaded: false
@@ -59,15 +60,19 @@ export default class AddEditRound extends React.Component {
     this.setState({ criteriaCount: Number(value) })
   }
 
-  handleSlottableChange = (value) => {
-    this.setState({ slottable: Boolean(value) })
+  handleForChange = (value) => {
+    this.setState({ slotType: value })
+  }
+
+  handleOrderChange = (value) => {
+    this.setState({ slotOrder: value })
   }
 
   handleSubmit = async () => {
     try {
       this.setState({ buttonText: this.getButtonState(buttonState.LOADING) })
 
-      let { criteriaCount, criteria, slottable } = this.state;
+      let { criteriaCount, criteria, slotType, slotOrder } = this.state;
       for (let index = 0; index < criteriaCount; index++) {
         if (!criteria[index] || !criteria[index].criterion)
           throw Error("Please enter criteria " + (index + 1));
@@ -77,7 +82,8 @@ export default class AddEditRound extends React.Component {
 
       let round = {
         criteria,
-        slottable
+        slotType,
+        slotOrder
       };
 
       if (this.props.round) {
@@ -139,20 +145,64 @@ export default class AddEditRound extends React.Component {
         </div>)}
 
       <div>
-        <div>Slottable</div>
+        <div>Type</div>
         <Select
           isSearchable={false}
-          name="slottable"
-          placeholder="Slottable"
+          name="type"
+          placeholder="Type"
           value={{
-            label: this.state.slottable ? "Slottable" : "Not Slottable",
-            value: this.state.slottable ? true : false,
+            label: keyToDisplay(this.state.slotType),
+            value: this.state.slotType,
           }}
           options={[
-            { label: "Slottable", value: true },
-            { label: "Not Slottable", value: false },
+            { label: "All", value: "all" },
+            { label: "Registered", value: "registered" },
           ]}
-          onChange={(e) => this.handleSlottableChange(e.value)}
+          onChange={(e) => this.handleForChange(e.value)}
+          styles={{
+            control: (provided, state) => ({
+              ...provided,
+              marginBottom: 10,
+              border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+              boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+              ":hover": {
+                border: "1px solid #ff5800",
+                boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+              },
+            }),
+            option: (provided, state) => ({
+              ...provided,
+              backgroundColor: state.isSelected ? "#ff5800" : "",
+              ":hover": {
+                backgroundColor: "#ffd100",
+                color: "black",
+              },
+            }),
+          }}
+          css={{
+            fontSize: "16px",
+            width: 300,
+            display: 'inline-block'
+          }}
+        />
+      </div>
+
+      <div>
+        <div>Order</div>
+        <Select
+          isSearchable={false}
+          name="order"
+          placeholder="Order"
+          value={{
+            label: keyToDisplay(this.state.slotOrder),
+            value: this.state.slotOrder,
+          }}
+          options={[
+            { label: "Asc", value: "asc" },
+            { label: "Desc", value: "desc" },
+            { label: "Random", value: "random" },
+          ]}
+          onChange={(e) => this.handleOrderChange(e.value)}
           styles={{
             control: (provided, state) => ({
               ...provided,
