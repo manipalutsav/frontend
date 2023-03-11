@@ -57,7 +57,9 @@ export default class AddEditRound extends React.Component {
   }
 
   handleCriteriaCountChange = (value) => {
-    this.setState({ criteriaCount: Number(value) })
+    let criteriaCount = Number(value);
+    let criteria = this.state.criteria.splice(0, criteriaCount);
+    this.setState({ criteriaCount, criteria })
   }
 
   handleForChange = (value) => {
