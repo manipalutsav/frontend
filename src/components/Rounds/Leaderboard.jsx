@@ -43,8 +43,8 @@ export default class extends React.Component {
         participants = participants.concat(_participants);
       }))
       console.log({ participants })
-      teams = teams.map(team => ({ ...team, participants: team.members.map(id => participants.find(participant => participant.id == id)) }))
-      leaderboard = leaderboard.map(item => ({ ...item, team: teams.find(team => team.college._id == item.slot.college._id && team.index == item.slot.teamIndex) }))
+      teams = teams.map(team => ({ ...team, participants: team.members.map(id => participants.find(participant => participant.id === id)) }))
+      leaderboard = leaderboard.map(item => ({ ...item, team: teams.find(team => team.college._id === item.slot.college._id && team.index === item.slot.teamIndex) }))
 
       console.log({ leaderboard });
       this.setState({ event, round, leaderboard, published: round.published, loading: false })
@@ -79,19 +79,7 @@ export default class extends React.Component {
             this.state.leaderboard.length
               ? <>
                 {
-                  this.state.leaderboard.map((item, i) => (
-                    <LBList
-                      key={i}
-                      position={item.rank}
-                      title={getTeamName(item.slot)}
-                      description={
-                        item.team.participants.length < 3 ? (item.team.participants.map((participant, key) => <div key={key}><small className="text-xs">{participant.registrationID}</small> {participant.name}</div>)) :
-                          <details>
-                            <summary>View Team</summary>
-                            {(item.team.participants.map((participant, key) => <div key={key}><small className="text-xs">{participant.registrationID}</small> {participant.name}</div>))}                         </details>
-                      }
-                      points={item.total}
-                    />
+                  this.state.leaderboard.map((item, i) => (<Leaderboard item={item} key={i} />
                   ))
                 }
                 <div style={{ textAlign: "center", padding: 20 }}>
@@ -117,3 +105,33 @@ export default class extends React.Component {
     </div >
   );
 };
+
+const Leaderboard = ({ item, key }) => (
+  item.team.participants.length == 1 ? (
+    <LBList
+      key={key}
+      position={item.rank}
+      title={item.team.participants[0].name}
+      description={<div>
+        <div>{item.team.participants[0].registrationID}</div>
+        <div>#{item.slot.number} - {getTeamName(item.slot)}</div>
+      </div>}
+      points={item.total}
+    />
+  ) : (
+    <LBList
+      key={key}
+      position={item.rank}
+      title={getTeamName(item.slot)}
+      description={
+        <div>
+          <div>#{item.slot.number}</div>
+          <details>
+            <summary>View Team</summary>
+            {(item.team.participants.map((participant, key) => <div key={key}><small className="text-xs">{participant.registrationID}</small> {participant.name}</div>))}
+          </details>
+        </div>
+      }
+      points={item.total}
+    />)
+);
