@@ -44,7 +44,7 @@ export default class extends React.Component {
       }))
       console.log({ participants })
       teams = teams.map(team => ({ ...team, participants: team.members.map(id => participants.find(participant => participant.id == id)) }))
-      leaderboard = leaderboard.map(item => ({ ...item, team: teams.find(team => team.college._id == item.slot.college._id) }))
+      leaderboard = leaderboard.map(item => ({ ...item, team: teams.find(team => team.college._id == item.slot.college._id && team.index == item.slot.teamIndex) }))
 
       console.log({ leaderboard });
       this.setState({ event, round, leaderboard, published: round.published, loading: false })
