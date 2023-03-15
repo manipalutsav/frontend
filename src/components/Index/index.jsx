@@ -4,8 +4,8 @@ import Countdown from 'react-countdown';
 
 const cookingEventsOpenDate = new Date("February 27, 2023, 23:59:59");
 const cookingEventsCloseDate = new Date("March 6, 2023, 17:00:00");
-const studentEventsOpenDate = new Date("March 20, 2023, 00:00:00");
-const studentEventsCloseDate = new Date("April 1, 2023, 23:59:59");
+const studentEventsOpenDate = new Date("March 15, 2023, 21:00:00");
+const studentEventsCloseDate = new Date("March 25, 2023, 23:59:59");
 
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
