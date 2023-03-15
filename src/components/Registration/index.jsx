@@ -13,7 +13,7 @@ import { Tab, Tabs } from "../../commons/Tabs";
 
 const EventCard = ({ event }) => {
   return (
-    <Link to={event.name.match(/cooking/i) ? "/register/" + event.id : "#"} css={{
+    <Link to={!event.name.match(/cooking/i) ? "/register/" + event.id : "#"} css={{
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
@@ -76,10 +76,10 @@ const EventCard = ({ event }) => {
           <span>{event.unregistered ? "Unregistered" : ""}</span>
         </div>
         <div>
-          <Block show={!event.name.match(/cooking/i)}>
-            Registration not open
-          </Block>
           <Block show={event.name.match(/cooking/i)}>
+            Event done
+          </Block>
+          <Block show={!event.name.match(/cooking/i)}>
             <Block show={event.registeredCount < event.maxTeamsPerCollege}>
               <Button>Register</Button>
             </Block>
@@ -181,7 +181,7 @@ export default class Events extends React.Component {
 
       <div className="justify-center flex flex-wrap flex-col">
         <LoadContent loading={this.state.loading} noDiv={true}>
-          <Block show={this.state.college.isOutStationed} id="1">
+          {/* <Block show={this.state.college.isOutStationed} id="1">
             <div>
               <h2 className="mucapp">Tentative participation information</h2>
               <Block show={!this.state.disableSubmit} id="2">
@@ -229,17 +229,15 @@ export default class Events extends React.Component {
             <Block show={this.state.disableSubmit} id="4">
               Participation Status already submitted. Please contact administrators if any change is required.
             </Block>
-          </Block>
+          </Block> */}
 
-          <Block show={!this.state.college.isOutStationed} id="5">
-            <div>
-              <h2 className="mucapp">Registration</h2>
-              <p>Register teams for the events in Utsav</p>
-            </div>
-            <div className="flex flex-wrap">
-              {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
-            </div>
-          </Block>
+          <div>
+            <h2 className="mucapp">Registration</h2>
+            <p>Register teams for the events in Utsav</p>
+          </div>
+          <div className="flex flex-wrap">
+            {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+          </div>
         </LoadContent>
       </div>
     </div>
