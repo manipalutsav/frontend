@@ -123,17 +123,17 @@ export default () =>
       <PrivateRoute path="/winners" component={Winners} type={2} />
 
       <PrivateRoute path="/leaderboard" component={Leaderboard} type={2} />
-      <PrivateRoute path="/leaderboard/public" component={PublicLeaderboard} type={4} />
+      <PrivateRoute path="/leaderboard/public" component={PublicLeaderboard} type={8} />
 
-      <PrivateRoute path="/teams" component={CollegeTeams} type={4} />
-      <PrivateRoute path="/teams/members/:member/edit" component={EditMember} type={4} />
-      <PrivateRoute path="/register" component={Register} type={4} />
-      <PrivateRoute path="/slots" component={PublicSlotsEvents} type={4} />
-      <PrivateRoute path="/slots/:event" component={PublicSlots} type={4} />
-      <PrivateRoute path="/register/:event" component={RegisterEvent} type={4} />
-      <PrivateRoute path="/register/:event/teams" component={RegisterTeam} type={4} />
-      <PrivateRoute path="/register/:event/teams/:team" component={Participants} type={4} />
-      <PrivateRoute path="/certificates" component={Certificates} type={4} />
+      <PrivateRoute path="/teams" component={CollegeTeams} type={8} />
+      <PrivateRoute path="/teams/members/:member/edit" component={EditMember} type={8} />
+      <PrivateRoute path="/register" component={Register} type={8} />
+      <PrivateRoute path="/slots" component={PublicSlotsEvents} type={8} />
+      <PrivateRoute path="/slots/:event" component={PublicSlots} type={8} />
+      <PrivateRoute path="/register/:event" component={RegisterEvent} type={8} />
+      <PrivateRoute path="/register/:event/teams" component={RegisterTeam} type={8} />
+      <PrivateRoute path="/register/:event/teams/:team" component={Participants} type={8} />
+      <PrivateRoute path="/certificates" component={Certificates} type={8} />
 
       {/* For volunteers */}
       <PrivateRoute path="/volunteers" component={AddVolunteer} type={1 << 3} />
