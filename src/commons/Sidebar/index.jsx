@@ -67,7 +67,7 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/leaderboard" title="Leaderboard" />
 
     <SidebarSeparator />
-    <li>
+    {/* <li>
       <a href="/feedback" css={{
         display: "block",
         marginTop: 10,
@@ -78,7 +78,7 @@ const SidebarItems = ({ backupName, backupData }) => (
       }}>
         Feedback
       </a>
-    </li>
+    </li> */}
     <SidebarItem to="/stats" title="Stats" />
     <a href={backupData} download={backupName}>
       <div css={{
