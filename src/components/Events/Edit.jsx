@@ -213,13 +213,17 @@ export default class EditEvent extends React.Component {
             placeholder="Venue"
             value={{ label: this.state.event.venue || "", value: this.state.event.venue || "" }}
             options={[
+              { label: "Dr. TMA Pai Hall, 1st Floor", value: "Dr. TMA Pai Hall, 1st Floor" },
               { label: "Dr. TMA Pai Hall, 2nd Floor", value: "Dr. TMA Pai Hall, 2nd Floor" },
               { label: "Dr. TMA Pai Hall, 3rd Floor", value: "Dr. TMA Pai Hall, 3rd Floor" },
               { label: "Counselling Hall, manipal.edu", value: "Counselling Hall, manipal.edu" },
               { label: "MMMC, Manipal", value: "MMMC, Manipal" },
               { label: "KMC Greens, Main Stage", value: "KMC Greens, Main Stage" },
               { label: "KMC Greens, STEPS", value: "KMC Greens, STEPS" },
-              { label: "WGSHA Kitchen", value: "WGSHA, Kitchen" }
+              { label: "WGSHA Kitchen", value: "WGSHA, Kitchen" },
+              { label: "Sharada Hall, MCHP", value: "Sharada Hall, MCHP" },
+              { label: "DBMS/MMMC (3rd Floor - Digi Lab)", value: "DBMS/MMMC (3rd Floor - Digi Lab)" },
+              { label: "Biochemistry LH – 1", value: "Biochemistry LH – 1" },
             ]}
             onChange={(e) => this.setState({ event: { ...this.state.event, venue: e.value } })}
             styles={{
