@@ -144,7 +144,7 @@ export default class Events extends React.Component {
                   <Link to={"/events/" + this.props.event + "/rounds"} css={{
                     marginRight: 10,
                   }}>
-                    <button className="mucapp">View Rounds</button>
+                    <button className="mucapp">Event Schedule</button>
                   </Link>
                   <Link to={"/events/" + this.props.event + "/edit"}>
                     <button className="mucapp">Edit Event</button>
