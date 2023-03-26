@@ -11,3 +11,7 @@ export const getTeamName = (slot) => {
     //
     return `${slot.college.name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
 }
+
+export const keyToDisplay = (key) => key ? key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, " ") : ""
+
+export const loop = (count) => Array(count).fill(undefined);

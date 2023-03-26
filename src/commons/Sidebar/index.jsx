@@ -64,10 +64,10 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/events" title="Events" />
     <SidebarItem to="/judges" title="Judges" />
     {/* <SidebarItem to="/winners" title="Winners" /> */}
-    {/* <SidebarItem to="/leaderboard" title="Leaderboard" /> */}
+    <SidebarItem to="/leaderboard" title="Event Standings"/>
 
     <SidebarSeparator />
-    <li>
+    {/* <li>
       <a href="/feedback" css={{
         display: "block",
         marginTop: 10,
@@ -78,7 +78,7 @@ const SidebarItems = ({ backupName, backupData }) => (
       }}>
         Feedback
       </a>
-    </li>
+    </li> */}
     <SidebarItem to="/stats" title="Stats" />
     <a href={backupData} download={backupName}>
       <div css={{

@@ -7,7 +7,7 @@ const userTypes = {
   STUDENT_COORDINATOR: 1 << 3,
 };
 
-if (typeof window != "undefined" && window.location.hostname == "localhost" && !serverUrl.startsWith("http://localhost")) {
+if (typeof window != "undefined" && window.location.hostname === "localhost" && !serverUrl.startsWith("http://localhost")) {
   window.alert("CAUTION: BACKEND IS SET TO " + serverUrl)
 }
 
@@ -16,6 +16,19 @@ export const servers = {
   testing: "https://staging.manipalutsav.com",
   prodIP: "http://54.89.249.180:3003",
   production: "https://api.manipalutsav.com"
+}
+
+export const buttonState = {
+  LOADED: "LOADED",
+  LOADING: "LOADING",
+  ADD: {
+    LOADED: "Add",
+    LOADING: "Adding...",
+  },
+  UPDATE: {
+    LOADED: "Update",
+    LOADING: "Updating...",
+  }
 }
 
 export default {

@@ -39,7 +39,7 @@ export default class extends React.Component {
       eventsService.getTeams(this.props.event).then(teams => {
 
         slots.forEach(slot => {
-          let team = teams.find(team => team.index == slot.teamIndex && team.college._id == slot.college._id);
+          let team = teams.find(team => team.index === slot.teamIndex && team.college._id === slot.college._id);
 
           if (team) {
             slot.registered = true;

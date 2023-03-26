@@ -32,7 +32,8 @@ export default class Judge extends Component {
 
   componentWillMount = () => {
     judges.getAll().then(judges => this.setState({
-      judgeOptions: judges.map(judge => ({ value: judge.id, label: judge.name }))
+      judgeOptions: judges.map(judge => ({ value: judge.id, label: judge.name })),
+      judges
     }));
   };
 
@@ -44,11 +45,19 @@ export default class Judge extends Component {
 
   selectJudge = async () => {
     if (this.state.judge) {
+
+      let judge = this.state.judges.find(judge => judge.id == this.state.judge)
+      if (judge.rounds.includes(this.props.round)) {
+        alert("Selected judge has already submitted scoresheet for the round.")
+        return;
+      }
+
+
       //comment
       eventsService.getSlots2(this.props.event, this.props.round).then(slots => {
         eventsService.getTeams(this.props.event).then(teams => {
 
-          slots = slots.filter(slot => teams.find(team => team.index == slot.teamIndex && team.college._id == slot.college._id));
+          slots = slots.filter(slot => teams.find(team => team.index === slot.teamIndex && team.college._id === slot.college._id));
 
           slots.map(team => team.points = []);
           this.setState({
@@ -72,11 +81,11 @@ export default class Judge extends Component {
     }
   };
 
-  handelCritriaChange = async (event) => {
+  handelCritriaChange = async (event, criterion) => {
     let { name, value } = event;
 
-    if (value < 0 || value > 10) {
-      return toast("Score cannot be above 10 or below 0");
+    if (value < 0 || value > criterion.weightage) {
+      return toast(`Score cannot be above ${criterion.weightage} or below 0`);
     }
 
 
@@ -153,32 +162,34 @@ export default class Judge extends Component {
     }
 
     let scores = this.state.slots.map(slot => ({
-      judges: [{
-        id: this.state.judge,
-        points: slot.points
-      }],
-      team: slot.id,
-      round: slot.round,
+      points: slot.points.map(i => Number(i)),
+      // judge: this.state.judge,
+      slot: slot.id,
+      // round: slot.round,
     }));
 
-    events.createScores(this.props.event, this.props.round, scores).then(res => {
+    events.createScores(this.props.event, this.props.round, this.state.judge, scores).then(res => {
       if (res) {
         //verify the scores are saved to the server.
-        events.getScores(this.props.event, this.props.round, scores).then(res2 => {
-          if (res2[0].judges.find(judge => judge.id === this.state.judge)) {
+        events.getScores(this.props.event, this.props.round, this.state.judge).then(scores2 => {
+
+          //failed when could not find all slots saved
+          let failed = scores.find(score => !scores2.find(score2 => score.slot == score2.slot && JSON.stringify(score.points) == JSON.stringify(score2.points)));
+
+          if (!failed) {
             localStorage.removeItem("scoresheet:" + this.props.round);
             navigate("/events/" + this.props.event + "/rounds");
           }
           else {
             typeof window !== "undefined"
-              && window.confirm("CRITICAL: Failed to update judge scores on the server, keep a backup from side menu and contact help.");
+              && window.confirm("CRITICAL[1]: Failed to update judge scores on the server, keep a backup from side menu and contact help.");
           }
         });
 
       }
       else {
         typeof window !== "undefined"
-          && window.confirm("CRITICAL: Failed to update judge scores on the server, keep a backup from side menu and contact help.");
+          && window.confirm("CRITICAL[2]: Failed to update judge scores on the server, keep a backup from side menu and contact help.");
       }
     })
   };
@@ -248,7 +259,6 @@ export default class Judge extends Component {
                 <h2 className="mucapp">{this.state.event.name} - {"Round" + (this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1))}</h2>
                 <h3 className="mucapp">
                   Slot #{this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].number}&ensp;
-
                 </h3>
               </div>
               <div css={{
@@ -256,7 +266,7 @@ export default class Judge extends Component {
                 fontSize: "1.5em",
                 visibility: this.state.hideTotalScore ? "hidden" : "visible"
               }}>
-                {(this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].total && this.state.slots[this.getSlotIndex(this.state.selection)].total.toFixed(1)) || 0} Points
+                {(this.state.slots.length && this.state.slots[this.getSlotIndex(this.state.selection)] && this.state.slots[this.getSlotIndex(this.state.selection)].total && this.state.slots[this.getSlotIndex(this.state.selection)].total.toFixed(1)) || 0} out of {this.state.criteria.map(criterion => criterion.weightage).reduce((w1, w2) => w1 + w2, 0)}
               </div>
 
 
@@ -267,30 +277,23 @@ export default class Judge extends Component {
                 alignItems: "center",
               }}>
                 {
-                  this.state.criteria.length === 0
-                    ? <CriteriaCard
-                      title="Score"
-                      onChange={this.handelCritriaChange}
-                      value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[0]) || "")}
-                      name={0}
-                    />
-                    : this.state.criteria.map((criterion, i) => (
-                      <CriteriaCard
-                        key={i}
-                        title={criterion}
-                        onChange={this.handelCritriaChange}
-                        value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[i]) || "")}
-                        name={i}
+                  this.state.criteria.map((criterionObj, i) => (
+                    <CriteriaCard
+                      key={i}
+                      criterion={criterionObj}
+                      onChange={(event) => this.handelCritriaChange(event, criterionObj)}
+                      value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].points[i]) || "")}
+                      name={i}
 
-                      />
-                    ))
+                    />
+                  ))
                 }
               </div>
 
               <textarea
                 onChange={this.handleNoteChange}
                 css={{ margin: "20px auto", minWidth: "50%", maxWidth: "70%", border: "1px solid #DDD", padding: 5, height: 200 }}
-                placeholder="Write your notes here"
+                placeholder="You can write some notes here for this slot number to reference it later. Notes will be cleared once you submit the scores."
                 name={this.state.selection}
                 value={((this.state.selection && this.state.slots[this.getSlotIndex(this.state.selection)].notes) || "")}
               ></textarea>

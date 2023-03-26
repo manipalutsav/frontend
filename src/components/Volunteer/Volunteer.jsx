@@ -1,11 +1,12 @@
 import React from "react";
 import Select from "react-select";
 
-import { addCoreVolunteer, getCoreVolunteers } from "../../services/volunteerService";
+import { addVolunteer, getVolunteers } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 import { Link } from "gatsby";
+import { keyToDisplay } from "../../utils/common";
 
 const sizes = [
     { value: 'XS', label: 'Extra Small' },
@@ -16,7 +17,7 @@ const sizes = [
     { value: 'XXL', label: 'Extra Extra Large' },
 ];
 
-class CoreVolunteer extends React.Component {
+class Volunteer extends React.Component {
     ADD_VOLUNTEER = "Add";
     ADDING_VOLUNTEER = "Adding...";
     state = {
@@ -72,12 +73,13 @@ class CoreVolunteer extends React.Component {
             if (!collegeId || collegeId.length === 0)
                 throw Error("Please select the college.");
 
-            let response = await addCoreVolunteer({
+            let response = await addVolunteer({
                 name,
                 registerNumber,
                 phoneNumber,
                 shirtSize,
-                collegeId
+                collegeId,
+                type: this.props.type
             });
             this.setState({
                 buttonText: this.ADD_VOLUNTEER,
@@ -95,7 +97,7 @@ class CoreVolunteer extends React.Component {
     }
 
     getVolunteers = async () => {
-        const response = await getCoreVolunteers();
+        const response = await getVolunteers(this.props.type);
         if (response.status === 200) {
             const volunteers = response.data;
             this.setState({ volunteers })
@@ -109,7 +111,8 @@ class CoreVolunteer extends React.Component {
             <div >
                 <div>
                     <div>
-                        <h2 className="mucapp">Core Volunteers</h2>
+                        {/*  */}
+                        <h2 className="mucapp">{keyToDisplay(this.props.type)} Volunteers</h2>
                     </div>
                 </div>
                 <div className="coreVolunteers">
@@ -257,7 +260,7 @@ class CoreVolunteer extends React.Component {
                                         <td>{volunteer.phoneNumber}</td>
                                         <td>{volunteer.shirtSize}</td>
                                         <td>{this.state.colleges.find(college => college.value === volunteer.collegeId).label}</td>
-                                        <td><Link to={"/volunteers/core/" + volunteer._id}><button className="mucapp">Edit</button></Link></td>
+                                        <td><Link to={`/volunteers/${this.props.type}/${volunteer._id}`}><button className="mucapp">Edit</button></Link></td>
                                     </tr>
                                 ))
                             }
@@ -269,4 +272,4 @@ class CoreVolunteer extends React.Component {
     }
 }
 
-export default CoreVolunteer
+export default Volunteer

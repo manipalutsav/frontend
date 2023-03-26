@@ -116,6 +116,7 @@ export default class EditEvent extends React.Component {
             placeholder="Name"
             required
             css={{ width: 300 }}
+            className="input input-bordered"
           />
         </div>
 
@@ -168,6 +169,7 @@ export default class EditEvent extends React.Component {
             required
             value={this.state.event.minMembersPerTeam || 1}
             css={{ width: 300 }}
+            className="input input-bordered"
           />
         </div>
 
@@ -183,6 +185,7 @@ export default class EditEvent extends React.Component {
             required
             value={this.state.event.maxMembersPerTeam || 1}
             css={{ width: 300 }}
+            className="input input-bordered"
           />
         </div>
 
@@ -198,6 +201,7 @@ export default class EditEvent extends React.Component {
             required
             value={this.state.event.maxTeamsPerCollege || 1}
             css={{ width: 300 }}
+            className="input input-bordered"
           />
         </div>
 
@@ -260,6 +264,7 @@ export default class EditEvent extends React.Component {
             placeholder="Description"
             css={{ width: 300, height: 200, maxWidth: "100%", }}
             value={this.state.event.description || ""}
+            className="input input-bordered"
           />
         </div>
 
@@ -275,6 +280,7 @@ export default class EditEvent extends React.Component {
             required
             value={this.state.event.duration || 0}
             css={{ width: 300 }}
+            className="input input-bordered"
           />
         </div>
 
@@ -286,6 +292,7 @@ export default class EditEvent extends React.Component {
             type="datetime-local"
             value={(this.state.event.startDate && this.state.event.startDate.split("Z")[0]) || ""}
             onChange={this.handleChange}
+            className="input input-bordered"
           />
         </div>
 
@@ -297,6 +304,7 @@ export default class EditEvent extends React.Component {
             type="datetime-local"
             value={(this.state.event.endDate && this.state.event.endDate.split("Z")[0]) || ""}
             onChange={this.handleChange}
+            className="input input-bordered"
           />
         </div>
 

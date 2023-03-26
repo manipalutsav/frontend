@@ -9,7 +9,6 @@ import constants from "../../utils/constants";
 import { getAll } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 import usersService from '../../services/users';
-import Loader from "../../commons/Loader";
 import LoadContent from "../../commons/LoadContent";
 
 export default class EditUser extends React.Component {

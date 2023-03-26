@@ -4,28 +4,21 @@ import LBList from "../../commons/LBList";
 import leaderboardService from "../../services/leaderboard";
 import { Link } from "gatsby";
 import { Button } from "../../commons/Form";
+import { toast } from "../../actions/toastActions";
 
 export default class extends React.PureComponent {
   constructor(props) {
     super(props);
-
     this.state = {
       leaderboard: [],
       published: false,
     };
   }
 
-  getRank = (points) => {
-    if (!this.state.leaderboard.length) return 0;
-
-    let scores = Array.from(new Set(this.state.leaderboard.map(team => team.points)));
-    return scores.indexOf(points) + 1;
-  };
-
   handlePublish = () => {
-    let leaderboard = this.state.leaderboard.map(team => ({
-      college: team.college._id,
-      points: team.points,
+    let leaderboard = this.state.leaderboard.map(college => ({
+      college: college._id,
+      points: college.points,
     }));
 
     leaderboardService.publish(leaderboard).then(lb =>
@@ -33,20 +26,20 @@ export default class extends React.PureComponent {
     );
   };
 
-  componentWillMount = () => {
-    leaderboardService.get().then(lb =>
-      this.setState({
-        leaderboard: lb.sort((a, b) => parseFloat(b.points) - parseFloat(a.points)),
-      })
-    );
+  componentWillMount = async () => {
+    try {
+      let leaderboard = await leaderboardService.get();
+      this.setState({ leaderboard });
+    } catch (error) {
+      toast(error)
+    }
   };
 
   render = () => (
     <div>
+      {console.log(this.state)}
       <div css={{ textAlign: "center" }}>
         <h1 className="mucapp">College Leaderboard</h1>
-
-
         <div>
           <Link to="/board"><Button>View Table</Button></Link>
           {
@@ -58,15 +51,15 @@ export default class extends React.PureComponent {
       </div>
       <div>
         {
-          this.state.leaderboard.length
-            ? this.state.leaderboard.map((team, i) => (
+          this.state.leaderboard.length > 0
+            ? this.state.leaderboard.map((college, index) => (
               <LBList
                 main={false}
-                key={i}
-                position={this.getRank(team.points)}
-                title={team.college.name}
-                description={team.college.location}
-                points={team.points}
+                key={index}
+                position={college.rank}
+                title={college.name}
+                description={college.location}
+                points={college.points}
               />
             ))
             : <h1 className="mucapp" style={{ textAlign: "center" }}>No results</h1>

@@ -31,7 +31,7 @@ import RegisterEvent from "../components/Registration/Event";
 import RegisterTeam from "../components/Registration/Team";
 import NotFound from "../components/404";
 import Rounds from "../components/Rounds";
-import AddRound from "../components/Rounds/Add";
+import AddEditRound from "../components/Rounds/AddEdit";
 import Slots from "../components/Slots";
 import PublicSlotsEvents from "../components/PublicSlots";
 import PublicSlots from "../components/PublicSlots/Slots";
@@ -46,9 +46,13 @@ import Winners from "../components/Winners";
 import Certificates from "../components/Certificates";
 
 //Imported for volunteer
-import Volunteer from "../components/Volunteer";
+import AddVolunteer from "../components/Volunteer";
+import Volunteer from "../components/Volunteer/Volunteer";
+import VolunteerEdit from "../components/Volunteer/VolunteerEdit";
 import CoreVolunteer from "../components/Volunteer/CoreVolunteer";
 import EventVolunteer from "../components/Volunteer/EventVolunteer";
+import EditCollege from "../components/Colleges/Edit";
+import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
 // import AddVolunteer from "../components/Volunteer/AddVolunteer";
 // import ViewCoreVolunteer from "../components/Volunteer/ViewCoreVolunteer";
 // import ViewVolunteers from "../components/Volunteer/ViewVolunteers";
@@ -58,10 +62,7 @@ import EventVolunteer from "../components/Volunteer/EventVolunteer";
 // import configureStore from "../store";
 
 import Layout from "../layouts/app";
-import EditRound from "../components/Rounds/Edit";
-import AddVolunteer from "../components/Volunteer";
-import EditCollege from "../components/Colleges/Edit";
-import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
+
 
 if (typeof (document) != 'undefined')
   document.title = "MUCAPP";
@@ -69,14 +70,14 @@ if (typeof (document) != 'undefined')
 const TRACKING_ID = "UA-183054936-1";
 ReactGA.initialize(TRACKING_ID);
 
-// Only checking for pageview every 30 seconds to avoid spamming GA
-ReactGA.pageview(window.location.pathname + window.location.search);
-setInterval(() => {
-  if(typeof window != undefined) {
+if (typeof window != "undefined") {
+  // Only checking for pageview every 30 seconds to avoid spamming GA
+  ReactGA.pageview(window.location.pathname + window.location.search);
+  setInterval(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
     console.log("GA pageview: " + window.location.pathname + window.location.search);
-  }
-}, 1000 * 30);  
+  }, 1000 * 30);
+}
 
 export default () =>
   <Layout>
@@ -101,9 +102,9 @@ export default () =>
       <PrivateRoute path="/events/:event/teams" component={EventTeams} type={2} />
       <PrivateRoute path="/events/:event/teams/:college/:team" component={EventParticipants} type={2} />
       <PrivateRoute path="/events/:event/rounds" exact component={Rounds} type={2} />
-      <PrivateRoute path="/events/:event/rounds/add" exact component={AddRound} type={1} />
+      <PrivateRoute path="/events/:event/rounds/add" exact component={AddEditRound} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/slot" exact component={Slots} type={2} />
-      <PrivateRoute path="/events/:event/rounds/:round/edit" exact component={EditRound} type={1} />
+      <PrivateRoute path="/events/:event/rounds/:round/edit" exact component={AddEditRound} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={2} />
       <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={2} />
       <PrivateRoute path="/events/:event/rounds/:round/leaderboard/download" exact component={Download} type={2} />
@@ -122,24 +123,25 @@ export default () =>
       <PrivateRoute path="/winners" component={Winners} type={2} />
 
       <PrivateRoute path="/leaderboard" component={Leaderboard} type={2} />
-      <PrivateRoute path="/leaderboard/public" component={PublicLeaderboard} type={4} />
+      <PrivateRoute path="/leaderboard/public" component={PublicLeaderboard} type={8} />
 
-      <PrivateRoute path="/teams" component={CollegeTeams} type={4} />
-      <PrivateRoute path="/teams/members/:member/edit" component={EditMember} type={4} />
-      <PrivateRoute path="/register" component={Register} type={4} />
-      <PrivateRoute path="/slots" component={PublicSlotsEvents} type={4} />
-      <PrivateRoute path="/slots/:event" component={PublicSlots} type={4} />
-      <PrivateRoute path="/register/:event" component={RegisterEvent} type={4} />
-      <PrivateRoute path="/register/:event/teams" component={RegisterTeam} type={4} />
-      <PrivateRoute path="/register/:event/teams/:team" component={Participants} type={4} />
-      <PrivateRoute path="/certificates" component={Certificates} type={4} />
+      <PrivateRoute path="/teams" component={CollegeTeams} type={8} />
+      <PrivateRoute path="/teams/members/:member/edit" component={EditMember} type={8} />
+      <PrivateRoute path="/register" component={Register} type={8} />
+      <PrivateRoute path="/slots" component={PublicSlotsEvents} type={8} />
+      <PrivateRoute path="/slots/:event" component={PublicSlots} type={8} />
+      <PrivateRoute path="/register/:event" component={RegisterEvent} type={8} />
+      <PrivateRoute path="/register/:event/teams" component={RegisterTeam} type={8} />
+      <PrivateRoute path="/register/:event/teams/:team" component={Participants} type={8} />
+      <PrivateRoute path="/certificates" component={Certificates} type={8} />
 
       {/* For volunteers */}
-      <PrivateRoute path="/volunteers" component={Volunteer} type={1 << 3} />
+      <PrivateRoute path="/volunteers" component={AddVolunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/core" component={CoreVolunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/core/:volunteerId" component={CoreVolunteerEdit} type={1 << 3} />
+      <PrivateRoute path="/volunteers/:type" component={Volunteer} type={1 << 3} />
+      <PrivateRoute path="/volunteers/:type/:volunteerId" component={VolunteerEdit} type={1 << 3} />
       <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} />
-      <PrivateRoute path="/addVolunteer" component={AddVolunteer} type={1 << 3} />
       {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
 

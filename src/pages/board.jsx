@@ -38,32 +38,25 @@ export default class extends React.Component {
     colleges = colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
     await this.setState({ colleges });
     let set = [];
-
-    //loop each event
     for (let i = 0; i < events.length; i++) {
       let event = events[i];
       if (event.faculty)
         continue;
 
       await this.setState({ status: "Fetching  " + event.name + " leaderboard..." });
-
-      //Fetch rounds leaderboard
-      //!IMPORTANT: Currently considering we have only one round, need to improve code.
-      let leaderboard = await leaderboardService.getRound(event.id, event.rounds[0]);
-      //sort round leaderboard
-      leaderboard = leaderboard.filter(team => !team.disqualified).sort((a, b) => b.points - a.points);
-      //Convert to set
-      let rankingPoints = Array.from(new Set(leaderboard.map(team => team.points)));
+      //Fetch rounds leaderboard (only last)
+      if (event.rounds.length == 0)
+        continue;//skip if no rounds found
+      let leaderboard = await leaderboardService.getRound(event.id, event.rounds[event.rounds.length - 1]);
 
       //Get rank
-      leaderboard.forEach(team => {
+      leaderboard.forEach(item => {
         // #TODO, two teams of same college winning in one event.
-        let rank = rankingPoints.indexOf(team.points);
-        if (rank < 3) {
+        if (item.rank <= 3) {
           set.push({
-            college: team.team.college,
+            college: item.slot.college,
             event: event.id,
-            rank: rank + 1
+            rank: item.rank
           });
         }
       });

@@ -49,24 +49,27 @@ const deleteRound = async (eventID, roundID) => {
   }
 };
 
-const createScores = async (eventID, roundID, scores) => {
+const createScores = async (eventId, roundId, judgeId, scores) => {
   try {
-    let response = await request("/events/" + eventID + "/rounds/" + roundID + "/scores", "POST", scores);
-
+    let response = await request(`/events/${eventId}/rounds/${roundId}/judges/${judgeId}`, "POST", scores);
+    console.log({ response })
     if (response && response.status === 200) {
-      return response.data;
+      return true;
     } else {
       if (response && response.status === "401")
         toast("Your session has expired, please logout and login again.")
-      return null;
+      else
+        toast(response.message);
+      return false;
     }
   } catch (e) {
-    return null;
+    console.log(e);
+    return false;
   }
 };
 
-const getScores = async (eventID, roundID) => {
-  let response = await request("/events/" + eventID + "/rounds/" + roundID + "/scores", "GET");
+const getScores = async (eventId, roundId, judgeId) => {
+  let response = await request(`/events/${eventId}/rounds/${roundId}/judges/${judgeId}`, "GET");
 
   if (response && response.status === 200) {
     return response.data;
@@ -260,6 +263,18 @@ const updateTeamScores = async (eventID, roundID, teams) => {
   }
 };
 
+const updateSlotBias = async (eventID, roundID, teams) => {
+  let response = await request("/events/" + eventID + "/rounds/" + roundID + "/bias", "PATCH", teams);
+
+  if (response && response.status === 200) {
+    return response.data;
+  } else {
+    if (response && response.status === 401) toast("Your session has expired, please logout and login again.");
+    else toast(response.message);
+    return null;
+  }
+};
+
 const publishRoundLeaderboard = async (eventID, roundID) => {
   let response = await request("/events/" + eventID + "/rounds/" + roundID + "/leaderboard", "PATCH", {});
 
@@ -294,4 +309,5 @@ export default {
   updateRound,
   updateTeamScores,
   publishRoundLeaderboard,
+  updateSlotBias
 };
