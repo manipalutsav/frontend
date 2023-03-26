@@ -64,7 +64,7 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/events" title="Events" />
     <SidebarItem to="/judges" title="Judges" />
     {/* <SidebarItem to="/winners" title="Winners" /> */}
-    <SidebarItem to="/leaderboard" title="Leaderboard" />
+    <SidebarItem to="/leaderboard" title="Event Standings"/>
 
     <SidebarSeparator />
     {/* <li>
