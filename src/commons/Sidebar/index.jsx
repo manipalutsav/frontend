@@ -55,7 +55,7 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/teams" title="Teams" />
     <SidebarItem to="/volunteers" title="Volunteer" />
     <SidebarItem to="/slots" title="Slots" />
-    <SidebarItem to="/leaderboard/public" title="Leaderboard" />
+    <SidebarItem to="/leaderboard/public" title="Event Standings" />
     {/* <SidebarItem to="/certificates" title="Certificates" /> */}
     <SidebarSeparator />
     <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li>
