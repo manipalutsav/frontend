@@ -71,7 +71,7 @@ export default class Events extends React.Component {
         (c) => !participatingCollege.find((p) => p == c.id)
       );
 
-      console.log(nonParticipatingColleges);
+      // console.log(nonParticipatingColleges);
       
       statues = statues.map(status => ({ ...status, college: collegeList.find(college => college.id === status.college) }))
       let participationStatusObj = {
