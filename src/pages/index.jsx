@@ -141,7 +141,7 @@ export default () =>
       <PrivateRoute path="/volunteers/core/:volunteerId" component={CoreVolunteerEdit} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type" component={Volunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type/:volunteerId" component={VolunteerEdit} type={1 << 3} />
-      <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} />
+      {/* <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} /> */}
       {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
 

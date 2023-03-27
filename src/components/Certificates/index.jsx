@@ -53,11 +53,11 @@ export default class Certificates extends React.Component {
       canvas.width = image.width;
       canvas.height = image.height;
       context.drawImage(image, 0, 0);
-      context.font = "45px Segoe UI";
-      context.fillStyle = "#555";
+      context.font = "bold 71px Blogger Sans";
+      context.fillStyle = "#000000";
       context.textAlign = "center";
-      context.fillText(member.name, (canvas.width / 2) + 100, 460);
-      context.fillText(event, (canvas.width / 2) + 100, 670);
+      context.fillText(member.name, (canvas.width / 2), 480);
+      context.fillText(event, (canvas.width / 2), 760);
       canvas.toBlob((blob) => {
         link.href = URL.createObjectURL(blob);
         link.download = member.name + " - " + event + ".png"
