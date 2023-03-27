@@ -77,10 +77,10 @@ export default class Events extends React.Component {
       if (participant.registrationID.match(/\s/))
         return toast(`Participant ${i + 1}: Registration id cannot contain spaces.`);
 
-      if (!participant.registrationID.match(/^(?:(?:MAHE[\d]{7})|(?:MSS[\d]{4,5})|(?:MAGE[\d]{8})|(?:EC[\d]{4,5})|(?:[\d]{9}))$/))
+      if (!participant.registrationID.match(/^(?:(?:MAHE[\d]{7})|(?:MAHER[\d]{6})|(?:MSS[\d]{4,5})|(?:MAGE[\d]{8})|(?:EC[\d]{4,5})|(?:[\d]{9}))$/))
         return toast(`Participant ${i + 1}: Registration id is invalid`);
 
-      if (this.state.event.faculty && participant.registrationID.match(/^[\d]{9}$/))
+      if (this.state.event.faculty && !this.state.event.name.match(/variety/i) && participant.registrationID.match(/^[\d]{9}$/))
         return toast(`Participant ${i + 1}: Registration id not accepted for faculty events`);
 
       if (!this.state.event.faculty && !participant.registrationID.match(/^[\d]{9}$/))
@@ -94,13 +94,18 @@ export default class Events extends React.Component {
 
     }
 
+    let researchScholars = this.state.participants.filter(participant => participant.registrationID.match(/MAHER|[\d]{9}/i));
+    if (researchScholars.length > 7 && this.state.event.name.match(/variety/i)) {
+      return toast(`Cannot have more than 7 research scholars for the event`);
+    }
+
     if (this.state.participants.length < this.state.event.minMembersPerTeam)
       return toast("Minimum of " + this.state.event.minMembersPerTeam + " participants are required to register for this event.");
 
     for (let i = 0; i < this.state.participants.length; i++)
       for (let j = 0; j < this.state.participants.length; j++)
-        if (i !== j && this.state.participants[i] === this.state.participants[j])
-          return toast(this.state.participants[i] + " has been entered more then once");
+        if (i !== j && this.state.participants[i].registrationID === this.state.participants[j].registrationID)
+          return toast(this.state.participants[i].registrationID + " has been entered more then once");
 
     let user = getUser();
     this.setState({
