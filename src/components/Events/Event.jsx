@@ -50,7 +50,8 @@ export default class Events extends React.Component {
       statues: [],
       descriptionStatus: false,
       loading: true,
-      participationStatus: {}
+      participationStatus: {},
+      nonParticipatingColleges: {},
     };
   }
 
@@ -63,6 +64,15 @@ export default class Events extends React.Component {
       let teams = await eventsService.getTeams(this.props.event);
       let statues = await participationStatus.getByEvent(this.props.event);
       let collegeList = await colleges.getAll();
+      // Getting all the colleges not participating
+
+      let participatingCollege = teams.map((t) => t.college._id);
+      let nonParticipatingColleges = collegeList.filter(
+        (c) => !participatingCollege.find((p) => p == c.id)
+      );
+
+      console.log(nonParticipatingColleges);
+      
       statues = statues.map(status => ({ ...status, college: collegeList.find(college => college.id === status.college) }))
       let participationStatusObj = {
         yes: 0,
@@ -79,7 +89,7 @@ export default class Events extends React.Component {
           participationStatusObj.no++;
       });
       console.log(statues)
-      this.setState({ teams, event, statues, participationStatus: participationStatusObj, loading: false });
+      this.setState({ teams, event, statues, participationStatus: participationStatusObj,nonParticipatingColleges: nonParticipatingColleges, loading: false });
     } catch (e) {
       toast(e.message);
     }
@@ -192,6 +202,35 @@ export default class Events extends React.Component {
                 <TeamCard key={i} team={team} />
               )
             }
+          </div>
+        </div>
+        <div>
+          <div>
+            <h3 className="mucapp">Non Participating Colleges</h3>
+          </div>
+          <div>
+            <table className="table w-full table-zebra">
+              <thead>
+                <tr>
+                  <th>Sl. No.</th>
+                  <th>College</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.nonParticipatingColleges.length > 0 &&
+                  this.state.nonParticipatingColleges.map((non, index) => {
+                    return (
+                      // <>Hello</>
+                      <tr>
+                        <td>{index + 1}.</td>
+                        <td>
+                          {non.name}, {non.location}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
