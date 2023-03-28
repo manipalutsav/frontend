@@ -127,6 +127,18 @@ const createTeam = async (eventID, team) => {
   }
 };
 
+const updateTeam = async (eventID, teamID, team) => {
+
+  let response = await request("/events/" + eventID + "/teams/" + teamID, "PATCH", team);
+  if (response && response.status === 200) {
+    return response.data;
+  } else {
+    if (response && response.status === "401")
+      toast("Your session has expired, please logout and login again.")
+    return null;
+  }
+};
+
 const deleteTeam = async (eventID, teamID) => {
   let response = await request("/events/" + eventID + "/teams/" + teamID, "DELETE");
 
@@ -307,6 +319,7 @@ export default {
   getTeams,
   getTeamsByRound,
   updateRound,
+  updateTeam,
   updateTeamScores,
   publishRoundLeaderboard,
   updateSlotBias

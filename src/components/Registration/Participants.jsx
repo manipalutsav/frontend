@@ -1,5 +1,5 @@
 import React from "react";
-import { navigate } from "gatsby";
+import { Link, navigate } from "gatsby";
 
 import { Button } from "../../commons/Form";
 import collegesService from "../../services/colleges";
@@ -84,9 +84,15 @@ export default class Events extends React.Component {
               <ParticipantCard key={i} participant={participant} />
             ))
           }
+
         </div>
+        
         <div>
           <Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register/" + this.props.event) }}>Back</Button>
+          {
+            
+            (this.state.participants.length <(this.state.team.event ?(this.state.team.event.maxMembersPerTeam):0))&& (<Link to={"/register/"+this.props.event+"/teams/"+this.props.team+"/update"}><Button>Add member</Button></Link>)
+          }
         </div>
       </div>
     </LoadContent>
