@@ -4,9 +4,11 @@ import { Link, navigate } from "gatsby";
 import { Button } from "../../commons/Form";
 import collegesService from "../../services/colleges";
 import eventsService from "../../services/events";
+import participantService from "../../services/participants";
 import { getUser } from "../../services/userServices";
 import LoadContent from "../../commons/LoadContent";
 import { FiX } from "react-icons/fi";
+import { toast } from "../../actions/toastActions";
 
 const styles = {
   participantCard: {
@@ -27,8 +29,17 @@ const styles = {
   },
 };
 
+const handleDelete = (eventID, teamID, participantID)=>{
+  participantService.deleteOne(eventID, teamID, participantID).then((ok)=>{
+    if(ok){
+      navigate(0);
+    }else
+      toast("Could not delete!")
+  })
+}
 
-const ParticipantCard = ({ participant }) => (
+
+const ParticipantCard = ({ participant, team, displayDelete }) => (
 
   <div css={{
     ...styles.participantCard,
@@ -40,17 +51,17 @@ const ParticipantCard = ({ participant }) => (
       gap:8
     }}>
       <span>{participant.name}</span>
-      <span css={{
+      {displayDelete && (<span css={{
           cursor: "pointer",
           ":hover": {
             color: "red",
           },
         }}>
           <FiX onClick={(e) => {
-            e.stopPropagation();
-            //  handleDelete(team)
+            // console.log(team)
+              handleDelete(team.event._id,team._id, participant.id);
             }} /> 
-        </span>
+        </span>)}
     </div>
     <div css={{
       color: "rgba(0, 0, 0, .5)",
@@ -117,7 +128,7 @@ export default class Events extends React.Component {
         <div style={{ display: 'flex' }}>
           {
             this.state.participants.map((participant, i) => (
-              <ParticipantCard key={i} participant={participant} />
+              <ParticipantCard key={i} participant={participant} team={this.state.team} displayDelete={this.state.team.members.length > this.state.team.event.minMembersPerTeam} />
             ))
           }
 
