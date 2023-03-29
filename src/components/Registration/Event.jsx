@@ -31,16 +31,6 @@ const styles = {
 };
 
 const TeamCard = ({ team, college }) => {
-  let handleDelete = (team) => {
-    // let surety = typeof window !== "undefined"
-    //   && window.confirm("Are you sure you want to delete " + team.name + "?");
-
-    // if (surety) {
-    //   eventsService.deleteTeam(team.event._id, team.id).then(() =>
-    //     navigate("/register/" + team.event._id)
-    //   );
-    // }
-  }
 
   return (
     <Link to={"/register/" + team.event._id + "/teams/" + team._id} css={{
@@ -58,7 +48,10 @@ const TeamCard = ({ team, college }) => {
             color: "red",
           },
         }}>
-          <FiX onClick={() => handleDelete(team)} />
+          {/* <FiX onClick={(e) => {
+            e.stopPropagation();
+             handleDelete(team)
+            }} /> */}
         </span>
       </div>
       <div css={{

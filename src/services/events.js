@@ -142,12 +142,17 @@ const updateTeam = async (eventID, teamID, team) => {
 const deleteTeam = async (eventID, teamID) => {
   let response = await request("/events/" + eventID + "/teams/" + teamID, "DELETE");
 
+
   if (response && response.status === 200) {
     // return response.data;
     return true;
   } else {
     if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
+    else if(response && response.status === 400){
+      // console.log(response)
+      toast(response.message)
+    }
     return null;
   }
 };
