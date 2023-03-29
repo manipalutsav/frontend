@@ -3,8 +3,10 @@ import { Link, navigate } from "gatsby";
 
 import { Button } from "../../commons/Form";
 import collegesService from "../../services/colleges";
+import eventsService from "../../services/events";
 import { getUser } from "../../services/userServices";
 import LoadContent from "../../commons/LoadContent";
+import { FiX } from "react-icons/fi";
 
 const styles = {
   participantCard: {
@@ -33,13 +35,27 @@ const ParticipantCard = ({ participant }) => (
   }}>
     <div css={{
       fontSize: "1.3em",
+      display: "flex",
+      alignItems: "center",
+      gap:8
     }}>
-      {participant.name}
+      <span>{participant.name}</span>
+      <span css={{
+          cursor: "pointer",
+          ":hover": {
+            color: "red",
+          },
+        }}>
+          <FiX onClick={(e) => {
+            e.stopPropagation();
+            //  handleDelete(team)
+            }} /> 
+        </span>
     </div>
     <div css={{
       color: "rgba(0, 0, 0, .5)",
     }}>
-      {participant.registrationID}
+      {participant.registrationID}     
     </div>
   </div>
 
@@ -55,7 +71,27 @@ export default class Events extends React.Component {
       participants: [],
       loading: true
     };
+    this.handleDelete = () => {
+      // console.log(team);
+      let surety = typeof window !== "undefined"
+        && window.confirm("Are you sure you want to delete " + this.state.team.name + "?");
+  
+      if (surety) {
+        
+        eventsService.deleteTeam(this.state.team.event._id, this.state.team._id).then((ok) =>
+          {
+            if(ok){
+              navigate("/register/" + this.state.team.event._id)
+            }
+          }
+          // console.log("")
+        );
+          // navigate("/register/" + this.state.team.event._id)
+  
+      }
+    }
   }
+  
 
   async init() {
     let user = getUser();
@@ -93,6 +129,7 @@ export default class Events extends React.Component {
             
             (this.state.participants.length <(this.state.team.event ?(this.state.team.event.maxMembersPerTeam):0))&& (<Link to={"/register/"+this.props.event+"/teams/"+this.props.team+"/update"}><Button>Add member</Button></Link>)
           }
+          <Button styles={{ marginTop: "10px", backgroundColor:"red !important" }} onClick={this.handleDelete }>Delete team</Button>
         </div>
       </div>
     </LoadContent>
