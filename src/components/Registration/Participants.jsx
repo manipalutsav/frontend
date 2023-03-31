@@ -9,6 +9,7 @@ import { getUser } from "../../services/userServices";
 import LoadContent from "../../commons/LoadContent";
 import { FiX } from "react-icons/fi";
 import { toast } from "../../actions/toastActions";
+import { isTeamChangeFreezed } from "../../utils/common";
 
 const styles = {
   participantCard: {
@@ -128,19 +129,16 @@ export default class Events extends React.Component {
         <div style={{ display: 'flex' }}>
           {
             this.state.participants.map((participant, i) => (
-              <ParticipantCard key={i} participant={participant} team={this.state.team} displayDelete={this.state.team.members.length > this.state.team.event.minMembersPerTeam} />
+              <ParticipantCard key={i} participant={participant} team={this.state.team} displayDelete={(this.state.team.members.length > this.state.team.event.minMembersPerTeam) &&!isTeamChangeFreezed()} />
             ))
           }
 
         </div>
         
         <div>
-          <Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register/" + this.props.event) }}>Back</Button>
-          {
-            
-            (this.state.participants.length <(this.state.team.event ?(this.state.team.event.maxMembersPerTeam):0))&& (<Link to={"/register/"+this.props.event+"/teams/"+this.props.team+"/update"}><Button>Add member</Button></Link>)
-          }
-          <Button styles={{ marginTop: "10px", backgroundColor:"red !important" }} onClick={this.handleDelete }>Delete team</Button>
+          {!isTeamChangeFreezed()&&(<Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register/" + this.props.event) }}>Back</Button>)}
+          {!isTeamChangeFreezed()&&(this.state.participants.length <(this.state.team.event ?(this.state.team.event.maxMembersPerTeam):0))&& (<Link to={"/register/"+this.props.event+"/teams/"+this.props.team+"/update"}><Button>Add member</Button></Link>)}
+          {!isTeamChangeFreezed()&&(<Button styles={{ marginTop: "10px", backgroundColor:"red !important" }} onClick={this.handleDelete }>Delete team</Button>)}
         </div>
       </div>
     </LoadContent>
