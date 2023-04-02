@@ -10,6 +10,9 @@ import events from "../../services/events";
 import eventsService from "../../services/events";
 import { toast } from "../../actions/toastActions";
 import Block from "../../commons/Block";
+import Dialog from "../../commons/Dialog";
+import { saveAs } from 'file-saver';
+
 
 export default class Judge extends Component {
   constructor(props) {
@@ -24,6 +27,7 @@ export default class Judge extends Component {
       slots: [],
       selection: null,
       submitted: false,
+      showDialog: false,
       judgeSelected: false,
       criteria: [],
       ...JSON.parse(localStorage.getItem("scoresheet:" + this.props.round)) || {}
@@ -31,6 +35,7 @@ export default class Judge extends Component {
   }
 
   componentWillMount = () => {
+    this.getBackup();
     judges.getAll().then(judges => this.setState({
       judgeOptions: judges.map(judge => ({ value: judge.id, label: judge.name })),
       judges
@@ -42,6 +47,54 @@ export default class Judge extends Component {
       judge: id,
     });
   };
+
+  makeBackup() {
+    let roundId = this.state.round.id;
+    let judeId = this.state.judge;
+    let eventId = this.state.event.id;
+    let backup = {
+      time: Date.now(),
+      ua: navigator.userAgent,
+      data: JSON.stringify(this.state.slots)
+    }
+    localStorage.setItem("scoresheet:" + this.props.round, JSON.stringify(this.state));
+    eventsService.backupScores(eventId, roundId, judeId, backup);
+  }
+
+  getBackup = async () => {
+    let roundId = this.props.round;
+    let judeId = this.state.judge;
+    let eventId = this.props.event;
+    if (this.state.judge === null) {
+      return;
+    }
+    let response = await eventsService.getBackup(eventId, roundId, judeId);
+    let backedUpSlots = response ? JSON.parse(response.data) : [];
+    if (JSON.stringify(backedUpSlots) !== JSON.stringify(this.state.slots)) {
+      this.setState({ showDialog: true })
+      return;
+    }
+  }
+
+  useServerBackup = () => {
+    this.setState({ showDialog: false }, async () => {
+      let blob = new Blob([JSON.stringify(localStorage)], { type: "text/json;charset=utf-8" });
+      saveAs(blob, "mucapp-" + new Date().toJSON() + ".json");
+
+      let roundId = this.props.round;
+      let judeId = this.state.judge;
+      let eventId = this.props.event;
+      let response = await eventsService.getBackup(eventId, roundId, judeId);
+      let backedUpSlots = response ? JSON.parse(response.data) : [];
+      this.setState({ slots: backedUpSlots });
+      this.makeBackup();
+    })
+
+  }
+
+  useLockBackup = () => {
+    this.setState({ showDialog: false }, this.makeBackup)
+  }
 
   selectJudge = async () => {
     if (this.state.judge) {
@@ -74,6 +127,8 @@ export default class Judge extends Component {
       events.getRound(this.props.event, this.props.round).then(round => {
         this.setState({ round, criteria: round.criteria });
       });
+
+      this.getBackup()
 
       this.setState({
         judgeSelected: true
@@ -124,7 +179,7 @@ export default class Judge extends Component {
       this.setState({
         submitVisible: finished
       });
-      localStorage.setItem("scoresheet:" + this.props.round, JSON.stringify(this.state));
+      this.makeBackup();
     })
   };
 
@@ -150,7 +205,7 @@ export default class Judge extends Component {
     await this.setState({
       slots
     });
-    localStorage.setItem("scoresheet:" + this.props.round, JSON.stringify(this.state));
+    this.makeBackup();
 
   }
   submitScore = () => {
@@ -178,6 +233,7 @@ export default class Judge extends Component {
 
           if (!failed) {
             localStorage.removeItem("scoresheet:" + this.props.round);
+            eventsService.deleteBackup(this.props.event, this.props.round, this.state.judge)
             navigate("/events/" + this.props.event + "/rounds");
           }
           else {
@@ -202,6 +258,7 @@ export default class Judge extends Component {
       return;
     }
     localStorage.removeItem("scoresheet:" + this.props.round);
+    eventsService.deleteBackup(this.props.event, this.props.round, this.state.judge)
     navigate("/events/" + this.props.event + "/rounds");
   }
 
@@ -380,6 +437,22 @@ export default class Judge extends Component {
             </div>
           </div>
       }
+      <Dialog
+        title="Mismatch between server backup and local backup"
+        body={<>These is a difference between server backup and local backup.<br />
+          If you click on server backup, you'll be prompted to download the local backup on your device for safety reasons.<br />
+          If you click on local backup, your server backup will be overridden, but we will always have old backups.<br />
+          Click which you want to use.</>}
+        positiveButton={{
+          label: "Server Backup",
+          handler: this.useServerBackup
+        }}
+        negativeButton={{
+          label: "Local Backup",
+          handler: this.useLockBackup
+        }}
+        show={this.state.showDialog}
+      />
     </div>
   )
 };
