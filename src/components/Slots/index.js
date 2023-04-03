@@ -35,8 +35,10 @@ export default class extends React.Component {
       this.setState({ event })
     );
 
-    eventsService.getSlots2(this.props.event, this.props.round).then(slots => {
-      eventsService.getTeams(this.props.event).then(teams => {
+    Promise.all([
+      eventsService.getSlots2(this.props.event, this.props.round),
+      eventsService.getTeams(this.props.event)
+    ]).then(([slots,teams]) => {
 
         slots.forEach(slot => {
           let team = teams.find(team => team.index === slot.teamIndex && team.college._id === slot.college._id);
@@ -44,13 +46,26 @@ export default class extends React.Component {
           if (team) {
             slot.registered = true;
           }
-        })
+        });
 
+        // Look for newly registered teams and add them to the list of slots
+  teams.forEach(team => {
+    let existingSlot = slots.find(slot => slot.teamIndex === team.index && slot.college._id === team.college._id);
+    if (!existingSlot) {
+      // Create a new slot and add it to the list of slots
+      let newSlot = {
+        teamIndex: team.index,
+        college: team.college,
+        number: slots.length + 1,
+        registered: true
+      };
+      slots.push(newSlot);
+    }
+  });
         this.setState({ slotted: !!slots.length, slots, visibleSlots: slots, teams, loaded: true }, () => {
           this.filterVisibleSlots();
         })
       });
-    });
 
   }
 

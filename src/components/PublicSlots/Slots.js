@@ -50,6 +50,21 @@ export default class extends React.Component {
       }
     })
 
+    // Look for newly registered teams and add them to the list of slots
+    teams.forEach(team => {
+      let existingSlot = slots.find(slot => slot.teamIndex === team.index && slot.college._id === team.college._id);
+      if (!existingSlot) {
+        // Create a new slot and add it to the list of slots
+        let newSlot = {
+          teamIndex: team.index,
+          college: team.college,
+          number: slots.length + 1,
+          registered: true
+        };
+        slots.push(newSlot);
+      }
+    });
+
     this.setState({ slotted: !!slots.length, slots: slots, loaded: true });
   }
 
