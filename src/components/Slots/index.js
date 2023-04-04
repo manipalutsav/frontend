@@ -119,7 +119,7 @@ export default class extends React.Component {
           }}>
             <h2 className="mucapp">
               {this.state.event.name}
-              {this.state.event.slots && this.state.event.slots.length > 1 && (
+              {this.state.event.rounds && this.state.event.rounds.length > 1 && (
                 <>
                   {" "}
                   Round {this.state.event.rounds.indexOf(this.props.round) + 1}
