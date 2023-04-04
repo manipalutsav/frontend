@@ -4,7 +4,6 @@ import { FiMenu, FiX, FiUser } from 'react-icons/fi'
 import sidebarStore from '../../reducers/sidebarReducer';
 import userStore from '../../reducers/userReducer';
 import { open, close } from '../../actions/sidebarActions';
-import Logo from './favicon (1).png';
 
 const HeaderLogo = () => (
   <Link to="/" className="mucapp">
@@ -95,7 +94,7 @@ export default class Header extends Component {
       boxShadow: "0 5px 50px 10px #f0f1f2",
     }}>
       <NavigationToggle />
-      <img src={Logo} width="45" height="40" margin-left="400px" />
+      <HeaderLogo />
       <UserLink />
     </header>
   );

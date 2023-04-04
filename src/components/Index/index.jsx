@@ -41,10 +41,10 @@ const RegistrationTimer = () => {
 }
 
 export default () =>
-  <div css={{ textAlign: "center", color: "#1b4079"}}>
-    <h2 css={{ fontSize: "30px", paddingBottom:"30px" }}>Welcome to</h2>
-    <h1 css={{ fontSize: "45px", color: "#F86F15", paddingBottom:"20px", fontWeight:"lighter" }}>MAHE UTSAV Coordinators' App</h1>
-    <h2 css={{ fontSize: "40px", paddingBottom:"45px"}}>UTSAV 2023</h2>
-    <img css={{ width: "35%", marginLeft:"33%"}} alt="Logo" src={utsavLogo} />
-  </div>
+  <div css={{ textAlign: "center" }}>
+    <h2 className="mucapp">MAHE Utsav Coordinators App</h2>
+    <h1 className="mucapp"> UTSAV 2023!</h1>
+    <RegistrationTimer />
+    <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} />
+  </div >
   ;

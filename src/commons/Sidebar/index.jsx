@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "gatsby";
-import { Dropdown } from "rsuite";
-import "rsuite/dist/rsuite.min.css";
-
 
 import store from "../../reducers/sidebarReducer";
 
@@ -30,13 +27,13 @@ const SidebarItem = (props) => (
       padding: 10,
       paddingLeft: 50,
       fontSize: ".9em",
-      textDecoration: "none !important",
-      color: path() === props.to ? "#003B73" : "inherit",
-      backgroundColor: path() === props.to ? "#BFD7ED" : "",
+      textDecoration: "none",
+      color: path() === props.to ? "#ff5800" : "inherit",
+      backgroundColor: path() === props.to ? "rgba(255, 209, 0, .2)" : "",
       borderRight: "3px solid",
       borderColor: path() === props.to ? "#ff5800" : "white",
       ":hover": {
-        color: "#003B73",
+        color: "#ff5800",
       },
     }}>
       {props.title}
@@ -60,40 +57,14 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/slots" title="Slots" />
     <SidebarItem to="/leaderboard/public" title="Event Standings" />
     {/* <SidebarItem to="/certificates" title="Certificates" /> */}
-    {/* <SidebarSeparator />
+    <SidebarSeparator />
     <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li>
     <SidebarItem to="/users" title="Users" />
     <SidebarItem to="/colleges" title="Colleges" />
     <SidebarItem to="/events" title="Events" />
     <SidebarItem to="/judges" title="Judges" />
-    <SidebarItem to="/winners" title="Winners" />
-    <SidebarItem to="/leaderboard" title="Event Standings"/> */}
-
-    <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px"}} title="ADMIN ONLY">
-                <Dropdown.Item as="a">
-                    <SidebarItem to="/users" title="Users" />
-                </Dropdown.Item>
-  
-                <Dropdown.Item as="a">
-                <SidebarItem to="/colleges" title="Colleges" />
-                </Dropdown.Item>
-  
-                <Dropdown.Item as="a">
-                <SidebarItem to="/events" title="Events" />
-                </Dropdown.Item>
-
-                <Dropdown.Item as="a">
-                <SidebarItem to="/judges" title="Judges" />
-                </Dropdown.Item>
-
-                {/* <Dropdown.Item as="a">
-                <SidebarItem to="/winners" title="Winners" />
-                </Dropdown.Item> */}
-
-                <Dropdown.Item as="a">
-                <SidebarItem to="/leaderboard" title="Event Standings" />
-                </Dropdown.Item>
-      </Dropdown>
+    {/* <SidebarItem to="/winners" title="Winners" /> */}
+    <SidebarItem to="/leaderboard" title="Event Standings"/>
 
     <SidebarSeparator />
     {/* <li>
