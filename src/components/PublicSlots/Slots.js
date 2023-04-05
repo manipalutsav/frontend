@@ -85,7 +85,7 @@ export default class extends React.Component {
           {this.state.event.name} Slots
         </h2>
         <div>
-          <Select
+          {(this.state.event.rounds && (this.state.event.rounds.length > 1 && <Select
             isSearchable={false}
             name="round"
             placeholder="Select Round"
@@ -117,7 +117,7 @@ export default class extends React.Component {
               width: 200,
               display: "inline-block",
             }}
-          />
+          />))}
         </div>
       </div>
 
