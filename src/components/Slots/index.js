@@ -133,7 +133,15 @@ export default class extends React.Component {
             marginBottom: 30,
           }}>
             <h2 className="mucapp">
-              {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)} Slots
+              {this.state.event.name}
+              {this.state.event.rounds && this.state.event.rounds.length > 1 && (
+                <>
+                  {" "}
+                  Round {this.state.event.rounds.indexOf(this.props.round) + 1}
+                </>
+              )}
+              {" "}
+              Slots
             </h2>
             <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
           </div>
@@ -160,7 +168,13 @@ export default class extends React.Component {
               marginBottom: 30,
             }}>
               <h2 className="mucapp">
-                Slotting teams for {this.state.event.name} Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}
+                Slotting teams for {this.state.event.name}
+                {this.state.event.rounds && this.state.event.rounds.length > 1 && (
+                  <>
+                    {" "}
+                    Round {this.state.event.rounds.indexOf(this.props.round) + 1}
+                  </>
+                )}
               </h2>
               <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
 
@@ -208,7 +222,10 @@ export default class extends React.Component {
           }}>
             <h2 className="mucapp">{this.state.event.name}</h2>
             <div css={{ color: "rgba(0, 0, 0, .5)" }}>
-              Teams haven't been slotted for Round {this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}
+              {this.state.event.rounds && this.state.event.rounds.length === 1
+                ? "Teams haven't been slotted"
+                : `Teams haven't been slotted for Round ${this.state.event.rounds && (this.state.event.rounds.indexOf(this.props.round) + 1)}`
+              }
             </div>
             <p css={{ color: "green" }}>Generate slots now!</p>
             <button className="mucapp" onClick={this.startSlotting}>

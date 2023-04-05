@@ -68,6 +68,63 @@ const createScores = async (eventId, roundId, judgeId, scores) => {
   }
 };
 
+const backupScores = async (eventId, roundId, judgeId, backupData) => {
+  try {
+    let response = await request(`/events/${eventId}/rounds/${roundId}/judges/${judgeId}/backup`, "POST", backupData);
+    console.log({ response })
+    if (response && response.status === 200) {
+      return true;
+    } else {
+      if (response && response.status === "401")
+        toast("Your session has expired, please logout and login again.")
+      else
+        toast("Warning!: Failed to backup scores on server. Reason: " + response.message);
+      return false;
+    }
+  } catch (e) {
+    console.log(e);
+    toast("Warning!: Failed to backup scores on server. Reason: " + e.message);
+    return false;
+  }
+};
+
+const getBackup = async (eventId, roundId, judgeId) => {
+  try {
+    let response = await request(`/events/${eventId}/rounds/${roundId}/judges/${judgeId}/backup`, "GET");
+    if (response && response.status === 200) {
+      return response.data;
+    } else {
+      if (response && response.status === "401")
+        toast("Your session has expired, please logout and login again.")
+      else
+        toast("Failed to fetch backup, reason: " + response.message);
+      return false;
+    }
+  } catch (e) {
+    toast("Warning!: Failed to fetch backup. Reason: " + e.message);
+    return false;
+  }
+};
+
+
+const deleteBackup = async (eventId, roundId, judgeId) => {
+  try {
+    let response = await request(`/events/${eventId}/rounds/${roundId}/judges/${judgeId}/backup`, "DELETE");
+    if (response && response.status === 200) {
+      return true;
+    } else {
+      if (response && response.status === "401")
+        toast("Your session has expired, please logout and login again.")
+      else
+        toast("Failed to delete backup, reason: " + response.message);
+      return false;
+    }
+  } catch (e) {
+    toast("Warning!: Failed to delete backup. Reason: " + e.message);
+    return false;
+  }
+};
+
 const getScores = async (eventId, roundId, judgeId) => {
   let response = await request(`/events/${eventId}/rounds/${roundId}/judges/${judgeId}`, "GET");
 
@@ -127,8 +184,21 @@ const createTeam = async (eventID, team) => {
   }
 };
 
+const updateTeam = async (eventID, teamID, team) => {
+
+  let response = await request("/events/" + eventID + "/teams/" + teamID, "PATCH", team);
+  if (response && response.status === 200) {
+    return response.data;
+  } else {
+    if (response && response.status === "401")
+      toast("Your session has expired, please logout and login again.")
+    return null;
+  }
+};
+
 const deleteTeam = async (eventID, teamID) => {
   let response = await request("/events/" + eventID + "/teams/" + teamID, "DELETE");
+
 
   if (response && response.status === 200) {
     // return response.data;
@@ -136,6 +206,10 @@ const deleteTeam = async (eventID, teamID) => {
   } else {
     if (response && response.status === "401")
       toast("Your session has expired, please logout and login again.")
+    else if(response && response.status === 400){
+      // console.log(response)
+      toast(response.message)
+    }
     return null;
   }
 };
@@ -307,7 +381,11 @@ export default {
   getTeams,
   getTeamsByRound,
   updateRound,
+  updateTeam,
   updateTeamScores,
   publishRoundLeaderboard,
-  updateSlotBias
+  updateSlotBias,
+  backupScores,
+  getBackup,
+  deleteBackup
 };

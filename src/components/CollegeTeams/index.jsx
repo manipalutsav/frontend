@@ -4,6 +4,7 @@ import { Link } from "gatsby";
 import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
 import LoadContent from "../../commons/LoadContent";
+import { isTeamChangeFreezed } from "../../utils/common";
 
 const styles = {
   memberCard: {
@@ -25,7 +26,7 @@ const styles = {
 };
 
 const MemberCard = ({ member, team }) => (
-  <Link to={"/teams/members/" + member.id + "/edit"} css={{
+  <Link to={!isTeamChangeFreezed() && "/teams/members/" + member.id + "/edit"} css={{
     ...styles.memberCard,
   }}>
     <div css={{

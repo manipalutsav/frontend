@@ -47,10 +47,11 @@ export default class Events extends React.Component {
     this.state = {
       event: {},
       teams: [],
-      statues: [],
+      // statues: [],/* Removed participation section */
       descriptionStatus: false,
       loading: true,
-      participationStatus: {}
+      // participationStatus: {},/* Removed participation section */
+      nonParticipatingColleges: {},
     };
   }
 
@@ -61,25 +62,33 @@ export default class Events extends React.Component {
     try {
       let event = await eventsService.get(this.props.event);
       let teams = await eventsService.getTeams(this.props.event);
-      let statues = await participationStatus.getByEvent(this.props.event);
+      // let statues = await participationStatus.getByEvent(this.props.event); /* Removed participation section */
       let collegeList = await colleges.getAll();
-      statues = statues.map(status => ({ ...status, college: collegeList.find(college => college.id === status.college) }))
-      let participationStatusObj = {
-        yes: 0,
-        no: 0,
-        maybe: 0
-      };
-      statues.forEach(obj => {
+      // Getting all the colleges not participating
 
-        if (obj.status === "Yes")
-          participationStatusObj.yes++;
-        else if (obj.status === "Maybe")
-          participationStatusObj.maybe++;
-        else
-          participationStatusObj.no++;
-      });
-      console.log(statues)
-      this.setState({ teams, event, statues, participationStatus: participationStatusObj, loading: false });
+      let participatingCollege = teams.map((t) => t.college._id);
+      let nonParticipatingColleges = collegeList.filter(
+        (c) => !participatingCollege.find((p) => p == c.id)
+      );
+
+        /* Removed participation section */
+      // statues = statues.map(status => ({ ...status, college: collegeList.find(college => college.id === status.college) }))
+      // let participationStatusObj = {
+      //   yes: 0,
+      //   no: 0,
+      //   maybe: 0
+      // };
+      // statues.forEach(obj => {
+
+      //   if (obj.status === "Yes")
+      //     participationStatusObj.yes++;
+      //   else if (obj.status === "Maybe")
+      //     participationStatusObj.maybe++;
+      //   else
+      //     participationStatusObj.no++;
+      // });
+      // console.log(statues)
+      this.setState({ teams, event /*, statues , participationStatus: participationStatusObj*/,nonParticipatingColleges: nonParticipatingColleges, loading: false });
     } catch (e) {
       toast(e.message);
     }
@@ -154,7 +163,8 @@ export default class Events extends React.Component {
               : null
           }
         </div>
-        <div>
+        {/* Removed participation section */}
+        {/* <div>
           <h3>Colleges Participation</h3>
           <table className="table w-full table-zebra" >
             <thead><tr>
@@ -176,7 +186,7 @@ export default class Events extends React.Component {
           <p>Yes: {this.state.participationStatus.yes}</p>
           <p>Maybe: {this.state.participationStatus.maybe}</p>
           <p>No: {this.state.participationStatus.no}</p>
-        </div>
+        </div> */}
         <div>
           <div>
             <h3 className="mucapp">Participating Teams</h3>
@@ -192,6 +202,35 @@ export default class Events extends React.Component {
                 <TeamCard key={i} team={team} />
               )
             }
+          </div>
+        </div>
+        <div>
+          <div>
+            <h3 className="mucapp">Non Participating Colleges</h3>
+          </div>
+          <div>
+            <table className="table w-full table-zebra">
+              <thead>
+                <tr>
+                  <th>Sl. No.</th>
+                  <th>College</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.nonParticipatingColleges.length > 0 &&
+                  this.state.nonParticipatingColleges.map((non, index) => {
+                    return (
+                      // <>Hello</>
+                      <tr>
+                        <td>{index + 1}.</td>
+                        <td>
+                          {non.name}, {non.location}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -3,6 +3,8 @@ import { navigate } from "gatsby";
 
 import constants from "../../utils/constants";
 import eventsService from "../../services/events";
+import collegesService from "../../services/colleges";
+
 import { getUser } from "../../services/userServices";
 import { Input, Button } from "../../commons/Form";
 import { toast } from "../../actions/toastActions";
@@ -39,6 +41,7 @@ export default class Events extends React.Component {
       participants: [],
       button: this.REGISTER,
       registrationStatus: null,
+      team:null
     };
   }
 
@@ -99,23 +102,20 @@ export default class Events extends React.Component {
       return toast(`Cannot have more than 7 research scholars for the event`);
     }
 
-    if (this.state.participants.length < this.state.event.minMembersPerTeam)
-      return toast("Minimum of " + this.state.event.minMembersPerTeam + " participants are required to register for this event.");
 
     for (let i = 0; i < this.state.participants.length; i++)
       for (let j = 0; j < this.state.participants.length; j++)
         if (i !== j && this.state.participants[i].registrationID === this.state.participants[j].registrationID)
-          return toast(this.state.participants[i].registrationID + " has been entered more then once");
+          return toast(this.state.participants[i].registrationID + " has been entered more than once");
 
     let user = getUser();
     this.setState({
       button: this.REGISTERING
     }, () => {
-      eventsService.createTeam(this.state.event.id, {
-        college: user.college,
+      eventsService.updateTeam(this.state.event.id, this.state.team._id, {
         participants,
       }).then(team =>
-        navigate("/register/" + this.state.event.id)
+        navigate("/register/" + this.state.event.id + "/teams/" + this.state.team._id)
       );
     })
 
@@ -128,15 +128,27 @@ export default class Events extends React.Component {
 
       let participantsInput = [];
 
-      for (let i = 0; i < event.maxMembersPerTeam; i++) {
-        participantsInput.push(<Participant handleChange={this.handleChange} key={i} count={i + 1} />);
-      }
 
-      this.setState({
-        event,
-        participantsInput,
-        registrationStatus: event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents,
-      });
+     
+
+      let user = getUser();
+      collegesService.getTeams(user.college).then(teams=>{
+        let team = teams.find((t)=>t._id == this.props.team);
+        const remainingMemberCount = (event.maxMembersPerTeam - team.members.length);
+        for (let i = 0; i < remainingMemberCount; i++) {
+            participantsInput.push(<Participant handleChange={this.handleChange} key={i} count={i + 1} />);
+        }
+        this.setState({
+            event,
+            participantsInput,
+            registrationStatus: event.faculty ? constants.registrations.facultyEvents : constants.registrations.studentEvents,
+            team
+          });
+      }).catch(err=>{
+        toast("Some error occured! "+err)
+      })
+
+      
     });
   };
 
@@ -149,15 +161,16 @@ export default class Events extends React.Component {
       : <div>
         <div>
           <h2 className="mucapp">Team Registration</h2>
-          <p>Register a team for the {this.state.event.name} event in Utsav.</p>
+          <p>Update your team for the {this.state.event.name} event in Utsav.</p>
         </div>
         <div>
+            {(this.state.event && this.state.team) && <>{this.state.participantsInput.length} more members can be registered</>}
           {
             this.state.participantsInput.map(participants => participants)
           }
           <div css={{ marginTop: "20px" }}>
             <Button onClick={this.handleSubmit} disabled={this.state.button === this.REGISTERING}>{this.state.button}</Button>
-            <Button styles={{ marginLeft: "10px" }} onClick={() => { navigate("/register") }}>Cancel</Button>
+            <Button styles={{ marginLeft: "10px" }} onClick={() => { navigate("/register/"+this.props.event+"/teams/"+this.props.team) }}>Cancel</Button>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ import PublicLeaderboard from "../components/PublicLeaderboard";
 import Teams from "../components/Participants";
 import Register from "../components/Registration";
 import Participants from "../components/Registration/Participants";
+import UpdateTeams from "../components/Registration/UpdateTeams";
 import Members from "../components/Members";
 import RegisterEvent from "../components/Registration/Event";
 import RegisterTeam from "../components/Registration/Team";
@@ -133,6 +134,7 @@ export default () =>
       <PrivateRoute path="/register/:event" component={RegisterEvent} type={8} />
       <PrivateRoute path="/register/:event/teams" component={RegisterTeam} type={8} />
       <PrivateRoute path="/register/:event/teams/:team" component={Participants} type={8} />
+      <PrivateRoute path="/register/:event/teams/:team/update" component={UpdateTeams} type={8} />
       <PrivateRoute path="/certificates" component={Certificates} type={8} />
 
       {/* For volunteers */}
@@ -141,7 +143,7 @@ export default () =>
       <PrivateRoute path="/volunteers/core/:volunteerId" component={CoreVolunteerEdit} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type" component={Volunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type/:volunteerId" component={VolunteerEdit} type={1 << 3} />
-      <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} />
+      {/* <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} /> */}
       {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
 
