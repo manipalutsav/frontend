@@ -43,6 +43,23 @@ const SidebarItem = (props) => (
   </li>
 );
 
+const DropItem = (props) => (
+    <Link to={props.to} title={props.title} css={{
+      display:"flex",
+      width:"100%",
+      padding: 10,
+      textDecoration: "none !important",
+      color: path() === props.to ? "#003B73" : "inherit",
+      backgroundColor: path() === props.to ? "#BFD7ED" : "",
+      ":hover": {
+        color: "#003B73",
+      },
+    }}>
+      {props.title}
+    </Link>
+);
+
+
 const SidebarItems = ({ backupName, backupData }) => (
   <ul css={{
     display: "inline",
@@ -72,19 +89,19 @@ const SidebarItems = ({ backupName, backupData }) => (
      */}
     <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px"}} title="ADMIN ONLY">
                 <Dropdown.Item as="a">
-                    <SidebarItem to="/users" title="Users" />
+                    <DropItem to="/users" title="Users" />
                 </Dropdown.Item>
   
                 <Dropdown.Item as="a">
-                <SidebarItem to="/colleges" title="Colleges" />
+                    <DropItem to="/colleges" title="Colleges" />
                 </Dropdown.Item>
   
                 <Dropdown.Item as="a">
-                <SidebarItem to="/events" title="Events" />
+                    <DropItem to="/events" title="Events" />
                 </Dropdown.Item>
 
                 <Dropdown.Item as="a">
-                <SidebarItem to="/judges" title="Judges" />
+                    <DropItem to="/judges" title="Judges" />
                 </Dropdown.Item>
 
                 {/* <Dropdown.Item as="a">
@@ -92,7 +109,7 @@ const SidebarItems = ({ backupName, backupData }) => (
                 </Dropdown.Item> */}
 
                 <Dropdown.Item as="a">
-                <SidebarItem to="/leaderboard" title="Event Standings" />
+                    <DropItem to="/leaderboard" title="Event Standings" />
                 </Dropdown.Item>
       </Dropdown>
 
