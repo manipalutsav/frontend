@@ -27,7 +27,6 @@ export default class extends React.Component {
     await this.setState({ status: "Fetching events..." });
     let events = await eventsService.getAll();
     events = events.sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
-    events = events.filter((e)=> e.name != 'Poetry (Kannada)'); // Poetry Kannada not considered for leaderboard
     await this.setState({ status: "Fetching colleges", events });
     let colleges = await collegeService.getAll();
     colleges = colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
@@ -37,13 +36,13 @@ export default class extends React.Component {
       let event = events[i];
       if (event.faculty)
         continue;
-      if (event.rounds.length == 0) // Placed it on top to avoid fetching for undefined rounds and causing issue on backend
-        continue;//skip if no rounds found
       let round = await eventsService.getRound(event.id, event.rounds[0]);
-      if (!round || !round.published)
+      if (!round.published)
         continue;
       await this.setState({ status: "Fetching  " + event.name + " leaderboard..." });
       //Fetch rounds leaderboard (only last)
+      if (event.rounds.length == 0)
+        continue;//skip if no rounds found
       let leaderboard = await leaderboardService.getRound(event.id, event.rounds[event.rounds.length - 1]);
 
       //Get rank
