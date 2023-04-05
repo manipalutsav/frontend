@@ -59,7 +59,7 @@ const SidebarItems = ({ backupName, backupData }) => (
     <SidebarItem to="/teams" title="TEAMS" />
     <SidebarItem to="/slots" title="SLOTS" />
     <SidebarItem to="/volunteers" title="VOLUNTEERS" />
-    <SidebarItem to="/leaderboard/public" title="LEADERBOARD" />
+    <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
     {/* <SidebarItem to="/certificates" title="Certificates" /> */}
     <SidebarSeparator />
     {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
@@ -92,7 +92,7 @@ const SidebarItems = ({ backupName, backupData }) => (
                 </Dropdown.Item> */}
 
                 <Dropdown.Item as="a">
-                <SidebarItem to="/leaderboard" title="Leaderboard" />
+                <SidebarItem to="/leaderboard" title="Event Standings" />
                 </Dropdown.Item>
       </Dropdown>
 
