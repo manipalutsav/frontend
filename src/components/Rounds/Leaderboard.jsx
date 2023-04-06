@@ -6,9 +6,29 @@ import eventService from '../../services/events';
 import collegeService from '../../services/colleges';
 import { Button } from "../../commons/Form";
 import { Link } from "gatsby";
-import { getTeamName } from "../../utils/common";
+import { getCertificateName, getTeamName } from "../../utils/common";
 import Block from '../../commons/Block'
 import Loader from "../../commons/Loader";
+
+import one_x_one__two_x_one__three_x_one from '../../images/1x1_2x1_3x1.png'
+import one_x_one__two_x_one__three_x_two from '../../images/1x1_2x1_3x2.png'
+import one_x_one__two_x_one__three_x_three from '../../images/1x1_2x1_3x3.png'
+
+import one_x_one__two_x_two__three_x_one from '../../images/1x1_2x2_3x1.png'
+import one_x_one__two_x_two__three_x_two from '../../images/1x1_2x2_3x2.png'
+import one_x_one__two_x_two__three_x_three from '../../images/1x1_2x2_3x3.png'
+
+import one_x_one__two_x_three__three_x_one from '../../images/1x1_2x3_3x1.png'
+import one_x_one__two_x_three__three_x_two from '../../images/1x1_2x3_3x2.png'
+import one_x_one__two_x_three__three_x_three from '../../images/1x1_2x3_3x3.png'
+
+import one_x_two__two_x_one__three_x_one from '../../images/1x2_2x1_3x1.png'
+import one_x_two__two_x_one__three_x_two from '../../images/1x2_2x1_3x2.png'
+import one_x_two__two_x_one__three_x_three from '../../images/1x2_2x1_3x3.png'
+
+import one_x_two__two_x_two__three_x_one from '../../images/1x2_2x2_3x1.png'
+import one_x_two__two_x_three__three_x_one from '../../images/1x2_2x3_3x1.png'
+import one_x_three__two_x_three__three_x_three from '../../images/1x3_2x3_3x3.png'
 
 export default class extends React.Component {
   BUTTON_NORMAL = "Publish";
@@ -29,6 +49,92 @@ export default class extends React.Component {
 
   componentDidMount() {
     this.init();
+  }
+
+   async download() {
+    let leaderboard = this.state.leaderboard;
+    let ranks = {1: [], 2: [], 3: []}
+
+    ranks[1] = leaderboard.filter(item => item.rank == 1);
+    ranks[2] = leaderboard.filter(item => item.rank == 2);
+    ranks[3] = leaderboard.filter(item => item.rank == 3);
+
+    let event = await eventService.get(this.props.event);
+    const is_group_event = event.maxMembersPerTeam > 1;
+    event = event.name;
+
+    const placesArray = [
+      ranks[1].map(item => ({ 
+        name: getCertificateName(item, is_group_event),
+      })),
+      ranks[2].map(item => ({ 
+        name: getCertificateName(item, is_group_event),
+      })),
+      ranks[3].map(item => ({ 
+        name: getCertificateName(item, is_group_event),
+      }))
+    ];
+
+    let event_font_size = "35.4";
+
+    const image = new Image();
+
+    let first_start = 460;
+    let second_start = 640;
+    let third_start = 820;
+    let bold = false;
+    // Only 1 team in each place
+    if(placesArray[0].length == 1 && placesArray[1].length == 1 && placesArray[2].length == 1){ 
+      image.src = one_x_one__two_x_one__three_x_one;
+      bold = true;
+    } 
+    // 3 teams tied in each place
+    else if(placesArray[0].length == 3 && placesArray[1].length == 3 && placesArray[2].length == 3){
+      image.src = one_x_three__two_x_three__three_x_three;
+      first_start = 480;
+      second_start = 700;
+      third_start = 925;
+    }
+    // TODO: More cases
+
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const link = document.createElement('a');
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      context.drawImage(image, 0, 0);
+      context.font = event_font_size + "px Algerian";
+      context.fillStyle = "#000000";
+      context.textAlign = "left";
+      context.fillText(event + " Results", (canvas.width / 2.57), 360);
+      if(bold) {
+        context.font = "bold 26px Verdana";
+      } else {
+        context.font = "26px Verdana";
+      }
+      for (let i = 0; i < placesArray[0].length; i++) {
+        let text = placesArray[0][i]["name"];
+        context.fillText(text, (canvas.width / 3.1), first_start + (i * 40));
+      }
+      for (let i = 0; i < placesArray[1].length; i++) {
+        let text = placesArray[1][i]["name"];
+        context.fillText(text, (canvas.width / 3.1), second_start + (i * 40));
+      }
+      for (let i = 0; i < placesArray[2].length; i++) {
+        let text = placesArray[2][i]["name"];
+        context.fillText(text, (canvas.width / 3.1), third_start + (i * 40));
+      }
+      canvas.toBlob((blob) => {
+        link.href = URL.createObjectURL(blob);
+        link.download = event + "-leaderboard.png"
+        link.style.display = "none";
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }, 'image/png');
+    };
+
   }
 
   init = async () => {
@@ -95,7 +201,8 @@ export default class extends React.Component {
                         {this.state.button}
                       </Button>
                   }
-                  <Link to={`/events/${this.props.event}/rounds/${this.props.round}/leaderboard/download`}><Button styles={{ marginLeft: 20 }}>Download</Button></Link>
+                  <button onClick={() => this.download()}>Download</button>
+                  {/* <Link to={`/events/${this.props.event}/rounds/${this.props.round}/leaderboard/download`}><Button styles={{ marginLeft: 20 }}>Download</Button></Link> */}
                 </div>
               </>
               : <h1 className="mucapp" style={{ textAlign: "center" }}>No results</h1>
