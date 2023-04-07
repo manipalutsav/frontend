@@ -25,6 +25,7 @@ const TeamCard = (props) => {
     if(props.team){
         return (
             <tr style={{textAlign:"left", border:"1px solid black"}}>
+              <td style={{border:"1px solid black", padding: "10px"}}>{props.team.slot.number || ""} </td>
               <td style={{border:"1px solid black", padding: "10px"}}>{props.team.college.name} </td>
               <td style={{border:"1px solid black", padding: "10px"}}>{props.team.name}</td>
               <td className="members" style={{display:"flex", padding: "10px"}}>
@@ -55,30 +56,26 @@ export default class Teams extends React.Component {
   async componentWillMount() {
     let teams = await getTeams2WithMembers(this.props.event);
     let event = await eventService.get(this.props.event);
-    // console.log(teams)
+    let slots = event.rounds!=null ? await eventService.getSlots2(this.props.event, event.rounds[0]):null;
+    console.log(slots);
     teams = teams.map(team => {
+        const slot = slots.find((slot)=>{
+            // return true;
+            return slot.college.id == team.college.id && slot.teamIndex == team.index;
+        })
         
         return {
             name: team.name,
             id: team.id,
             event: team.event,
             college: team.college,
-            members: team.members
+            members: team.members,
+            slot
           };
     });
 
     this.setState({ teams, loaded: true, event});
-    /*
-    let sortedTeams = {};
-    let colleges = Array.from(new Set(teams.map(team => team.event.name)));
-    for (let event of events) {
-      sortedTeams[event] = teams.filter(team => team.event.name === event);
-    }
-
-    this.setState({
-      events,
-      teams: sortedTeams,
-    });*/
+    
 
 
   }
@@ -131,6 +128,7 @@ export default class Teams extends React.Component {
         <table  cellPadding={40}  style={{marginTop:"10px", border:"1px solid black"}}>
             <tbody>
                 <tr style={{textAlign:"left", border:"1px solid black"}}>
+                    <th style={{border:"1px solid black", padding: "10px"}}>Slot no.</th>
                     <th style={{border:"1px solid black", padding: "10px"}}>College name</th>
                     <th style={{border:"1px solid black", padding: "10px"}}>Team name</th>
                     <th style={{border:"1px solid black", padding: "10px"}}>Members</th>
