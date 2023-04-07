@@ -10,7 +10,8 @@ import { getCertificateName, getTeamName } from "../../utils/common";
 import Block from '../../commons/Block'
 import Loader from "../../commons/Loader";
 
-import template from '../../images/template.png'
+import './style.css';
+import template from '../../images/template.png';
 
 export default class extends React.Component {
   BUTTON_NORMAL = "Publish";
@@ -62,8 +63,8 @@ export default class extends React.Component {
     const image = new Image();
 
     let first_start = 450;
-    let second_start = 640;
-    let third_start = 810;
+    let second_start = 625;
+    let third_start = 805;
 
     image.src = template;
     
@@ -78,24 +79,54 @@ export default class extends React.Component {
       context.fillStyle = "#000000";
       context.textAlign = "left";
       context.fillText(event + " Results", (canvas.width / 2.6), 360);
-      context.font = "bold 26px Verdana";
+      context.font = "bold 26px HammersmithOne";
       for (let i = 0; i < placesArray[0].length; i++) {
         let text = placesArray[0][i]["name"];
-        if (i == 0) context.fillText(text, (canvas.width / 3.1), first_start);
-        if (i == 2) context.fillText(text, (canvas.width / 3.1), first_start - 30);
-        if (i == 1) context.fillText(text, (canvas.width / 3.1), first_start + 30);
+        let { width } = context.measureText(text);
+        if (i == 0) {
+          context.fillText(text, (canvas.width / 3.1), first_start);
+          context.fillRect((canvas.width / 3.1), first_start + 3, width, 2);
+        }
+        if (i == 2) {
+          context.fillText(text, (canvas.width / 3.1), first_start - 40);
+          context.fillRect((canvas.width / 3.1), first_start - 37, width, 2);
+        }
+        if (i == 1) {
+          context.fillText(text, (canvas.width / 3.1), first_start + 40);
+          context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
+        }
       }
       for (let i = 0; i < placesArray[1].length; i++) {
         let text = placesArray[1][i]["name"];
-        if (i == 0) context.fillText(text, (canvas.width / 3.1), second_start);
-        if (i == 2) context.fillText(text, (canvas.width / 3.1), second_start - 30);
-        if (i == 1) context.fillText(text, (canvas.width / 3.1), second_start + 30);
+        let { width } = context.measureText(text);
+        if (i == 0) {
+          context.fillText(text, (canvas.width / 3.1), second_start);
+          context.fillRect((canvas.width / 3.1), second_start + 3, width, 2);
+        }
+        if (i == 2) {
+          context.fillText(text, (canvas.width / 3.1), second_start - 40);
+          context.fillRect((canvas.width / 3.1), second_start - 37, width, 2);
+        }
+        if (i == 1) {
+          context.fillText(text, (canvas.width / 3.1), second_start + 40);
+          context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
+        }
       }
       for (let i = 0; i < placesArray[2].length; i++) {
         let text = placesArray[2][i]["name"];
-        if (i == 0) context.fillText(text, (canvas.width / 3.1), third_start);
-        if (i == 2) context.fillText(text, (canvas.width / 3.1), third_start - 30);
-        if (i == 1) context.fillText(text, (canvas.width / 3.1), third_start + 30);
+        let { width } = context.measureText(text);
+        if (i == 0) {
+          context.fillText(text, (canvas.width / 3.1), third_start);
+          context.fillRect((canvas.width / 3.1), third_start + 3, width, 2);
+        }
+        if (i == 2) {
+          context.fillText(text, (canvas.width / 3.1), third_start - 40);
+          context.fillRect((canvas.width / 3.1), third_start - 37, width, 2);
+        }
+        if (i == 1) {
+          context.fillText(text, (canvas.width / 3.1), third_start + 40);
+          context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
+        }
       }
       canvas.toBlob((blob) => {
         link.href = URL.createObjectURL(blob);

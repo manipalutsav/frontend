@@ -26,7 +26,7 @@ const college_abbreviations = {
     "Manipal Tata Medical College": "MTMC",
     "Manipal University Jaipur": "MUJ",
     "Sikkim Manipal University": "Sikkim MU",
-    "Kasturba Hospital": "Kasturba Hospital"
+    "Kasturba Hospital": "KH"
 };
 
 export const getTeamName = (slot) => {
