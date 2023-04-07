@@ -37,6 +37,7 @@ const TeamCard = (props) => (
     }}>
       {props.team.members.length + " member" + (props.team.members.length === 1 ? "" : "s")}
     </div>
+    {console.log(props)}
   </Link>
 );
 
@@ -157,6 +158,9 @@ export default class Events extends React.Component {
                   </Link>
                   <Link to={"/events/" + this.props.event + "/edit"}>
                     <button className="mucapp">Edit Event</button>
+                  </Link>
+                  <Link to={"/events/" + this.props.event + "/teams"} style={{marginLeft:"10px"}}>
+                    <button className="mucapp">Team List</button>
                   </Link>
                 </div>
               </>
