@@ -115,6 +115,8 @@ export default class Teams extends React.Component {
             printWindow.document.write("</body></html>");
             // printWindow.close();
             printWindow.print();
+            printWindow.close();
+
         }
   }
 
