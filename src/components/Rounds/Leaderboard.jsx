@@ -6,9 +6,12 @@ import eventService from '../../services/events';
 import collegeService from '../../services/colleges';
 import { Button } from "../../commons/Form";
 import { Link } from "gatsby";
-import { getTeamName } from "../../utils/common";
+import { getCertificateName, getTeamName } from "../../utils/common";
 import Block from '../../commons/Block'
 import Loader from "../../commons/Loader";
+
+import './style.css';
+import template from '../../images/template.png';
 
 export default class extends React.Component {
   BUTTON_NORMAL = "Publish";
@@ -29,6 +32,114 @@ export default class extends React.Component {
 
   componentDidMount() {
     this.init();
+  }
+
+   async download() {
+    let leaderboard = this.state.leaderboard;
+    let ranks = {1: [], 2: [], 3: []}
+
+    ranks[1] = leaderboard.filter(item => item.rank == 1);
+    ranks[2] = leaderboard.filter(item => item.rank == 2);
+    ranks[3] = leaderboard.filter(item => item.rank == 3);
+
+    let event = await eventService.get(this.props.event);
+    const is_group_event = event.maxMembersPerTeam > 1;
+    event = event.name;
+
+    const placesArray = [
+      ranks[1].map(item => ({ 
+        name: getCertificateName(item, is_group_event),
+      })),
+      ranks[2].map(item => ({ 
+        name: getCertificateName(item, is_group_event),
+      })),
+      ranks[3].map(item => ({ 
+        name: getCertificateName(item, is_group_event),
+      }))
+    ];
+
+    const image = new Image();
+
+    let first_start = 450;
+    let second_start = 625;
+    let third_start = 805;
+
+    image.src = template;
+    
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const link = document.createElement('a');
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      context.drawImage(image, 0, 0);
+      context.font = "bold 37.4px Verdana";
+      context.fillStyle = "#000000";
+      context.textAlign = "left";
+      let textStr = event + " Results";
+      let textWidth = context.measureText(textStr).width;
+      context.fillText(event + " Results", (canvas.width / 2) - (textWidth / 2), 300);
+      context.font = "bold 34px HammersmithOne";
+      for (let i = 0; i < placesArray[0].length; i++) {
+        context.font = "bold 34px HammersmithOne";
+        let text = placesArray[0][i]["name"];
+        let { width } = context.measureText(text);
+        if (i == 0) {
+          context.fillText(text, (canvas.width / 3.4), first_start);
+          // context.fillRect((canvas.width / 3.1), first_start + 3, width, 2);
+        }
+        if (i == 2) {
+          context.fillText(text, (canvas.width / 3.4), first_start + 40);
+          // context.fillRect((canvas.width / 3.1), first_start - 37, width, 2);
+        }
+        if (i == 1) {
+          context.fillText(text, (canvas.width / 3.4), first_start - 40);
+          // context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
+        }
+      }
+      for (let i = 0; i < placesArray[1].length; i++) {
+        context.font = "bold 34px HammersmithOne";
+        let text = placesArray[1][i]["name"];
+        let { width } = context.measureText(text);
+        if (i == 0) {
+          context.fillText(text, (canvas.width / 3.4), second_start);
+          // context.fillRect((canvas.width / 3.1), second_start + 3, width, 2);
+        }
+        if (i == 2) {
+          context.fillText(text, (canvas.width / 3.4), second_start + 40);
+          // context.fillRect((canvas.width / 3.1), second_start - 37, width, 2);
+        }
+        if (i == 1) {
+          context.fillText(text, (canvas.width / 3.4), second_start - 40);
+          // context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
+        }
+      }
+      for (let i = 0; i < placesArray[2].length; i++) {
+        let text = placesArray[2][i]["name"];
+        let { width } = context.measureText(text);
+        if (i == 0) {
+          context.fillText(text, (canvas.width / 3.4), third_start);
+          // context.fillRect((canvas.width / 3.1), third_start + 3, width, 2);
+        }
+        if (i == 2) {
+          context.fillText(text, (canvas.width / 3.4), third_start + 40);
+          // context.fillRect((canvas.width / 3.1), third_start - 37, width, 2);
+        }
+        if (i == 1) {
+          context.fillText(text, (canvas.width / 3.4), third_start - 40);
+          // context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
+        }
+      }
+      canvas.toBlob((blob) => {
+        link.href = URL.createObjectURL(blob);
+        link.download = event + "-leaderboard.png"
+        link.style.display = "none";
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }, 'image/png');
+    };
+
   }
 
   init = async () => {
@@ -95,7 +206,8 @@ export default class extends React.Component {
                         {this.state.button}
                       </Button>
                   }
-                  <Link to={`/events/${this.props.event}/rounds/${this.props.round}/leaderboard/download`}><Button styles={{ marginLeft: 20 }}>Download</Button></Link>
+                  <button onClick={() => this.download()}>Download</button>
+                  {/* <Link to={`/events/${this.props.event}/rounds/${this.props.round}/leaderboard/download`}><Button styles={{ marginLeft: 20 }}>Download</Button></Link> */}
                 </div>
               </>
               : <h1 className="mucapp" style={{ textAlign: "center" }}>No results</h1>
