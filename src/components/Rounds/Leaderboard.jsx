@@ -58,8 +58,6 @@ export default class extends React.Component {
       }))
     ];
 
-    let event_font_size = "35.4";
-
     const image = new Image();
 
     let first_start = 450;
@@ -75,57 +73,61 @@ export default class extends React.Component {
       canvas.width = image.width;
       canvas.height = image.height;
       context.drawImage(image, 0, 0);
-      context.font = event_font_size + "px Algerian";
+      context.font = "bold 37.4px Verdana";
       context.fillStyle = "#000000";
       context.textAlign = "left";
-      context.fillText(event + " Results", (canvas.width / 2.6), 360);
-      context.font = "bold 26px HammersmithOne";
+      let textStr = event + " Results";
+      let textWidth = context.measureText(textStr).width;
+      context.fillText(event + " Results", (canvas.width / 2) - (textWidth / 2), 300);
+      context.font = "bold 34px HammersmithOne";
       for (let i = 0; i < placesArray[0].length; i++) {
+        context.font = "bold 34px HammersmithOne";
         let text = placesArray[0][i]["name"];
         let { width } = context.measureText(text);
         if (i == 0) {
-          context.fillText(text, (canvas.width / 3.1), first_start);
-          context.fillRect((canvas.width / 3.1), first_start + 3, width, 2);
+          context.fillText(text, (canvas.width / 3.4), first_start);
+          // context.fillRect((canvas.width / 3.1), first_start + 3, width, 2);
         }
         if (i == 2) {
-          context.fillText(text, (canvas.width / 3.1), first_start - 40);
-          context.fillRect((canvas.width / 3.1), first_start - 37, width, 2);
+          context.fillText(text, (canvas.width / 3.4), first_start + 40);
+          // context.fillRect((canvas.width / 3.1), first_start - 37, width, 2);
         }
         if (i == 1) {
-          context.fillText(text, (canvas.width / 3.1), first_start + 40);
-          context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
+          context.fillText(text, (canvas.width / 3.4), first_start - 40);
+          // context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
         }
       }
       for (let i = 0; i < placesArray[1].length; i++) {
+        context.font = "bold 34px HammersmithOne";
         let text = placesArray[1][i]["name"];
         let { width } = context.measureText(text);
         if (i == 0) {
-          context.fillText(text, (canvas.width / 3.1), second_start);
-          context.fillRect((canvas.width / 3.1), second_start + 3, width, 2);
+          context.fillText(text, (canvas.width / 3.4), second_start);
+          // context.fillRect((canvas.width / 3.1), second_start + 3, width, 2);
         }
         if (i == 2) {
-          context.fillText(text, (canvas.width / 3.1), second_start - 40);
-          context.fillRect((canvas.width / 3.1), second_start - 37, width, 2);
+          context.fillText(text, (canvas.width / 3.4), second_start + 40);
+          // context.fillRect((canvas.width / 3.1), second_start - 37, width, 2);
         }
         if (i == 1) {
-          context.fillText(text, (canvas.width / 3.1), second_start + 40);
-          context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
+          context.fillText(text, (canvas.width / 3.4), second_start - 40);
+          // context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
         }
       }
       for (let i = 0; i < placesArray[2].length; i++) {
         let text = placesArray[2][i]["name"];
         let { width } = context.measureText(text);
         if (i == 0) {
-          context.fillText(text, (canvas.width / 3.1), third_start);
-          context.fillRect((canvas.width / 3.1), third_start + 3, width, 2);
+          context.fillText(text, (canvas.width / 3.4), third_start);
+          // context.fillRect((canvas.width / 3.1), third_start + 3, width, 2);
         }
         if (i == 2) {
-          context.fillText(text, (canvas.width / 3.1), third_start - 40);
-          context.fillRect((canvas.width / 3.1), third_start - 37, width, 2);
+          context.fillText(text, (canvas.width / 3.4), third_start + 40);
+          // context.fillRect((canvas.width / 3.1), third_start - 37, width, 2);
         }
         if (i == 1) {
-          context.fillText(text, (canvas.width / 3.1), third_start + 40);
-          context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
+          context.fillText(text, (canvas.width / 3.4), third_start - 40);
+          // context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
         }
       }
       canvas.toBlob((blob) => {
