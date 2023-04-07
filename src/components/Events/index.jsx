@@ -120,31 +120,7 @@ export default class Events extends React.Component {
   componentWillMount = async () => {
 
     this.init();
-    // get();
-
-    // this.unsubscribe = reducer.subscribe(() => {
-    //   reducer.getState().then(state => {
-    //     let events = state.data.list.map(event => ({
-    //       id: event.id,
-    //       name: event.name,
-    //       description: event.description,
-    //       college: event.college,
-    //       venue: event.venue,
-    //       rounds: event.rounds,
-    //       startDate: event.startDate,
-    //       endDate: event.endDate,
-    //     }));
-
-    //     events.sort((a, b) => {
-    //       return new Date(a.startDate) - new Date(b.startDate);
-    //     });
-
-    //     this.setState({ events, loading: false });
-    //   });
-    // });
-
-    // if (!response) return toast("Failed to load events, refresh to try again.");
-    // if (response.status !== 200) return toast(response.message);
+    
   };
 
 

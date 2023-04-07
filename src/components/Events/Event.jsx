@@ -37,7 +37,6 @@ const TeamCard = (props) => (
     }}>
       {props.team.members.length + " member" + (props.team.members.length === 1 ? "" : "s")}
     </div>
-    {console.log(props)}
   </Link>
 );
 
