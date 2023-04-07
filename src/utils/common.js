@@ -48,7 +48,7 @@ export const getCertificateName = (item, isGroupEvent) => {
     let slot = item.slot;
     let college_name = slot.college.name in college_abbreviations ? college_abbreviations[slot.college.name] : slot.college.name;
     if (isGroupEvent) {
-        return `#${slot.number} ${college_name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
+        return `#${slot.number} - ${college_name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
     } else {
         let participant_name_arr = item.team.participants[0].name.split(" ");
         let participant_name = "";
@@ -56,7 +56,7 @@ export const getCertificateName = (item, isGroupEvent) => {
             participant_name += participant_name_arr[i].charAt(0) + ". ";
         }
         participant_name += participant_name_arr[participant_name_arr.length - 1];
-        return `#${slot.number} ${participant_name}, ${college_name}, ${slot.college.location}`;
+        return `#${slot.number} - ${participant_name} - ${college_name}, ${slot.college.location}`;
     }
 }
 
