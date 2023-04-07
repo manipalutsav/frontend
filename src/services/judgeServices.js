@@ -46,3 +46,18 @@ export const create = async (payload) => {
     return null;
   }
 }
+
+export const deleteOne = async (id) => {
+  let response = await request(`/judges/${id}`, "DELETE");
+  console.log(id);
+  if (response.status && response.status === 200) {
+    send({
+      list: response.data,
+      src: 'judges'
+    });
+  } else {
+    if(response&&response.status==="401")
+      toast("Your session has expired, please logout and login again.")
+    return null;
+  }
+}

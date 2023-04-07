@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 import { FiX } from "react-icons/fi";
 
 import reducer from "../../reducers/commonReducer";
-import { getAll } from "../../services/judgeServices";
+import { getAll, deleteOne } from "../../services/judgeServices";
 import Loader from "../../commons/Loader";
 
 const styles = {
@@ -26,11 +26,19 @@ const styles = {
 };
 
 const Judge = (props) => {
-  let handleDelete = (judge) => {
-    typeof window !== "undefined"
+  
+  let handleDelete = async (judge)  => {
+    if(judge.rounds.length > 0){
+      return window.alert("You cannot delete judges who have judged rounds!");
+    }
+    const surety = typeof window !== "undefined"
       && window.confirm("Are you sure you want to delete the judge " + judge.name + "?");
-    // if (surety && !judge.rounds.length)
-    // TODO: DELETE /judges/:judge
+    if (surety)
+    {
+      await deleteOne(judge.id);
+      // console.log(judge)
+    }
+
   }
 
   return (
