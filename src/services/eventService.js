@@ -96,6 +96,15 @@ export const getTeams2 = async (eventId) => {
   
 }
 
+export const getTeams2WithMembers = async (eventId) => {
+  let response = await request(`/events/${eventId}/teams/members`);
+
+  if (response.status && response.status === 200) return response.data;
+  if(response&&response.status==="401")
+    toast("Your session has expired, please logout and login again.")
+
+}
+
 export const getRoundTeams = async (eventId, roundId) => {
   let response = await request(`/events/${eventId}/rounds/${roundId}/teams`);
 

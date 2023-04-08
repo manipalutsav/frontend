@@ -18,7 +18,7 @@ import AddJudge from "../components/Judges/Add";
 import Events from '../components/Events';
 import Event from '../components/Events/Event';
 import AddEvent from '../components/Events/Add';
-import EventTeams from '../components/Events/Teams';
+import EventTeams from '../components/Events/Teams2';
 import EventParticipants from '../components/Events/Participants';
 import EditEvent from '../components/Events/Edit';
 import Leaderboard from "../components/Leaderboard";
