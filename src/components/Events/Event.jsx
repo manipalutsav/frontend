@@ -129,20 +129,26 @@ export default class Events extends React.Component {
                   fontSize: "0.9em",
                   whiteSpace: "pre-wrap",
                 }}>
-                  <button
-                    className="mucapp"
-                    onClick={this.toggleDescription}
-                    css={{
-                      marginBottom: 10,
-                      width: 255,
-                    }}
-                  >
-                    {
-                      this.state.descriptionStatus
-                        ? "Hide Rules"
-                        : "Show Rules"
-                    }
-                  </button>
+                  <div id="button-group">
+                    <button
+                      className="mucapp"
+                      onClick={this.toggleDescription}
+                      css={{
+                        width:"140px",
+
+                        marginBottom: 10,
+                      }}
+                    >
+                      {
+                        this.state.descriptionStatus
+                          ? "Hide Rules"
+                          : "Show Rules"
+                      }
+                    </button>
+                    <Link to={"/events/" + this.props.event + "/teams"} style={{margin:"10px"}}>
+                      <button className="mucapp" style={{width: "104px"}}>Team List</button>
+                    </Link>
+                  </div>
                   {
                     this.state.descriptionStatus
                       ? this.state.event.description
@@ -158,9 +164,7 @@ export default class Events extends React.Component {
                   <Link to={"/events/" + this.props.event + "/edit"}>
                     <button className="mucapp">Edit Event</button>
                   </Link>
-                  <Link to={"/events/" + this.props.event + "/teams"} style={{marginLeft:"10px"}}>
-                    <button className="mucapp">Team List</button>
-                  </Link>
+                  
                 </div>
               </>
               : null
