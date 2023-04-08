@@ -26,7 +26,7 @@ const TeamCard = (props) => {
         return (
             <tr style={{textAlign:"left", border:"1px solid black"}}>
               <td style={{border:"1px solid black", padding: "10px"}}>{props.team.slot.number || ""} </td>
-              <td style={{border:"1px solid black", padding: "10px"}}>{props.team.college.name} </td>
+              <td style={{border:"1px solid black", padding: "10px"}}>{props.team.college.name}, {props.team.college.location} </td>
               <td style={{border:"1px solid black", padding: "10px"}}>{props.team.name}</td>
               <td className="members" style={{display:"flex", padding: "10px"}}>
                   {props.team.members.map((member)=>{
@@ -57,12 +57,13 @@ export default class Teams extends React.Component {
     let teams = await getTeams2WithMembers(this.props.event);
     let event = await eventService.get(this.props.event);
     let slots = event.rounds!=null ? await eventService.getSlots2(this.props.event, event.rounds[0]):null;
-    console.log(slots);
     teams = teams.map(team => {
         const slot = slots.find((slot)=>{
             // return true;
-            return slot.college.id == team.college.id && slot.teamIndex == team.index;
+            return slot.college._id == team.college._id && slot.teamIndex == team.index;
         })
+
+        console.log(team , slot);
         
         return {
             name: team.name,
