@@ -61,8 +61,10 @@ export default class Teams extends React.Component {
     teams = teams.map(team => {
         const slot = slots.find((slot)=>{
             // return true;
-            return slot.college.id == team.college.id && slot.teamIndex == team.index;
+            return slot.college._id == team.college._id && slot.teamIndex == team.index;
         })
+
+        console.log(team , slot);
         
         return {
             name: team.name,
