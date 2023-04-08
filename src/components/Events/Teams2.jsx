@@ -25,12 +25,12 @@ const TeamCard = (props) => {
     if(props.team){
         return (
             <tr style={{textAlign:"left", border:"1px solid black"}}>
-              <td style={{border:"1px solid black", padding: "10px"}}>{props.team.slot.number || ""} </td>
-              <td style={{border:"1px solid black", padding: "10px"}}>{props.team.college.name}, {props.team.college.location} </td>
-              <td style={{border:"1px solid black", padding: "10px"}}>{props.team.name}</td>
-              <td className="members" style={{display:"flex", padding: "10px"}}>
+              <td style={{border:"1px solid black", padding: "5px"}}>{props.team.slot.number || ""} </td>
+              <td style={{border:"1px solid black", padding: "5px"}}>{props.team.college.name}, {props.team.college.location} </td>
+              <td style={{border:"1px solid black", padding: "5px"}}>{props.team.name}</td>
+              <td className="members" style={{display:"flex", padding: "5px"}}>
                   {props.team.members.map((member)=>{
-                    return (<div className="member" style={{margin:"0px 10px",}}>
+                    return (<div className="member" style={{margin:"0px 5px", fontSize: ".8em"}}>
                         <div className="member-name">{member.name}</div>
                         <div className="member-regno" style={{fontSize:"0.8em", color:"grey"}}>{(member.registrationID)}</div>
                     </div>)
@@ -106,9 +106,10 @@ export default class Teams extends React.Component {
     
         if(window)  {
             // console.log("Print")
-            const printWindow = window.open("","","width=2480,height=3508");
-            printWindow.document.write("<html><head>");
-            console.log(this.tableStyle())
+            const printWindow = window.open("","Utsav 2023","width=1485mm,height=550mm");
+            
+            printWindow.document.write("<html><head><title>Utsav 2023</title>");
+            // console.log(this.tableStyle())
             printWindow.document.write(this.tableStyle());
             printWindow.document.write("</head><body>");
             printWindow.document.write("<h1>"+this.state.event.name+"</h1>")
