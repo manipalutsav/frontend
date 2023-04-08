@@ -106,8 +106,8 @@ export default () =>
       <PrivateRoute path="/events/:event/rounds/add" exact component={AddEditRound} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/slot" exact component={Slots} type={2} />
       <PrivateRoute path="/events/:event/rounds/:round/edit" exact component={AddEditRound} type={1} />
-      <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={2} />
-      <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={2} />
+      <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={1} />
+      <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/leaderboard/download" exact component={Download} type={2} />
 
       <PrivateRoute path="/colleges" component={Colleges} type={2} />
