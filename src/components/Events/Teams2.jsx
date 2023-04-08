@@ -63,7 +63,7 @@ export default class Teams extends React.Component {
             return slot.college._id == team.college._id && slot.teamIndex == team.index;
         })
 
-        console.log(team , slot);
+        // console.log(team , slot);
         
         return {
             name: team.name,
@@ -74,6 +74,10 @@ export default class Teams extends React.Component {
             slot
           };
     });
+    
+    teams.sort((a, b)=>{
+      return (a.slot.number - b.slot.number);
+    })
 
     this.setState({ teams, loaded: true, event});
     
