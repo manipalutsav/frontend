@@ -215,6 +215,8 @@ export default class extends React.Component {
           }
         </Block>
       </div >
+      {/* Make sure browser loads the font */}
+      <div style="font-family: HammersmithOne;"> </div>
     </div >
   );
 };
