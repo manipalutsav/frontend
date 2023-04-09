@@ -43,12 +43,16 @@ export const getTeamName = (slot) => {
 
 export const keyToDisplay = (key) => key ? key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, " ") : ""
 
-export const getCertificateName = (item, isGroupEvent) => {
+export const getCertificateName = (item, isGroupEvent, isMultipleTeamsEvent) => {
     const alphabets = ['A', 'B', 'C', 'D', 'E'];
     let slot = item.slot;
     let college_name = slot.college.name in college_abbreviations ? college_abbreviations[slot.college.name] : slot.college.name;
     if (isGroupEvent) {
-        return `#${slot.number} - ${college_name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
+        if (isMultipleTeamsEvent) {
+            return `#${slot.number} - ${college_name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
+        } else {
+            return `#${slot.number} - ${college_name}, ${slot.college.location}`;
+        }
     } else {
         let participant_name_arr = item.team.participants[0].name.split(" ");
         let participant_name = "";

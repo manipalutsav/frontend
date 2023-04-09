@@ -44,17 +44,18 @@ export default class extends React.Component {
 
     let event = await eventService.get(this.props.event);
     const is_group_event = event.maxMembersPerTeam > 1;
+    const is_multiple_team_event = event.maxTeamsPerCollege > 1;
     event = event.name;
 
     const placesArray = [
       ranks[1].map(item => ({ 
-        name: getCertificateName(item, is_group_event),
+        name: getCertificateName(item, is_group_event, is_multiple_team_event),
       })),
       ranks[2].map(item => ({ 
-        name: getCertificateName(item, is_group_event),
+        name: getCertificateName(item, is_group_event, is_multiple_team_event),
       })),
       ranks[3].map(item => ({ 
-        name: getCertificateName(item, is_group_event),
+        name: getCertificateName(item, is_group_event, is_multiple_team_event),
       }))
     ];
 
