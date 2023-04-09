@@ -8,7 +8,8 @@ import { Button } from '../commons/Form';
 import { getUser } from "../services/userServices";
 import { navigate } from "gatsby";
 
-
+const remove_college_list = [{name:"Cultural Coordination Committee", location:"Manipal"}];
+const remove_event_list = ["Staff Cooking: Vegetarian", "Staff Cooking: Non-Vegetarian", "Staff Cooking: Dessert", "Staff Vegetable & Fruit Carving", "Staff Variety Entertainment", "Poetry (Kannada)"];
 export default class extends React.Component {
   state = {
     status: "...",
@@ -33,9 +34,15 @@ export default class extends React.Component {
     await this.setState({ status: "Fetching events..." });
     let events = await eventsService.getAll();
     events = events.sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
+    events = events.filter((ev)=>{
+      return (remove_event_list.find(r_ev => r_ev == ev.name) == undefined);
+    })
     await this.setState({ status: "Fetching colleges", events });
     let colleges = await collegeService.getAll();
     colleges = colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
+    colleges = colleges.filter((college)=>{ // Filter out the colleges that shouldn't be in the leaderboard
+      return (remove_college_list.find(r_college => r_college.name == college.name && r_college.location == college.location) == undefined);
+    })
     await this.setState({ colleges });
     let set = [];
     for (let i = 0; i < events.length; i++) {
