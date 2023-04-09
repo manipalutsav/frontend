@@ -41,6 +41,14 @@ export const getTeamName = (slot) => {
     return `${slot.college.name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
 }
 
+export const toTitleCase = (phrase) => {
+    return phrase
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+};
+
 export const keyToDisplay = (key) => key ? key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, " ") : ""
 
 export const getCertificateName = (item, isGroupEvent, isMultipleTeamsEvent) => {
@@ -60,7 +68,7 @@ export const getCertificateName = (item, isGroupEvent, isMultipleTeamsEvent) => 
             participant_name += participant_name_arr[i].charAt(0) + ". ";
         }
         participant_name += participant_name_arr[participant_name_arr.length - 1];
-        return `#${slot.number} - ${participant_name} - ${college_name}, ${slot.college.location}`;
+        return `#${slot.number} - ${toTitleCase(participant_name)} - ${college_name}, ${slot.college.location}`;
     }
 }
 
