@@ -180,7 +180,8 @@ export default class extends React.Component {
     <div>
       <div>
         <h1 className="mucapp" style={{ textAlign: "center" }}>{this.state.event.name}</h1>
-        <h2 style={{ textAlign: "center" }}>Round {this.state.event.rounds && this.state.event.rounds.indexOf(this.props.round) + 1} Leaderboard</h2>
+        <h2 style={{ textAlign: "center", "font-family": "HammersmithOne" }}>Round {this.state.event.rounds && this.state.event.rounds.indexOf(this.props.round) + 1} Leaderboard</h2>
+        {/* Make sure browser loads the font */}
       </div>
       <div>
         <Block show={this.state.loading}>
@@ -215,8 +216,6 @@ export default class extends React.Component {
           }
         </Block>
       </div >
-      {/* Make sure browser loads the font */}
-      <div style="font-family: HammersmithOne;"> </div>
     </div >
   );
 };
