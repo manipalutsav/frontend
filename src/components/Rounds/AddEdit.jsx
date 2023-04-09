@@ -8,6 +8,7 @@ import { Button } from "../../commons/Form";
 import { toast } from "../../actions/toastActions";
 import { keyToDisplay, loop } from "../../utils/common";
 import { buttonState } from "../../utils/constants";
+import Block from "../../commons/Block";
 
 export default class AddEditRound extends React.Component {
   state = {
@@ -17,7 +18,8 @@ export default class AddEditRound extends React.Component {
     slotOrder: "random",
     criteria: [],
     criteriaCount: 4,
-    loaded: false
+    loaded: false,
+    firstRound: false
   };
 
   getButtonState(state) { return buttonState[this.props.round ? "UPDATE" : "ADD"][state] }
@@ -32,10 +34,10 @@ export default class AddEditRound extends React.Component {
     if (this.props.round) {
       let round = await eventsService.getRound(this.props.event, this.props.round)
       let criteriaCount = round.criteria.length;
-      this.setState({ ...round, criteriaCount, loaded: true })
+      this.setState({ ...round, criteriaCount, loaded: true, firstRound: event.rounds[0] == this.props.round })
     }
     else {
-      this.setState({ loaded: true })
+      this.setState({ loaded: true, firstRound: event.rounds.length === 0 })
     }
 
   }
@@ -66,6 +68,10 @@ export default class AddEditRound extends React.Component {
     this.setState({ slotType: value })
   }
 
+  handleQualifierChange = (value) => {
+    this.setState({ qualifier: value })
+  }
+
   handleOrderChange = (value) => {
     this.setState({ slotOrder: value })
   }
@@ -74,7 +80,7 @@ export default class AddEditRound extends React.Component {
     try {
       this.setState({ buttonText: this.getButtonState(buttonState.LOADING) })
 
-      let { criteriaCount, criteria, slotType, slotOrder } = this.state;
+      let { criteriaCount, criteria, slotType, slotOrder, qualifier } = this.state;
       for (let index = 0; index < criteriaCount; index++) {
         if (!criteria[index] || !criteria[index].criterion)
           throw Error("Please enter criteria " + (index + 1));
@@ -85,7 +91,8 @@ export default class AddEditRound extends React.Component {
       let round = {
         criteria,
         slotType,
-        slotOrder
+        slotOrder,
+        qualifier
       };
 
       if (this.props.round) {
@@ -107,6 +114,8 @@ export default class AddEditRound extends React.Component {
       <div>
         <h2 className="mucapp">Add rounds to {this.state.event.name}</h2>
       </div>
+
+
 
       <div className="pt-5 pb-5">
         <div>Number of criteria</div>
@@ -146,48 +155,69 @@ export default class AddEditRound extends React.Component {
           />
         </div>)}
 
-      <div>
-        <div>Type</div>
-        <Select
-          isSearchable={false}
-          name="type"
-          placeholder="Type"
-          value={{
-            label: keyToDisplay(this.state.slotType),
-            value: this.state.slotType,
-          }}
-          options={[
-            { label: "All", value: "all" },
-            { label: "Registered", value: "registered" },
-          ]}
-          onChange={(e) => this.handleForChange(e.value)}
-          styles={{
-            control: (provided, state) => ({
-              ...provided,
-              marginBottom: 10,
-              border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
-              boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
-              ":hover": {
-                border: "1px solid #ff5800",
-                boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
-              },
-            }),
-            option: (provided, state) => ({
-              ...provided,
-              backgroundColor: state.isSelected ? "#ff5800" : "",
-              ":hover": {
-                backgroundColor: "#ffd100",
-                color: "black",
-              },
-            }),
-          }}
-          css={{
-            fontSize: "16px",
-            width: 300,
-            display: 'inline-block'
-          }}
-        />
-      </div>
+      <Block show={this.state.firstRound}>
+        <div>
+          <div>Type</div>
+          <Select
+            isSearchable={false}
+            name="type"
+            placeholder="Type"
+            value={{
+              label: keyToDisplay(this.state.slotType),
+              value: this.state.slotType,
+            }}
+            options={[
+              { label: "All", value: "all" },
+              { label: "Registered", value: "registered" },
+            ]}
+            onChange={(e) => this.handleForChange(e.value)}
+            styles={{
+              control: (provided, state) => ({
+                ...provided,
+                marginBottom: 10,
+                border: state.isFocused ? "1px solid #ffd100" : "1px solid rgba(0, 0, 0, .1)",
+                boxShadow: state.isFocused ? "0 3px 10px -5px rgba(0, 0, 0, .3)" : "",
+                ":hover": {
+                  border: "1px solid #ff5800",
+                  boxShadow: "0 3px 10px -5px rgba(0, 0, 0, .3)",
+                },
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isSelected ? "#ff5800" : "",
+                ":hover": {
+                  backgroundColor: "#ffd100",
+                  color: "black",
+                },
+              }),
+            }}
+            css={{
+              fontSize: "16px",
+              width: 300,
+              display: 'inline-block'
+            }}
+          />
+        </div>
+      </Block>
+
+
+      <Block show={!this.state.firstRound}>
+        <div className="pt-5 pb-5">
+          <div>Qualified number of teams from previous round</div>
+          <input
+            onChange={(e) => this.handleQualifierChange(e.target.value)}
+            autoComplete="off"
+            name="criteriaCount"
+            type="number"
+            className="input input-bordered input-accent w-full max-w-xs"
+            min="0"
+            value={this.state.qualifier}
+            placeholder="Count"
+            css={{ width: 300 }}
+          />
+        </div>
+      </Block>
+
 
       <div>
         <div>Order</div>
