@@ -6,6 +6,8 @@ import leaderboardService from '../services/leaderboard';
 import collegeService from '../services/colleges';
 import { Button } from '../commons/Form';
 
+import "./index.css"
+
 const remove_college_list = [{name:"Cultural Coordination Committee", location:"Manipal"}];
 const remove_event_list = ["Staff Cooking: Vegetarian", "Staff Cooking: Non-Vegetarian", "Staff Cooking: Dessert", "Staff Vegetable & Fruit Carving", "Staff Variety Entertainment", "Poetry (Kannada)"];
 // const remove_event_list = ["Some event", "Hello World"]; // Testing
@@ -140,8 +142,8 @@ export default class extends React.Component {
         {this.state.showButton ? <Button onClick={this.sortByRank} styles={{ marginLeft: 20 }}>Sort By Rank</Button> : ''}
         {this.state.showButton ? <Button onClick={this.sortByName} styles={{ marginLeft: 20 }}>Sort By College Name</Button> : ''}
       </div>
-      <div className="leaderboardContainer" style={{ overflow: "scroll" }}>
-        <table className="leaderboard">
+      <div className="leaderboardContainer">
+        <table className="leaderboard" style={{ overflow: "scroll" }}>
           <thead>
             <tr>
               <th>&nbsp;</th>
