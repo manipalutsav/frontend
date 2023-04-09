@@ -63,6 +63,8 @@ import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
 // import configureStore from "../store";
 
 import Layout from "../layouts/app";
+import PracticeSlots from "../components/PracticeSlots";
+import PublicPracticeSlots from "../components/PublicPracticeSlots";
 
 
 if (typeof (document) != 'undefined')
@@ -143,6 +145,11 @@ export default () =>
       <PrivateRoute path="/volunteers/core/:volunteerId" component={CoreVolunteerEdit} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type" component={Volunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type/:volunteerId" component={VolunteerEdit} type={1 << 3} />
+
+      <PrivateRoute path="/practice-slots" component={PracticeSlots} type={1} />
+      <PrivateRoute path="/practice-slots/public" component={PublicPracticeSlots} type={8} />
+
+
       {/* <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} /> */}
       {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
