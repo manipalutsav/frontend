@@ -34,7 +34,7 @@ export default class AddEditRound extends React.Component {
     if (this.props.round) {
       let round = await eventsService.getRound(this.props.event, this.props.round)
       let criteriaCount = round.criteria.length;
-      this.setState({ ...round, criteriaCount, loaded: true, firstRound: event.rounds[0] == this.props.round }, () => console.log(this.state))
+      this.setState({ ...round, criteriaCount, loaded: true, firstRound: event.rounds[0] == this.props.round })
     }
     else {
       this.setState({ loaded: true, firstRound: event.rounds.length === 0 })
