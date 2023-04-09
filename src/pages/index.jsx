@@ -63,6 +63,8 @@ import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
 // import configureStore from "../store";
 
 import Layout from "../layouts/app";
+import PracticeSlots from "../components/PracticeSlots";
+import PublicPracticeSlots from "../components/PublicPracticeSlots";
 
 
 if (typeof (document) != 'undefined')
@@ -106,8 +108,8 @@ export default () =>
       <PrivateRoute path="/events/:event/rounds/add" exact component={AddEditRound} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/slot" exact component={Slots} type={2} />
       <PrivateRoute path="/events/:event/rounds/:round/edit" exact component={AddEditRound} type={1} />
-      <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={2} />
-      <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={2} />
+      <PrivateRoute path="/events/:event/rounds/:round/leaderboard" exact component={RoundLeaderboard} type={1} />
+      <PrivateRoute path="/events/:event/rounds/:round/bias" exact component={Bias} type={1} />
       <PrivateRoute path="/events/:event/rounds/:round/leaderboard/download" exact component={Download} type={2} />
 
       <PrivateRoute path="/colleges" component={Colleges} type={2} />
@@ -143,6 +145,11 @@ export default () =>
       <PrivateRoute path="/volunteers/core/:volunteerId" component={CoreVolunteerEdit} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type" component={Volunteer} type={1 << 3} />
       <PrivateRoute path="/volunteers/:type/:volunteerId" component={VolunteerEdit} type={1 << 3} />
+
+      <PrivateRoute path="/practice-slots" component={PracticeSlots} type={1} />
+      <PrivateRoute path="/practice-slots/public" component={PublicPracticeSlots} type={8} />
+
+
       {/* <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} /> */}
       {/* <PrivateRoute path="/viewCoreVolunteer" component={ViewCoreVolunteer} type={4} />
       <PrivateRoute path="/viewVolunteers/:collegeId" component={ViewVolunteers} type={4} /> */}
