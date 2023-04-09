@@ -6,6 +6,8 @@ import leaderboardService from '../services/leaderboard';
 import collegeService from '../services/colleges';
 import { Button } from '../commons/Form';
 
+import "./index.css"
+
 export default class extends React.Component {
   state = {
     status: "...",
@@ -131,8 +133,8 @@ export default class extends React.Component {
         {this.state.showButton ? <Button onClick={this.sortByRank} styles={{ marginLeft: 20 }}>Sort By Rank</Button> : ''}
         {this.state.showButton ? <Button onClick={this.sortByName} styles={{ marginLeft: 20 }}>Sort By College Name</Button> : ''}
       </div>
-      <div className="leaderboardContainer" style={{ overflow: "scroll" }}>
-        <table className="leaderboard">
+      <div className="leaderboardContainer">
+        <table className="leaderboard" style={{"overflow": "scroll"}}>
           <thead>
             <tr>
               <th>&nbsp;</th>
@@ -145,8 +147,32 @@ export default class extends React.Component {
               this.state.colleges.map((college, index) =>
                 <tr key={index}>
                   <th>{college.name},{college.location}</th>
-                  {this.state.events.map((event, index) => <th key={index}>{this.getPoints(event, college)}</th>)}
-                  <th>{this.getTotal(college)}</th>
+                  {this.state.events.map((event, index) => <td key={index}>{this.getPoints(event, college)}</td>)}
+                  <td>{this.getTotal(college)}</td>
+                </tr>)
+            }
+            {
+              this.state.colleges.map((college, index) =>
+                <tr key={index}>
+                  <th>{college.name},{college.location}</th>
+                  {this.state.events.map((event, index) => <td key={index}>{this.getPoints(event, college)}</td>)}
+                  <td>{this.getTotal(college)}</td>
+                </tr>)
+            }
+            {
+              this.state.colleges.map((college, index) =>
+                <tr key={index}>
+                  <th>{college.name},{college.location}</th>
+                  {this.state.events.map((event, index) => <td key={index}>{this.getPoints(event, college)}</td>)}
+                  <td>{this.getTotal(college)}</td>
+                </tr>)
+            }
+            {
+              this.state.colleges.map((college, index) =>
+                <tr key={index}>
+                  <th>{college.name},{college.location}</th>
+                  {this.state.events.map((event, index) => <td key={index}>{this.getPoints(event, college)}</td>)}
+                  <td>{this.getTotal(college)}</td>
                 </tr>)
             }
           </tbody>
