@@ -116,9 +116,10 @@ export default class Teams extends React.Component {
             const table = document.querySelector("#team-list").innerHTML;
             printWindow.document.write(table);
             printWindow.document.write("</body></html>");
+            printWindow.document.close();
+
             // printWindow.close();
             printWindow.print();
-            printWindow.close();
 
         }
   }
