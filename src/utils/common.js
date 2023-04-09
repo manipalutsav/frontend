@@ -41,14 +41,26 @@ export const getTeamName = (slot) => {
     return `${slot.college.name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
 }
 
+export const toTitleCase = (phrase) => {
+    return phrase
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+};
+
 export const keyToDisplay = (key) => key ? key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, " ") : ""
 
-export const getCertificateName = (item, isGroupEvent) => {
+export const getCertificateName = (item, isGroupEvent, isMultipleTeamsEvent) => {
     const alphabets = ['A', 'B', 'C', 'D', 'E'];
     let slot = item.slot;
     let college_name = slot.college.name in college_abbreviations ? college_abbreviations[slot.college.name] : slot.college.name;
     if (isGroupEvent) {
-        return `#${slot.number} - ${college_name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
+        if (isMultipleTeamsEvent) {
+            return `#${slot.number} - ${college_name}, ${slot.college.location} (Team ${alphabets[slot.teamIndex]})`;
+        } else {
+            return `#${slot.number} - ${college_name}, ${slot.college.location}`;
+        }
     } else {
         let participant_name_arr = item.team.participants[0].name.split(" ");
         let participant_name = "";
@@ -56,7 +68,7 @@ export const getCertificateName = (item, isGroupEvent) => {
             participant_name += participant_name_arr[i].charAt(0) + ". ";
         }
         participant_name += participant_name_arr[participant_name_arr.length - 1];
-        return `#${slot.number} - ${participant_name} - ${college_name}, ${slot.college.location}`;
+        return `#${slot.number} - ${toTitleCase(participant_name)} - ${college_name}, ${slot.college.location}`;
     }
 }
 

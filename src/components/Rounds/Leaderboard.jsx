@@ -6,7 +6,7 @@ import eventService from '../../services/events';
 import collegeService from '../../services/colleges';
 import { Button } from "../../commons/Form";
 import { Link } from "gatsby";
-import { getCertificateName, getTeamName } from "../../utils/common";
+import { getCertificateName, getTeamName, toTitleCase } from "../../utils/common";
 import Block from '../../commons/Block'
 import Loader from "../../commons/Loader";
 
@@ -44,17 +44,18 @@ export default class extends React.Component {
 
     let event = await eventService.get(this.props.event);
     const is_group_event = event.maxMembersPerTeam > 1;
+    const is_multiple_team_event = event.maxTeamsPerCollege > 1;
     event = event.name;
 
     const placesArray = [
       ranks[1].map(item => ({ 
-        name: getCertificateName(item, is_group_event),
+        name: getCertificateName(item, is_group_event, is_multiple_team_event),
       })),
       ranks[2].map(item => ({ 
-        name: getCertificateName(item, is_group_event),
+        name: getCertificateName(item, is_group_event, is_multiple_team_event),
       })),
       ranks[3].map(item => ({ 
-        name: getCertificateName(item, is_group_event),
+        name: getCertificateName(item, is_group_event, is_multiple_team_event),
       }))
     ];
 
@@ -214,6 +215,8 @@ export default class extends React.Component {
           }
         </Block>
       </div >
+      {/* Make sure browser loads the font */}
+      <div style="font-family: HammersmithOne;"> </div>
     </div >
   );
 };
@@ -223,7 +226,7 @@ const Leaderboard = ({ item, key }) => (
     <LBList
       key={key}
       position={item.rank}
-      title={item.team.participants[0].name}
+      title={toTitleCase(item.team.participants[0].name)}
       description={<div>
         <div>{item.team.participants[0].registrationID}</div>
         <div>#{item.slot.number} - {getTeamName(item.slot)}</div>
