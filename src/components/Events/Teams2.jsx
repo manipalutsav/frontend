@@ -28,9 +28,9 @@ const TeamCard = (props) => {
               <td style={{border:"1px solid black", padding: "5px"}}>{props.team.slot.number || ""} </td>
               <td style={{border:"1px solid black", padding: "5px"}}>{props.team.college.name}, {props.team.college.location} </td>
               <td style={{border:"1px solid black", padding: "5px"}}>{props.team.name}</td>
-              <td className="members" style={{display:"flex", padding: "5px"}}>
-                  {props.team.members.map((member)=>{
-                    return (<div className="member" style={{margin:"0px 5px", fontSize: ".8em"}}>
+              <td className="members" style={{display:"flex", padding: "5px", flexWrap:"wrap", width:"100%"}}>
+                  {props.team.members.map((member, idx)=>{
+                    return (<div className="member" style={{margin:"10px 5px", fontSize: ".82em"}} key={idx}>
                         <div className="member-name">{member.name}</div>
                         <div className="member-regno" style={{fontSize:"0.8em", color:"grey"}}>{(member.registrationID)}</div>
                     </div>)
