@@ -6,7 +6,6 @@ import leaderboardService from '../services/leaderboard';
 import collegeService from '../services/colleges';
 import { Button } from '../commons/Form';
 import ReactDOMServer from 'react-dom/server';
-import html2pdf from 'html2pdf.js/dist/html2pdf.min';
 
 import "./index.css"
 
@@ -140,7 +139,7 @@ export default class extends React.Component {
   }
   tableJSX = ()=>{
     return (<div className="leaderboard-containter-pdf">
-    <table className="leaderboard" style={{ overflow: "scroll" }}>
+    <table className="leaderboard" style={{width: "100%", }}>
       <thead>
         <tr>
           <th>&nbsp;</th>
@@ -157,25 +156,60 @@ export default class extends React.Component {
               <th>{this.getTotal(college)}</th>
             </tr>)
         }
+        
       </tbody>
     </table>
   </div>)
   }
   generatePDF(){
     const tableJSX = ReactDOMServer.renderToString(this.tableJSX());
-    const opt = {
-      jsPDF: {
-        format: 'a4',
-        orientation: 'landscape',
+    const style = `
+       <style>
+          @media print{@page {size: landscape}}
+          body{
+            font-family: sans-serif;
+          }
+          .leaderboard th{
+            width: 100px;
+            border: 1px solid #000;
+            padding: 5px;
+          } 
+
+          table{
+            border-collapse: collapse !important;
+          }
+
+          tr:nth-child(odd){
+            background-color: #eee;
+          }
+       </style>
+    `
+    // const opt = {
+    //   jsPDF: {
+    //     format: 'a3',
+    //     orientation: 'landscape',
         
-      },
-      pagebreak: {mode:"avoid-all"},
-      html2canvas:  { scale: 4, letterRendering: true, },
-      margin: 1,
-      image: {type: 'jpeg', quality: 1},
-      filename: 'overall_leaderboard.pdf'
+    //   },
+    //   pagebreak: {mode:"avoid-all"},
+    //   html2canvas:  { scale: 4, },
+    //   margin: 1,
+    //   image: {type: 'jpeg', quality: 0.98},
+    //   filename: 'overall_leaderboard.pdf'
+    // }
+    // html2pdf().set(opt).from(tableJSX).save();
+    if(typeof window != "undefined"){
+      const printWindow = window.open("","Utsav 2023","width=1485mm,height=550mm");
+            
+            printWindow.document.write("<html><head><title>Utsav 2023</title>");
+            printWindow.document.write(style);
+            printWindow.document.write("</head><body>");
+            printWindow.document.write(tableJSX);
+            printWindow.document.write("</body></html>");
+            printWindow.document.close();
+
+            // printWindow.close();
+            printWindow.print();
     }
-    html2pdf().set(opt).from(tableJSX).save();
   }
   render = () => (
     <Layout>
