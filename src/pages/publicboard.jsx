@@ -5,6 +5,7 @@ import eventsService from '../services/events'
 import leaderboardService from '../services/leaderboard';
 import collegeService from '../services/colleges';
 import { Button } from '../commons/Form';
+import ReactDOMServer from 'react-dom/server';
 
 import "./index.css"
 
@@ -24,6 +25,8 @@ export default class extends React.Component {
     this.getPoints = this.getPoints.bind(this);
     this.sortByRank = this.sortByRank.bind(this);
     this.sortByName = this.sortByName.bind(this);
+    this.generatePDF = this.generatePDF.bind(this);
+    this.tableJSX = this.tableJSX.bind(this);
   }
   componentWillMount() {
     this.init();
@@ -134,6 +137,80 @@ export default class extends React.Component {
     let colleges = this.state.colleges.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
     this.setState({ colleges });
   }
+  tableJSX = ()=>{
+    return (<div className="leaderboard-containter-pdf">
+    <table className="leaderboard" style={{width: "100%", }}>
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          {this.state.events.map((event, index) => <th key={index}>{event.name}</th>)}
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          this.state.colleges.map((college, index) =>
+            <tr key={index}>
+              <th>{college.name},{college.location}</th>
+              {this.state.events.map((event, index) => <th key={index}>{this.getPoints(event, college)}</th>)}
+              <th>{this.getTotal(college)}</th>
+            </tr>)
+        }
+        
+      </tbody>
+    </table>
+  </div>)
+  }
+  generatePDF(){
+    const tableJSX = ReactDOMServer.renderToString(this.tableJSX());
+    const style = `
+       <style>
+          @media print{@page {size: landscape}}
+          body{
+            font-family: sans-serif;
+          }
+          .leaderboard th{
+            width: 100px;
+            border: 1px solid #000;
+            padding: 5px;
+          } 
+
+          table{
+            border-collapse: collapse !important;
+          }
+
+          tr:nth-child(odd){
+            background-color: #eee;
+          }
+       </style>
+    `
+    // const opt = {
+    //   jsPDF: {
+    //     format: 'a3',
+    //     orientation: 'landscape',
+        
+    //   },
+    //   pagebreak: {mode:"avoid-all"},
+    //   html2canvas:  { scale: 4, },
+    //   margin: 1,
+    //   image: {type: 'jpeg', quality: 0.98},
+    //   filename: 'overall_leaderboard.pdf'
+    // }
+    // html2pdf().set(opt).from(tableJSX).save();
+    if(typeof window != "undefined"){
+      const printWindow = window.open("","Utsav 2023","width=1485mm,height=550mm");
+            
+            printWindow.document.write("<html><head><title>Utsav 2023</title>");
+            printWindow.document.write(style);
+            printWindow.document.write("</head><body>");
+            printWindow.document.write(tableJSX);
+            printWindow.document.write("</body></html>");
+            printWindow.document.close();
+
+            // printWindow.close();
+            printWindow.print();
+    }
+  }
   render = () => (
     <Layout>
       <h1 className="mucapp"> Leaderboard</h1>
@@ -141,6 +218,7 @@ export default class extends React.Component {
         {this.state.status}
         {this.state.showButton ? <Button onClick={this.sortByRank} styles={{ marginLeft: 20 }}>Sort By Rank</Button> : ''}
         {this.state.showButton ? <Button onClick={this.sortByName} styles={{ marginLeft: 20 }}>Sort By College Name</Button> : ''}
+        <Button onClick={this.generatePDF} styles={{ marginLeft: 20 }}>Generate PDF</Button>
       </div>
       <div className="leaderboardContainer">
         <table className="leaderboard" style={{ overflow: "scroll" }}>
