@@ -62,12 +62,25 @@ export const getCertificateName = (item, isGroupEvent, isMultipleTeamsEvent) => 
             return `#${slot.number} - ${college_name}, ${slot.college.location}`;
         }
     } else {
-        let participant_name_arr = item.team.participants[0].name.split(" ");
+        let participant_name_init = toTitleCase(item.team.participants[0].name);
+        participant_name_init = participant_name_init.replace("Dr. ", "");
+        participant_name_init = participant_name_init.replace("Dr ", "");
+
+        participant_name_init = participant_name_init.replace("Mr. ", "");
+        participant_name_init = participant_name_init.replace("Mr ", "");
+
+        participant_name_init = participant_name_init.replace("Ms. ", "");
+        participant_name_init = participant_name_init.replace("Ms ", "");
+
+        participant_name_init = participant_name_init.replace("Mrs. ", "");
+        participant_name_init = participant_name_init.replace("Mrs ", "");
+
+        let participant_name_arr = participant_name_init.split(" ");
         let participant_name = "";
-        for (let i = 0; i < participant_name_arr.length - 1; i++) {
+        participant_name += participant_name_arr[0] + " ";
+        for (let i = 1; i < participant_name_arr.length; i++) {
             participant_name += participant_name_arr[i].charAt(0) + ". ";
         }
-        participant_name += participant_name_arr[participant_name_arr.length - 1];
         return `#${slot.number} - ${toTitleCase(participant_name)} - ${college_name}, ${slot.college.location}`;
     }
 }
