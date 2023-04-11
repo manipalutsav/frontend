@@ -20,8 +20,8 @@ export const keyToDisplay = (key) => key ? key.charAt(0).toUpperCase() + key.sli
 export const isTeamChangeFreezed = ()=>{
     const curDate = new Date();
     // New time period for editing
-    const editWindowBeginDate = new Date("11/April/2023, 9:00 PM");
-    const editWindowEndDate = new Date("12/April/2023, 10:00 AM");
+    const editWindowBeginDate = new Date("11/April/2023, 10:00 PM");
+    const editWindowEndDate = new Date("12/April/2023, 9:00 AM");
     if(curDate > editWindowBeginDate && curDate <= editWindowEndDate){
         return false;
     }
