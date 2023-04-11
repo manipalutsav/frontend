@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "gatsby";
+import { Dropdown } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
 
 import store from "../../reducers/sidebarReducer";
 
@@ -7,7 +9,7 @@ const SidebarSeparator = () => (
   <li>
     <hr css={{
       margin: "10px 25px 0",
-      border: "1px dashed rgba(0, 0, 0, .1)",
+      border: "1px dashed white",
     }} />
   </li>
 );
@@ -27,13 +29,13 @@ const SidebarItem = (props) => (
       padding: 10,
       paddingLeft: 50,
       fontSize: ".9em",
-      textDecoration: "none",
-      color: path() === props.to ? "#ff5800" : "inherit",
-      backgroundColor: path() === props.to ? "rgba(255, 209, 0, .2)" : "",
+      textDecoration: "none !important",
+      color: path() === props.to ? "#003B73" : "inherit",
+      backgroundColor: path() === props.to ? "#BFD7ED" : "",
       borderRight: "3px solid",
       borderColor: path() === props.to ? "#ff5800" : "white",
       ":hover": {
-        color: "#ff5800",
+        color: "#003B73",
       },
     }}>
       {props.title}
@@ -43,28 +45,68 @@ const SidebarItem = (props) => (
 
 const SidebarItems = ({ backupName, backupData }) => (
   <ul css={{
-    display: "flex",
-    flexDirection: "column",
+    display: "inline",
+    flexDirection: "row",
+    fontSize: "18px",
+    fontWeight: "lighter",
     margin: 0,
     marginTop: 20,
     listStyle: "none",
     padding: 0,
   }}>
-    <SidebarItem to="/" title="Home" />
-    <SidebarItem to="/register" title="Register" />
-    <SidebarItem to="/teams" title="Teams" />
-    <SidebarItem to="/volunteers" title="Volunteer" />
-    <SidebarItem to="/slots" title="Slots" />
-    <SidebarItem to="/leaderboard/public" title="Event Standings" />
+    <SidebarItem to="/" title="HOME" />
+    <SidebarItem to="/register" title="REGISTER" />
+    <SidebarItem to="/teams" title="TEAMS" />
+    <SidebarItem to="/slots" title="SLOTS" />
+    <SidebarItem to="/volunteers" title="VOLUNTEERS" />
+    <SidebarItem to="/leaderboard/public" title="LEADERBOARD" />
     {/* <SidebarItem to="/certificates" title="Certificates" /> */}
     <SidebarSeparator />
-    <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li>
+    {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
+    {/* <Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />;
     <SidebarItem to="/users" title="Users" />
-    <SidebarItem to="/colleges" title="Colleges" />
-    <SidebarItem to="/events" title="Events" />
-    <SidebarItem to="/judges" title="Judges" />
-    {/* <SidebarItem to="/winners" title="Winners" /> */}
-    <SidebarItem to="/leaderboard" title="Event Standings"/>
+    
+    
+    
+    
+     */}
+    <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px"}} title="ADMIN ONLY">
+  <Dropdown.Item as="a">
+    <Link to="/users" title="Users" css={{ textDecoration: "none !important", color: "#222" }}>
+      Users
+    </Link>
+  </Dropdown.Item>
+
+  <Dropdown.Item as="a">
+    <Link to="/colleges" title="Colleges" css={{ textDecoration: "none !important", color: "#222" }}>
+      Colleges
+    </Link>
+  </Dropdown.Item>
+
+  <Dropdown.Item as="a">
+    <Link to="/events" title="Events" css={{ textDecoration: "none !important", color: "#222" }}>
+      Events
+    </Link>
+  </Dropdown.Item>
+
+  <Dropdown.Item as="a">
+    <Link to="/judges" title="Judges" css={{ textDecoration: "none !important", color: "#222" }}>
+      Judges
+    </Link>
+  </Dropdown.Item>
+
+  {/* <Dropdown.Item as="a">
+    <Link to="/winners" title="Winners" css={{ textDecoration: "none !important", color: "#222" }}>
+      Winners
+    </Link>
+  </Dropdown.Item> */}
+
+  <Dropdown.Item as="a">
+    <Link to="/leaderboard" title="Leaderboard" css={{ textDecoration: "none !important", color: "#222" }}>
+      Leaderboard
+    </Link>
+  </Dropdown.Item>
+</Dropdown>
 
     <SidebarSeparator />
     {/* <li>
@@ -138,3 +180,4 @@ export default class Sidebar extends Component {
     </div>
   );
 }
+
