@@ -74,6 +74,7 @@ export default class Bias extends React.Component {
         slot.judgePoints = leaderboardItem ? leaderboardItem.total : 0;
         slot.total = slot.judgePoints - this.getOvertimeMinusPoints(slot.overtime);
       })
+      slots.sort((a,b)=>b.judgePoints - a.judgePoints)
       this.setState({ event, round, slots })
     } catch (error) {
       console.log(error)
