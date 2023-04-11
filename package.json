@@ -26,6 +26,7 @@
     "glamor": "^2.20.40",
     "html2canvas": "^1.0.0-alpha.12",
     "jszip": "^3.2.2",
+    "moment": "^2.29.4",
     "postcss": "^8.4.20",
     "react": "^16.8.3",
     "react-countdown": "^2.3.5",

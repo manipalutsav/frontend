@@ -23,8 +23,8 @@ export default class Profile extends React.Component {
   }
 
   handleLogout() {
-    if(window.confirm('Are you sure you want to logout?')) {
-     logout(() => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      logout(() => {
         navigate("/");
         return null;
       });
@@ -56,7 +56,7 @@ export default class Profile extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let user = getUser();
 
     this.setState({ user }, () =>
