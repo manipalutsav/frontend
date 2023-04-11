@@ -138,7 +138,8 @@ export default class Events extends React.Component {
         <div>
           {!isTeamChangeFreezed()&&(<Button styles={{ marginTop: "10px" }} onClick={() => { navigate("/register/" + this.props.event) }}>Back</Button>)}
           {!isTeamChangeFreezed()&&(this.state.participants.length <(this.state.team.event ?(this.state.team.event.maxMembersPerTeam):0))&& (<Link to={"/register/"+this.props.event+"/teams/"+this.props.team+"/update"}><Button>Add member</Button></Link>)}
-          {!isTeamChangeFreezed()&&(<Button styles={{ marginTop: "10px", backgroundColor:"red !important" }} onClick={this.handleDelete }>Delete team</Button>)}
+          {/* Option to delete a team no longer needed */}
+          {/* {!isTeamChangeFreezed()&&(<Button styles={{ marginTop: "10px", backgroundColor:"red !important" }} onClick={this.handleDelete }>Delete team</Button>)} */}
         </div>
       </div>
     </LoadContent>
