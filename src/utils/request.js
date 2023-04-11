@@ -17,6 +17,7 @@ const request = async (path, method = "GET", body = {}) => {
     let url = path ? constants.server + path : constants.server;
     const options = {
       credentials: "include",
+      mode: 'cors',
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",

@@ -105,6 +105,10 @@ const SidebarItems = ({ backupName, backupData }) => (
         <DropItem to="/judges" title="Judges" />
       </Dropdown.Item>
 
+      <Dropdown.Item as="a">
+        <DropItem to="/notifications" title="Notifications" />
+      </Dropdown.Item>
+
       {/* <Dropdown.Item as="a">
         <DropItem to="/practice-slots" title="Practice Slots" />
       </Dropdown.Item> */}
@@ -119,6 +123,7 @@ const SidebarItems = ({ backupName, backupData }) => (
         <DropItem to="/leaderboard" title="Event Standings" />
       </Dropdown.Item>
     </Dropdown>
+
 
     <SidebarSeparator />
     {/* <li>

@@ -65,6 +65,8 @@ import CoreVolunteerEdit from "../components/Volunteer/CoreVolunteerEdit";
 import Layout from "../layouts/app";
 import PracticeSlots from "../components/PracticeSlots";
 import PublicPracticeSlots from "../components/PublicPracticeSlots";
+import Notifications from "../components/Notifications";
+import PublicEvents from "../components/PublicEvents";
 
 
 if (typeof (document) != 'undefined')
@@ -99,6 +101,7 @@ export default () =>
       <PrivateRoute path="/users/:user/edit" component={EditUser} type={1} />
 
       <PrivateRoute path="/events" component={Events} type={2} />
+      <PrivateRoute path="/events/public" component={PublicEvents} type={2} />
       <PrivateRoute path="/events/add" component={AddEvent} type={1} />
       <PrivateRoute path="/events/:event" component={Event} type={2} />
       <PrivateRoute path="/events/:event/edit" component={EditEvent} type={1} />
@@ -148,6 +151,7 @@ export default () =>
 
       <PrivateRoute path="/practice-slots" component={PracticeSlots} type={1} />
       <PrivateRoute path="/practice-slots/public" component={PublicPracticeSlots} type={8} />
+      <PrivateRoute path="/notifications" component={Notifications} type={8} />
 
 
       {/* <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} /> */}
