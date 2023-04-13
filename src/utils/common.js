@@ -91,8 +91,8 @@ export const getCertificateName = (item, isGroupEvent, isMultipleTeamsEvent) => 
 export const isTeamChangeFreezed = () => {
     const curDate = new Date();
     // New time period for editing
-    const editWindowBeginDate = new Date("11/April/2023, 10:00 PM");
-    const editWindowEndDate = new Date("13/April/2023, 12:00 AM");
+    const editWindowBeginDate = new Date("13/April/2023, 11:00 PM");
+    const editWindowEndDate = new Date("14/April/2023, 7:00 AM");
     if(curDate > editWindowBeginDate && curDate <= editWindowEndDate){
         return false;
     }
