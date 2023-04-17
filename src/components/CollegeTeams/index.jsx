@@ -92,6 +92,9 @@ export default class Teams extends React.Component {
         <div>
           <h2 className="mucapp">{this.state.college ? (this.state.college.name + " " + this.state.college.location) : ""} Teams</h2>
         </div>
+        <div>
+          <button onClick={() => this.props.navigate("./rankings")} className="mucapp">View Event Rankings</button>
+        </div>
         <LoadContent loading={this.state.teamsLoading}>
           {
             this.state.events.length

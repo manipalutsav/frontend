@@ -43,6 +43,7 @@ import Bias from '../components/Rounds/Bias';
 import Download from '../components/Rounds/Download';
 import CollegeTeams from "../components/CollegeTeams";
 import EditMember from "../components/CollegeTeams/Edit";
+import Rankings from "../components/CollegeTeams/rankings";
 import Winners from "../components/Winners";
 import Certificates from "../components/Certificates";
 
@@ -133,6 +134,7 @@ export default () =>
 
       <PrivateRoute path="/teams" component={CollegeTeams} type={8} />
       <PrivateRoute path="/teams/members/:member/edit" component={EditMember} type={8} />
+      <PrivateRoute path="/teams/rankings" component={Rankings} type={8} />
       <PrivateRoute path="/register" component={Register} type={8} />
       <PrivateRoute path="/slots" component={PublicSlotsEvents} type={8} />
       <PrivateRoute path="/slots/:event" component={PublicSlots} type={8} />
