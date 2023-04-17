@@ -109,6 +109,20 @@ const getParticipants = async (collegeID) => {
     return [];
   }
 };
+
+const getAllEventRankings = async (collegeID) => {
+  let response;
+  if (collegeID)
+    response = await request("/colleges/" + collegeID + "/rankings");
+
+  if (response && response.status === 200) {
+    return response.data;
+  } else {
+    if (response && response.status === "401")
+      toast("Your session has expired, please logout and login again.")
+    return [];
+  }
+};
 export default {
   create,
   update,
@@ -116,5 +130,6 @@ export default {
   getAll,
   getTeams,
   getParticipants,
-  getCollege
+  getCollege,
+  getAllEventRankings
 };
