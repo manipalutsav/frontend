@@ -5,6 +5,7 @@ import participantsService from "../../services/participants";
 
 import { Button } from "../../commons/Form";
 import { toast } from "../../actions/toastActions";
+import { isTeamChangeFreezed } from "../../utils/common";
 
 export default class EditMember extends React.Component {
   UPDATE = "Update";
@@ -50,8 +51,7 @@ export default class EditMember extends React.Component {
       <div>
         <h2 className="mucapp">Edit Participant {this.state.participant.name}</h2>
       </div>
-
-      <div>
+      {!isTeamChangeFreezed() ? (<div>
         <div>
           <div>Name</div>
           <input
@@ -88,7 +88,8 @@ export default class EditMember extends React.Component {
             {this.state.buttonText}
           </Button>
         </div>
-      </div>
+      </div>):(<>Registration closed!</>)}
+      
     </div>
   );
 };
