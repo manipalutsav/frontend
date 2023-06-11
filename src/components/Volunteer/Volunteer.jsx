@@ -72,7 +72,6 @@ class Volunteer extends React.Component {
           const lines = [];
           if (list[i].college.length > 50) {
             const sep = list[i].college.split(" ");
-            console.log(sep);
 
             let line = "";
             let j = 0;
@@ -100,7 +99,7 @@ class Volunteer extends React.Component {
           }
           canvas.toBlob((blob) => {
             this.setState({
-              buttonName: `Processing ${Math.round((i / total) * 100)}%...`,
+              downloadButtonName: `Processing ${Math.round((i / total) * 100)}%...`,
             });
             resolve(blob);
           }, "image/png");
@@ -116,7 +115,7 @@ class Volunteer extends React.Component {
     result.forEach((i) => {
       zip.folder(i.event).file(i.filename, i.blob);
     });
-    this.setState({ buttonName: `Zipping...` });
+    this.setState({ downloadButtonName: `Zipping...` });
     zip.generateAsync({ type: "blob" }).then((content) => {
       link.download = "event-volunteers-cert";
       link.href = URL.createObjectURL(content);
@@ -124,7 +123,7 @@ class Volunteer extends React.Component {
       document.body.append(link);
       link.click();
       link.remove();
-      this.setState({ buttonName: "Download All" });
+      this.setState({ downloadButtonName: "Download Certificates" });
     });
   }
   componentWillMount() {
