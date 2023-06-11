@@ -87,11 +87,11 @@ export default class Certificates extends React.Component {
           canvas.width = image.width;
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
-          context.font = "45px Segoe UI";
-          context.fillStyle = "#555";
+          context.font = "bold 71px Blogger Sans";
+          context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, (canvas.width / 2) + 100, 460);
-          context.fillText(list[i].event, (canvas.width / 2) + 100, 670);
+          context.fillText(list[i].name, (canvas.width / 2) , 480);
+          context.fillText(list[i].event, (canvas.width / 2), 760);
           canvas.toBlob((blob) => {
             this.setState({ buttonName: `Processing ${Math.round(i / total * 100)}%...` });
             resolve(blob)
@@ -137,7 +137,7 @@ export default class Certificates extends React.Component {
               <th>Register Number</th>
               <th>Name</th>
               <th>Event</th>
-              <th><button onClick={this.downloadAll}>{this.state.buttonName}</button></th>
+              <th><button className="mucapp css-1hbqjvt" onClick={this.downloadAll}>{this.state.buttonName}</button></th>
             </tr>
           </thead>
           <tbody>
@@ -148,7 +148,7 @@ export default class Certificates extends React.Component {
                     <td>{member.registrationID}</td>
                     <td>{member.name}</td>
                     <td>{event}</td>
-                    <td><button onClick={() => this.download(member, event)}>Download</button></td>
+                    <td><button className="mucapp css-1hbqjvt" onClick={() => this.download(member, event)}>Download</button></td>
                   </tr>))
                 ))
               ))
