@@ -13,7 +13,12 @@ import { Tab, Tabs } from "../../commons/Tabs";
 
 const EventCard = ({ event }) => {
   return (
-    <Link to={!event.name.match(/cooking/i) ? "/register/" + event.id : "#"} css={{
+    <Link
+    // Disabling link for now 
+    // to={!event.name.match(/cooking/i) ? "/register/" + event.id : "#"} 
+    to="#"
+    
+    css={{
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
@@ -69,14 +74,14 @@ const EventCard = ({ event }) => {
         alignItems: "center",
         marginTop: 10,
       }}>
-        <div css={{
+        {/* <div css={{
           color: "red",
           fontSize: "0.8em",
         }}>
           <span>{event.unregistered ? "Unregistered" : ""}</span>
-        </div>
+        </div> */}
         <div>
-          <Block show={event.name.match(/cooking/i)}>
+          {/* <Block show={event.name.match(/cooking/i)}>
             Event done
           </Block>
           <Block show={!event.name.match(/cooking/i)}>
@@ -86,6 +91,9 @@ const EventCard = ({ event }) => {
             <Block show={event.registeredCount === event.maxTeamsPerCollege}>
               <span css={{ fontSize: "0.9em" }}>Slots full for college</span>
             </Block>
+          </Block> */}
+          <Block show={true}>
+            Registration starting soon!
           </Block>
         </div>
       </div>
