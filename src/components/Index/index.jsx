@@ -43,9 +43,9 @@ const RegistrationTimer = () => {
 export default () =>
   <div css={{ textAlign: "center" }}>
     <h2 className="mucapp">MAHE Utsav Coordinators App</h2>
-    <h1 className="mucapp"> UTSAV 2023!</h1>
+    <h1 className="mucapp"> UTSAV 2024!</h1>
     {/* <RegistrationTimer /> */}
-    <div className="festival-live-message">The festival is on!</div>
+    {/* <div className="festival-live-message">The festival is on!</div> */}
     <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} />
   </div >
   ;
