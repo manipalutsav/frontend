@@ -205,9 +205,9 @@ class CoreVolunteer extends React.Component {
         <div>
           <div>
             <h2 className="mucapp">Core Volunteers</h2>
-            <button className="mucapp" onClick={this.downloadAll}>
+            {/* <button className="mucapp" onClick={this.downloadAll}>
               {this.state.downloadButtonName}
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="coreVolunteers">
