@@ -6,7 +6,7 @@ import eventsService from "../../services/events";
 import collegesService from "../../services/colleges";
 
 import { edit } from "../../services/eventService";
-import { Button } from "../../commons/Form";
+import { Input, Button } from "../../commons/Form";
 import { toast } from "../../actions/toastActions";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
@@ -53,6 +53,8 @@ export default class EditEvent extends React.Component {
         startDate: new Date(new Date(this.state.event.startDate).getTime() + this.state.timezoneOffset).toISOString(),
         endDate: new Date(new Date(this.state.event.endDate).getTime() + this.state.timezoneOffset).toISOString(),
         faculty: this.state.event.faculty,
+        registrationStartDate: this.state.event.registrationStartDate ? new Date(new Date(this.state.event.registrationStartDate).getTime() + this.state.timezoneOffset).toISOString() : undefined,
+        registrationEndDate: this.state.event.registrationEndDate ? new Date(new Date(this.state.event.registrationEndDate).getTime() + this.state.timezoneOffset).toISOString() : undefined,
       });
 
       if (!response) toast("Some error occured");
@@ -78,6 +80,8 @@ export default class EditEvent extends React.Component {
           startDate: new Date(new Date(event.startDate).getTime() - this.state.timezoneOffset).toISOString(),
           endDate: new Date(new Date(event.endDate).getTime() - this.state.timezoneOffset).toISOString(),
           faculty: event.faculty,
+          registrationStartDate: event.registrationStartDate ? new Date(new Date(event.registrationStartDate).getTime() - this.state.timezoneOffset).toISOString() : "",
+          registrationEndDate: event.registrationStartDate ? new Date(new Date(event.registrationEndDate).getTime() - this.state.timezoneOffset).toISOString() : "",
         },
       });
     });
@@ -352,6 +356,28 @@ export default class EditEvent extends React.Component {
           />
         </div>
 
+        <div>
+          <label htmlFor="registrationStartDate">Registration Start Date: </label>
+          <input
+            className="input input-bordered"
+            type="datetime-local"
+            name="registrationStartDate"
+            id="registrationStartDate"
+            value={(this.state.event.registrationStartDate && this.state.event.registrationStartDate.split("Z")[0]) || ""}
+            onChange={this.handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="registrationEndDate">Registration End Date: </label>
+          <input
+            className="input input-bordered"
+            type="datetime-local"
+            name="registrationEndDate"
+            id="registrationEndDate"
+            value={(this.state.event.registrationEndDate && this.state.event.registrationEndDate.split("Z")[0]) || ""}
+            onChange={this.handleChange}
+          />
+        </div>
         <div>
           <Button
             onClick={this.handleClick}

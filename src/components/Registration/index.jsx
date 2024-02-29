@@ -13,29 +13,26 @@ import { Tab, Tabs } from "../../commons/Tabs";
 
 const EventCard = ({ event }) => {
   return (
-    <Link
-    // Disabling link for now 
-    // to={!event.name.match(/cooking/i) ? "/register/" + event.id : "#"} 
-    to="#"
-    
-    css={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      marginRight: 20,
-      marginBottom: 20,
-      padding: 20,
-      width: 350,
-      borderRadius: 3,
-      border: "2px solid rgba(0, 0, 0, .1)",
-      color: "inherit",
-      boxShadow: "0px 5px 20px -4px rgba(0, 0, 0, .1)",
-      transition: "box-shadow .2s ease",
-      ":hover": {
+    <div
+
+      css={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        marginRight: 20,
+        marginBottom: 20,
+        padding: 20,
+        width: 350,
+        borderRadius: 3,
+        border: "2px solid rgba(0, 0, 0, .1)",
         color: "inherit",
-        boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
-      }
-    }}>
+        boxShadow: "0px 5px 20px -4px rgba(0, 0, 0, .1)",
+        transition: "box-shadow .2s ease",
+        ":hover": {
+          color: "inherit",
+          boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+        }
+      }}>
       <div>
         <div css={{
           fontSize: "1.3em",
@@ -74,30 +71,28 @@ const EventCard = ({ event }) => {
         alignItems: "center",
         marginTop: 10,
       }}>
-        {/* <div css={{
-          color: "red",
-          fontSize: "0.8em",
-        }}>
-          <span>{event.unregistered ? "Unregistered" : ""}</span>
-        </div> */}
         <div>
-          {/* <Block show={event.name.match(/cooking/i)}>
-            Event done
+          <Block show={Date.now() < new Date(event.startDate).getTime()}>
+            <Block show={Date.now() < new Date(event.registrationStartDate).getTime()}>
+              <small>Registration starts at {new Date(event.registrationStartDate).toLocaleString()} and ends at {new Date(event.registrationEndDate).toLocaleString()}</small>
+            </Block>
+            <Block show={new Date(event.registrationStartDate).getTime() < Date.now() && Date.now() < new Date(event.registrationEndDate).getTime()}>
+              <div><small>Registration ends at {new Date(event.registrationEndDate).toLocaleString()}</small></div>
+              <Link to={"/register/" + event.id}><Button>Register</Button></Link>
+            </Block>
+            <Block show={new Date(event.registrationEndDate).getTime() < Date.now()}>
+              <small>Registration has ended.</small>
+            </Block>
           </Block>
-          <Block show={!event.name.match(/cooking/i)}>
-            <Block show={event.registeredCount < event.maxTeamsPerCollege}>
-              <Button>Register</Button>
-            </Block>
-            <Block show={event.registeredCount === event.maxTeamsPerCollege}>
-              <span css={{ fontSize: "0.9em" }}>Slots full for college</span>
-            </Block>
-          </Block> */}
-          <Block show={true}>
-            Registration starting soon!
+          <Block show={new Date(event.startDate).getTime() < Date.now() && Date.now() < new Date(event.endDate).getTime()}>
+            <div><span css={{ fontSize: "0.6em", background: "#18acd2", color: "white", padding: 5, marginBottom: 5, display: "inline-block", borderRadius: 10 }}>Event is ongoing!</span></div>
+          </Block>
+          <Block show={new Date(event.endDate).getTime() < Date.now()}>
+            <div><span css={{ fontSize: "0.6em", background: "#8c3939", color: "white", padding: 5, marginBottom: 5, display: "inline-block", borderRadius: 10 }}> Event is done.</span></div>
           </Block>
         </div>
       </div>
-    </Link>
+    </div>
   )
 };
 
@@ -144,6 +139,8 @@ export default class Events extends React.Component {
         unregistered: !teams.some(team => team.event._id === event.id),
         registeredCount: teams.filter(team => team.event._id === event.id).length,
         faculty: event.faculty,
+        registrationStartDate: event.registrationStartDate,
+        registrationEndDate: event.registrationEndDate
       }));
       events.sort((a, b) => {
         return new Date(a.startDate) - new Date(b.startDate);
