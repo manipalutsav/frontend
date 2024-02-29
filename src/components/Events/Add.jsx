@@ -70,6 +70,8 @@ export default class AddEvent extends React.Component {
         startDate: new Date(this.state.startDate),
         endDate: new Date(this.state.endDate),
         faculty: this.state.faculty,
+        registrationStartDate: new Date(this.state.registrationStartDate),
+        registrationEndDate: new Date(this.state.registrationEndDate),
         slottable: true
       });
       if (!response)
@@ -330,6 +332,26 @@ export default class AddEvent extends React.Component {
               width: 300,
               display: 'inline-block'
             }}
+          />
+        </div>
+        <div>
+          <label htmlFor="registrationStartDate">Registration Start Date: </label>
+          <Input
+            type="datetime-local"
+            name="registrationStartDate"
+            id="registrationStartDate"
+            value={this.state.registrationStartDate}
+            onChange={this.handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="registrationEndDate">Registration End Date: </label>
+          <Input
+            type="datetime-local"
+            name="registrationEndDate"
+            id="registrationEndDate"
+            value={this.state.registrationEndDate}
+            onChange={this.handleChange}
           />
         </div>
         <div>
