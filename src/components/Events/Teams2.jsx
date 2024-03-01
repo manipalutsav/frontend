@@ -19,6 +19,7 @@ const styles = {
       color: "inherit",
     }
   },
+
 };
 
 const TeamCard = (props) => {

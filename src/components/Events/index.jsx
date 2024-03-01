@@ -1,15 +1,12 @@
 import React from "react";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 
+import './style.css'
 import eventsService from "../../services/events";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTable, faTableList } from '@fortawesome/free-solid-svg-icons'
+import { faTable, faTableList, faClose } from '@fortawesome/free-solid-svg-icons'
 import LoadContent from "../../commons/LoadContent";
 import participationStatus from "../../services/participationStatus";
-
-
-
-
 
 const styles = {
   eventCard: {
@@ -27,6 +24,14 @@ const styles = {
       boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
     },
   },
+  table_styles: {
+    // border: "2px solid black",
+    fontSize: "16px",
+    textWrap: "balance",
+  },
+  table_th: {
+    overflowX: "hidden"
+  }
 };
 
 const EventCard = ({ event }) => (
@@ -67,9 +72,14 @@ export default class Events extends React.Component {
     this.state = {
       events: [],
       loading: true,
-      mode: "card"
+      mode: "card",
+      searchQuery: "",
     };
   }
+
+  handleSearch = (e) => {
+    this.setState({ searchQuery: e.target.value });
+  };
 
 
   async init() {
@@ -149,43 +159,63 @@ export default class Events extends React.Component {
 
 
   render = () => (
-    <div>
+    <div className="event-list-outer-container">
       <div>
         <h2 className="mucapp ">Events</h2>
         <Link to="/events/add"><button className="mucapp">Add Event</button></Link>
       </div>
-      <div className="text-center">
+      <div className="text-center" title={this.state.mode == "card" ? "Switch to Table View" : "Switch to Card View"}>
         <FontAwesomeIcon icon={faTable} style={{ padding: 4, color: "grey" }} />
         <input type="checkbox" className="toggle" data-theme="light" onClick={() => this.setState({ mode: this.state.mode === "table" ? "card" : "table" })} />
         <FontAwesomeIcon icon={faTableList} style={{ padding: 4, color: "grey" }} />
       </div>
 
       <LoadContent loading={this.state.loading} noDiv={true}>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search by event name"
+            value={this.state.searchQuery}
+            onChange={this.handleSearch}
+            title="Enter the event name to search"
+          />
+          <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+            <FontAwesomeIcon icon={faClose} />
+          </div>
+        </div>
         {this.state.mode === "table" ? <>
-          <table className="table w-full table-zebra" >
+          <table className="table table-zebra overflow-x-auto border" >
             <thead><tr>
-              <th>Event Name</th>
-              <th>Venue</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Rounds</th>
-              <th>Max Teams Per college</th>
-              <th>Is Faculty Event</th>
-              <th>OutStationed Campuses</th>
+              <th style={styles.table_th}>Event Name</th>
+              <th style={styles.table_th}>Venue</th>
+              <th style={styles.table_th}>Start Date</th>
+              <th style={styles.table_th}>End Date</th>
+              <th style={styles.table_th}>Rounds</th>
+              <th style={styles.table_th}>Max Teams Per college</th>
+              <th style={styles.table_th}>Is Faculty Event</th>
+              <th style={styles.table_th}>OutStationed Campuses</th>
             </tr></thead>
             <tbody>
-              {this.state.events.map(event => <tr>
-                <td>{event.name}</td>
-                <td>{event.venue}</td>
-                <td>{event.startDate}</td>
-                <td>{event.endDate}</td>
-                <td>{event.rounds.length}</td>
-                <td>{event.maxTeamsPerCollege}</td>
-                <td>{event.faculty ? "true" : ""}</td>
-                <td>{event.participationStatus ? (`${event.participationStatus.yes} Yes, ${event.participationStatus.maybe} Maybe,${event.participationStatus.no} No`) : ""}</td>
-                <td>
-                </td>
-              </tr>)}
+              {
+                this.state.events
+                  .filter((event) =>
+                    event.name.toLowerCase().includes(this.state.searchQuery.toLowerCase())
+                  )
+                  .map((event, index) => {
+                    return (
+                      <tr onClick={() => { navigate("/events/" + event.id) }} className="table-data-row" key={index}>
+                        <td style={styles.table_styles}>{event.name}</td>
+                        <td style={styles.table_styles}>{event.venue}</td>
+                        <td style={{ ...styles.table_styles, minWidth: "100px" }}>{event.startDate.slice(0, 9)}</td>
+                        <td style={{ ...styles.table_styles, minWidth: "100px" }}>{event.endDate.slice(0, 9)}</td>
+                        <td style={styles.table_styles}>{event.rounds.length}</td>
+                        <td style={styles.table_styles}>{event.maxTeamsPerCollege}</td>
+                        <td style={styles.table_styles}>{event.faculty ? "true" : ""}</td>
+                        <td style={styles.table_styles}>{event.participationStatus ? (`${event.participationStatus.yes} Yes, ${event.participationStatus.maybe} Maybe,${event.participationStatus.no} No`) : ""}</td>
+                      </tr>
+                    );
+                  })
+              }
             </tbody>
           </table>
 
@@ -197,7 +227,13 @@ export default class Events extends React.Component {
             display: "flex",
             flexWrap: "wrap",
           }}>
-            {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+            {this.state.events
+              .filter((event) =>
+                event.name.toLowerCase().includes(this.state.searchQuery.toLowerCase())
+              )
+              .map((event, i) => (
+                <EventCard key={i} event={event} />
+              ))}
           </div>}
       </LoadContent>
     </div>
