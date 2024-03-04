@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
+import './style.css'
 
 import eventsService from "../../services/events";
 import collegesService from "../../services/colleges";
@@ -10,6 +11,8 @@ import participationStatus from "../../services/participationStatus";
 import { toast } from "../../actions/toastActions";
 import Block from "../../commons/Block";
 import { Tab, Tabs } from "../../commons/Tabs";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClose } from '@fortawesome/free-solid-svg-icons'
 
 const EventCard = ({ event }) => {
   return (
@@ -109,7 +112,8 @@ export default class Events extends React.Component {
       participationStatus: {},
       loading: true,
       disableSubmit: false,
-      tabIndex: 0
+      tabIndex: 0,
+      searchQuery: "",
     };
   }
 
@@ -181,6 +185,10 @@ export default class Events extends React.Component {
 
   }
 
+  handleSearch = (e) => {
+    this.setState({ searchQuery: e.target.value })
+  };
+
   render = () => (
     <div data-theme="lofi">
 
@@ -239,9 +247,24 @@ export default class Events extends React.Component {
           <div>
             <h2 className="mucapp">Registration</h2>
             <p>Register teams for the events in Utsav</p>
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search by event name"
+                value={this.state.searchQuery}
+                onChange={this.handleSearch}
+                title="Enter the event name to search"
+              />
+              <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+                <FontAwesomeIcon icon={faClose} />
+              </div>
+            </div>
           </div>
           <div className="flex flex-wrap">
-            {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+
+            {this.state.events
+              .filter(event => event.name.toLowerCase().includes(this.state.searchQuery.toLowerCase()))
+              .map((event, i) => <EventCard key={i} event={event} />)}
           </div>
         </LoadContent>
       </div>

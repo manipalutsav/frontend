@@ -1,10 +1,14 @@
 import React from "react";
 import { Link } from "gatsby";
 import { FiX } from "react-icons/fi";
+import './style.css'
 
 import reducer from "../../reducers/commonReducer";
 import { getAll } from "../../services/judgeServices";
 import Loader from "../../commons/Loader";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClose } from '@fortawesome/free-solid-svg-icons'
+
 
 const styles = {
   judgeCard: {
@@ -76,19 +80,21 @@ const JudgesList = (props) => (
       Add Judge
     </Link>
     {
-      props.judges
-        ? props.judges.map((judge, i) => (
+      props.judges ? props.judges
+        .filter(item =>
+          item.name.toLowerCase().includes(props.searchQuery.toLowerCase())
+        )
+        .map((judge, i) => (
           <Judge info={judge} key={i} />
-        ))
-        : null
-    }
+        )) : null}
   </div>
 );
 
 export default class Judges extends React.Component {
   state = {
     judges: [],
-    loading: true
+    loading: true,
+    searchQuery: ""
   };
 
   componentWillMount() {
@@ -101,6 +107,11 @@ export default class Judges extends React.Component {
     });
   }
 
+  handleSearch = (e) => {
+    this.setState({ searchQuery: e.target.value })
+  };
+
+
   componentWillUnmount() {
     this.unsubscribe();
   }
@@ -108,11 +119,23 @@ export default class Judges extends React.Component {
   render = () => (
     <div>
       <h2 className="mucapp">Judges</h2>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search by Judge name"
+          value={this.state.searchQuery}
+          onChange={this.handleSearch}
+          title="Enter the judge name to search"
+        />
+        <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+          <FontAwesomeIcon icon={faClose} />
+        </div>
+      </div>
       <div>
         {
           this.state.loading
             ? <Loader />
-            : <JudgesList judges={this.state.judges} />
+            : <JudgesList judges={this.state.judges} searchQuery={this.state.searchQuery} />
         }
       </div>
     </div>
