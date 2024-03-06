@@ -27,8 +27,14 @@ const styles = {
   },
 };
 
-const College = (props) => (
+const College = (props) => {
+  let hasEvent  = props.college.events;
+  //this is for testing (remove this line before pushing it to the test server )
+  //hasEvent = "e";
+  return(
+
   <div css={{
+    backgroundColor:  ( hasEvent==undefined || hasEvent==null || hasEvent==[] ) ? "#e9ebf0" : props.college.isOutStationed ? "#fce6da" : "$ffb98e",
     ...styles.collegeCard,
   }}>
     <div>{props.college.name}</div>
@@ -40,7 +46,7 @@ const College = (props) => (
       fontSize: "0.8em",
       color: "#ff5800",
     }}>
-      {console.log(props)}
+      {console.log(props,"props")}
       <Block show={props.college.teams}>{toUnitText(props.college.teams && props.college.teams.length, "Team")}</Block>
       <Block show={props.college.events}>{toUnitText(props.college.events && props.college.events.size, "Event")}</Block>
 
@@ -51,7 +57,7 @@ const College = (props) => (
     </div>
   </div>
 
-);
+)};
 
 const CollegeList = (props) => (
   <div css={{

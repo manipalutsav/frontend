@@ -198,7 +198,7 @@ export default class extends React.Component {
     // }
     // html2pdf().set(opt).from(tableJSX).save();
     if(typeof window != "undefined"){
-      const printWindow = window.open("","Utsav 2023","width=1485mm,height=550mm");
+      const printWindow = window.open("","Utsav 2024","width=1485mm,height=550mm");
             
             printWindow.document.write("<html><head><title>Utsav 2023</title>");
             printWindow.document.write(style);
@@ -241,6 +241,7 @@ export default class extends React.Component {
           </tbody>
         </table>
       </div>
+      
     </Layout>
   );
 };

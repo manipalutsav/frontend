@@ -5,6 +5,7 @@ import leaderboardService from "../../services/leaderboard";
 import { Link } from "gatsby";
 import { Button } from "../../commons/Form";
 import { toast } from "../../actions/toastActions";
+import Certificates from "../Certificates";
 
 export default class extends React.PureComponent {
   constructor(props) {
