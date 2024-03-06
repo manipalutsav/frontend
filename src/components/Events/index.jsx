@@ -95,8 +95,6 @@ export default class Events extends React.Component {
         const alreadyCheckedClgs = [];
 
         const noOfOutstation= team.filter(t=>{
-          console.log("Team", t)
-
           const res = t.college.isOutStationed === true && alreadyCheckedClgs.findIndex((id)=>id === t.college._id) === -1;
           alreadyCheckedClgs.push(t.college._id)
           return res;
