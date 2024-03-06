@@ -1,31 +1,32 @@
 import React from "react";
 import { Link, navigate } from "gatsby";
-import './style.css'
-
 import eventsService from "../../services/events";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTable, faTableList, faClose } from '@fortawesome/free-solid-svg-icons'
 import LoadContent from "../../commons/LoadContent";
 import participationStatus from "../../services/participationStatus";
-
+import './style.css'
 
 
 
 
 const styles = {
   eventCard: {
-    marginRight: 20,
-    marginBottom: 20,
+    // marginRight: 20,
+    // marginBottom: 20,
     padding: 20,
-    width: 285,
-    borderRadius: 3,
+    minHeight: 200,
+    height: "auto",
+    width: "100%",
+    borderRadius: 5,
     border: "2px solid rgba(0, 0, 0, .1)",
     color: "inherit",
     boxShadow: "0px 5px 20px -4px rgba(0, 0, 0, .1)",
-    transition: "box-shadow .2s ease",
+    transition: "all .2s ease",
     ":hover": {
       color: "inherit",
       boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+      transform: "translateY(-10px)"
     },
   },
   table_styles: {
@@ -47,10 +48,9 @@ const EventCard = ({ event }) => (
     }}>
       {event.name}
     </div>
-    <div css={{
-      fontSize: "0.9em",
-      color: new Date() > new Date(event.endDate) ? "red" : "green",
-    }}>
+    <div
+      className={`text-[0.9em] ${new Date() > new Date(event.endDate) ? "text-red-500" : "text-green-500"
+        }`}>
       {
         new Date() > new Date(event.endDate)
           ? "ended " + (new Date(event.endDate)).toLocaleString()
@@ -167,23 +167,27 @@ export default class Events extends React.Component {
         <h2 className="mucapp ">Events</h2>
         <Link to="/events/add"><button className="mucapp">Add Event</button></Link>
       </div>
-      <div className="text-center">
+      <div className="text-center flex justify-start items-center py-5">
         <FontAwesomeIcon icon={faTable} style={{ padding: 4, color: "grey" }} />
         <input type="checkbox" className="toggle" data-theme="light" onClick={() => this.setState({ mode: this.state.mode === "table" ? "card" : "table" })} />
         <FontAwesomeIcon icon={faTableList} style={{ padding: 4, color: "grey" }} />
       </div>
 
       <LoadContent loading={this.state.loading} noDiv={true}>
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search by event name"
-            value={this.state.searchQuery}
-            onChange={this.handleSearch}
-            title="Enter the event name to search"
-          />
-          <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
-            <FontAwesomeIcon icon={faClose} />
+        <div className="flex justify-start items-start">
+
+          <div className=" border border-1 border-slate-400 flex justify-center items-center rounded-full px-2 mb-5 w-full md:w-1/2 lg:w-1/3 xl:w-72">
+            <input
+              type="text"
+              placeholder="Search by event name"
+              value={this.state.searchQuery}
+              onChange={this.handleSearch}
+              title="Enter the event name to search"
+              className="h-full px-2 py-3 w-full rounded-full outline-none text-md"
+            />
+            <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+              <FontAwesomeIcon icon={faClose} />
+            </div>
           </div>
         </div>
         {this.state.mode === "table" ? <>
@@ -225,14 +229,17 @@ export default class Events extends React.Component {
 
         </>
           :
-          <div css={{
-            marginTop: 20,
-            display: "flex",
-            flexWrap: "wrap",
-          }}>
+          <div
+            // css={{
+            //   marginTop: 20,
+            //   display: "flex",
+            //   flexWrap: "wrap",
+            // }}
+            className="h-auto w-full grid xl:grid-cols-5 md:grid-cols-2 gap-5"
+          >
             {this.state.events
               .filter((event) =>
-                event.name.toLowerCase().includes(this.state.searchQuery.toLowerCase())
+                event.name.toLowerCase().trim().includes(this.state.searchQuery.toLowerCase().trim())
               )
               .map((event, i) => (
                 <EventCard key={i} event={event} />
