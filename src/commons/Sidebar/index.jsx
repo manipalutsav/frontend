@@ -174,9 +174,8 @@ export default class Sidebar extends Component {
     this.updateBackup();
 
     this.setState({
-      isAdmin: isLoggedIn() && getUser().type == 1
+      isAdmin: isLoggedIn() && getUser().type <= 2 // Admin or support
     })
-
   }
 
   updateBackup = () => {
