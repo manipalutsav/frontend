@@ -19,10 +19,11 @@ const styles = {
     border: "2px solid rgba(0, 0, 0, .1)",
     color: "inherit",
     boxShadow: "0px 5px 20px -4px rgba(0, 0, 0, .1)",
-    transition: "box-shadow .2s ease",
+    transition: "all .2s ease",
     ":hover": {
       color: "inherit",
       boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+      transform: "translateY(-10px)"
     }
   },
 };
@@ -81,10 +82,13 @@ const UsersList = (props) => (
     <Link to="/users/add" css={{
       ...styles.userCard,
       backgroundColor: "#ff5800",
+      fontWeight:"semi-bold",
       color: "white",
       ":hover": {
         color: "white",
         boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+        backgroundColor: "#ffd100",
+        color:"black"
       }
     }}>
       Add User
