@@ -69,10 +69,13 @@ const JudgesList = (props) => (
     <Link to="/judges/add" css={{
       ...styles.judgeCard,
       backgroundColor: "#ff5800",
+      transition:"All 200ms ease-in-out",
+      fontWeight:"semi-bold",
       color: "white",
       ":hover": {
-        color: "white",
         boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+        backgroundColor: "#ffd100",
+        color:"black"
       }
     }}>
       Add Judge

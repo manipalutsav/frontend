@@ -191,7 +191,7 @@ export default class Events extends React.Component {
           </div>
         </div>
         {this.state.mode === "table" ? <>
-          <table className="table table-zebra w-full overflow-x-auto border" >
+          <table className="events-table table table-zebra w-full overflow-x-auto border" >
             <thead><tr>
               <th style={styles.table_th}>Event Name</th>
               <th style={styles.table_th}>Venue</th>
@@ -210,7 +210,7 @@ export default class Events extends React.Component {
                   )
                   .map((event, index) => {
                     return (
-                      <tr onClick={() => { navigate("/events/" + event.id) }} className="table-data-row" key={index}>
+                      <tr className="table-data-row" onClick={() => { navigate("/events/" + event.id) }}  key={index}>
                         <td style={styles.table_styles}>{event.name}</td>
                         <td style={styles.table_styles}>{event.venue}</td>
                         <td style={{ ...styles.table_styles, minWidth: "100px" }}>{event.startDate.slice(0, 10)}</td>

@@ -63,10 +63,14 @@ const CollegeList = (props) => (
     <Link to="/colleges/add" css={{
       ...styles.collegeCard,
       backgroundColor: "#ff5800",
+      fontWeight:"semi-bold",
       color: "white",
+      transition: "all 200ms ease-in-out",
       ":hover": {
         color: "white",
         boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+        backgroundColor: "#ffd100",
+        color:"black"
       }
     }}>
       Add College

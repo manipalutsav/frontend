@@ -190,7 +190,7 @@ img.mucapp {
 .vtable th,
 .vtable td {
   padding: 10px 2px;
-  text-align: center;
+  text-align: left;
 }
 
 .coreVolunteers {

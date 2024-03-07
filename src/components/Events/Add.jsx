@@ -109,9 +109,9 @@ export default class AddEvent extends React.Component {
   render = () => (
     <div>
       <h2 className="mucapp">Add Event</h2>
-      <p>Add a new event to MUCAPP.</p>
+      <p className="mb-3">Add a new event to MUCAPP.</p>
       <div>
-        <div>
+        <div className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3 ">
           <label htmlFor="name">Name: </label>
           <Input
             onChange={this.handleChange}
@@ -123,9 +123,10 @@ export default class AddEvent extends React.Component {
             placeholder="Name"
             required
             styles={{ width: 300 }}
+            // className="w-6/12"
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="college">College: </label>
           <Select
             isSearchable={false}
@@ -161,7 +162,7 @@ export default class AddEvent extends React.Component {
             }}
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="minMembersPerTeam">Minimum Members Per Team: </label>
           <Input
             onChange={this.handleChange}
@@ -176,7 +177,7 @@ export default class AddEvent extends React.Component {
             styles={{ width: 300 }}
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="maxMembersPerTeam">Maximum Members Per Team: </label>
           <Input
             onChange={this.handleChange}
@@ -190,7 +191,7 @@ export default class AddEvent extends React.Component {
             styles={{ width: 300 }}
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="maxTeamsPerCollege">Maximum Teams Per College: </label>
           <Input
             onChange={this.handleChange}
@@ -203,7 +204,7 @@ export default class AddEvent extends React.Component {
             styles={{ width: 300 }}
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="venue">Venue: </label>
           <Select
             isSearchable={false}
@@ -252,7 +253,7 @@ export default class AddEvent extends React.Component {
             }}
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="description">Description: </label>
           <TextArea
             onChange={this.handleChange}
@@ -264,7 +265,7 @@ export default class AddEvent extends React.Component {
             styles={{ maxWidth: 300, minWidth: 300 }}
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="duration">Duration in minutes: </label>
           <Input
             onChange={this.handleChange}
@@ -276,29 +277,31 @@ export default class AddEvent extends React.Component {
             styles={{ width: 300, verticalAlign: "top" }}
           />
         </div>
-        <div>
+        <div  className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="startDate">Start Date: </label>
           <Input
             type="datetime-local"
             name="startDate"
             id="startDate"
+            styles={{ maxWidth: 300, minWidth: 300 }}
             value={this.state.startDate}
             onChange={this.handleChange}
           />
 
         </div>
 
-        <div>
+        <div className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="endDate">End Date: </label>
           <Input
             type="datetime-local"
             name="endDate"
             id="endDate"
+            styles={{ maxWidth: 300, minWidth: 300 }}
             value={this.state.endDate}
             onChange={this.handleChange}
           />
-        </div>
-        <div>
+        </div >
+        <div className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="type">For: </label>
           <Select
             isSearchable={false}
@@ -334,27 +337,29 @@ export default class AddEvent extends React.Component {
             }}
           />
         </div>
-        <div>
+        <div className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="registrationStartDate">Registration Start Date: </label>
           <Input
             type="datetime-local"
             name="registrationStartDate"
             id="registrationStartDate"
+            styles={{ maxWidth: 300, minWidth: 300 }}
             value={this.state.registrationStartDate}
             onChange={this.handleChange}
           />
         </div>
-        <div>
+        <div className="flex justify-between items-center flex-wrap lg:w-6/12 sm:w-full mb-3">
           <label htmlFor="registrationEndDate">Registration End Date: </label>
           <Input
             type="datetime-local"
             name="registrationEndDate"
             id="registrationEndDate"
+            styles={{ maxWidth: 300, minWidth: 300 }}
             value={this.state.registrationEndDate}
             onChange={this.handleChange}
           />
         </div>
-        <div>
+        <div className="lg:w-6/12 sm:w-full flex lg:justify-end justify-start">
           <Button onClick={this.handleClick} disabled={this.state.buttonText === this.ADDING}>{this.state.buttonText}</Button>
         </div>
       </div>

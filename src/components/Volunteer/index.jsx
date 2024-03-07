@@ -44,11 +44,13 @@ const AddVolunteer = ({ type }) => (
     <Link to={`/volunteers/${type}`} css={{
         ...styles.volunteerCard,
         backgroundColor: "#ff5800",
+        transition: "All 200ms ease-in-out",
         color: "white",
         ":hover": {
-            color: "white",
             boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
-            transform: "translateY(-10px)"
+            transform: "translateY(-10px)",
+            backgroundColor: "#ffd100",
+            color: "black"
         }
     }}>
         {keyToDisplay(type)} Volunteers

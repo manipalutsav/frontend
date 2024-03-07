@@ -15,22 +15,17 @@
   transition: 100ms color ease-in-out;
 }
 
-table {
+.events-table {
   max-width: 100%;
 }
 
-th {
+.events-table th {
   min-width: 100px;
   width: auto;
 }
 
 .search-container {
   border: 1px solid black;
-  /* width: 300px;   */
-  /* border-radius: 5px; */
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
 }
 
 .search-container input {
@@ -56,20 +51,20 @@ th {
   color: black;
 }
 
-table:first-child {
+.events-table :first-child {
   position: relative;
 }
 
 @media only screen and (max-width: 757px) {
-  table {
+  .events-table  {
     width: 100% !important;
   }
-  th,
+  .events-table th,
   td {
     width: 150px;
   }
 
-  th:first-child {
+  .events-table th:first-child {
     position: relative !important;
   }
 }
