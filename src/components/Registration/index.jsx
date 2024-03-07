@@ -22,11 +22,14 @@ const EventCard = ({ event }) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        marginRight: 20,
-        marginBottom: 20,
+        // marginRight: 20,
+        // marginBottom: 20,
+        textWrap: "wrap",
+        minHeight: 200,
+        height: "auto",
         padding: 20,
-        width: 350,
-        borderRadius: 3,
+        width: "100%",
+        borderRadius: 5,
         border: "2px solid rgba(0, 0, 0, .1)",
         color: "inherit",
         boxShadow: "0px 5px 20px -4px rgba(0, 0, 0, .1)",
@@ -61,9 +64,12 @@ const EventCard = ({ event }) => {
           color: "rgba(0, 0, 0, .5)",
           fontSize: "0.9em",
           marginBottom: "8px",
-          maxHeight: 200,
-          overflowY: "auto",
-          whiteSpace: "pre-wrap"
+          maxHeight: "auto",
+          // overflowY: "auto",
+          wordWrap: "break-word",
+          wordBreak: "break-all",
+          whiteSpace: "pre-wrap",
+          width: "100%",
         }}>
           {event.description && event.description.replace(/[>]/g, '- ')}
         </div>
@@ -247,20 +253,24 @@ export default class Events extends React.Component {
           <div>
             <h2 className="mucapp">Registration</h2>
             <p>Register teams for the events in Utsav</p>
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Search by event name"
-                value={this.state.searchQuery}
-                onChange={this.handleSearch}
-                title="Enter the event name to search"
-              />
-              <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
-                <FontAwesomeIcon icon={faClose} />
+            <div className="flex justify-start items-start mt-2">
+
+              <div className=" border border-1 border-slate-400 flex justify-center items-center rounded-full px-2 mb-5 w-full md:w-1/2 lg:w-1/3 xl:w-72">
+                <input
+                  type="text"
+                  placeholder="Search by event name"
+                  value={this.state.searchQuery}
+                  onChange={this.handleSearch}
+                  title="Enter the event name to search"
+                  className="h-full px-2 py-3 w-full rounded-full outline-none text-md"
+                />
+                <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+                  <FontAwesomeIcon icon={faClose} />
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-wrap">
+          <div className="h-auto w-full grid xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-5">
 
             {this.state.events
               .filter(event => event.name.toLowerCase().includes(this.state.searchQuery.toLowerCase()))

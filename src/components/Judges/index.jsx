@@ -12,11 +12,12 @@ import { faClose } from '@fortawesome/free-solid-svg-icons'
 
 const styles = {
   judgeCard: {
-    display: "inline-block",
-    marginRight: 20,
-    marginBottom: 20,
+    // display: "inline-block",
+    // marginRight: 20,
+    // marginBottom: 20,
     padding: 20,
-    width: 250,
+    height: "auto",
+    width: "100%",
     borderRadius: 3,
     border: "2px solid rgba(0, 0, 0, .1)",
     color: "inherit",
@@ -64,10 +65,7 @@ const Judge = (props) => {
 };
 
 const JudgesList = (props) => (
-  <div css={{
-    display: "flex",
-    flexWrap: "wrap",
-  }}>
+  <div className="h-auto w-full grid xl:grid-cols-5 md:grid-cols-2 gap-5">
     <Link to="/judges/add" css={{
       ...styles.judgeCard,
       backgroundColor: "#ff5800",
@@ -119,19 +117,23 @@ export default class Judges extends React.Component {
   render = () => (
     <div>
       <h2 className="mucapp">Judges</h2>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search by Judge name"
-          value={this.state.searchQuery}
-          onChange={this.handleSearch}
-          title="Enter the judge name to search"
-        />
-        <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
-          <FontAwesomeIcon icon={faClose} />
+      <div className="flex justify-start items-start">
+
+        <div className=" border border-1 border-slate-400 mt-2 flex justify-center items-center rounded-full px-2 mb-5 w-full md:w-1/2 lg:w-1/3 xl:w-72">
+          <input
+            type="text"
+            placeholder="Search by event name"
+            value={this.state.searchQuery}
+            onChange={this.handleSearch}
+            title="Enter the event name to search"
+            className="h-full px-2 py-3 w-full rounded-full outline-none text-md"
+          />
+          <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+            <FontAwesomeIcon icon={faClose} />
+          </div>
         </div>
       </div>
-      <div>
+      <div className="">
         {
           this.state.loading
             ? <Loader />
