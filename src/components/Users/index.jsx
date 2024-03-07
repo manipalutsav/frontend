@@ -121,7 +121,7 @@ export default class Users extends React.Component {
   render = () => (
     <div>
       <h2 className="mucapp">Users</h2>
-      <p>Users of MUCAPP.</p>
+      <p className="pb-3">Users of MUCAPP.</p>
       <div>
         {
           this.state.loading

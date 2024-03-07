@@ -17,7 +17,6 @@ import { faClose } from '@fortawesome/free-solid-svg-icons'
 const EventCard = ({ event }) => {
   return (
     <div
-
       css={{
         display: "flex",
         flexDirection: "column",
@@ -64,8 +63,8 @@ const EventCard = ({ event }) => {
           color: "rgba(0, 0, 0, .5)",
           fontSize: "0.9em",
           marginBottom: "8px",
-          maxHeight: "auto",
-          // overflowY: "auto",
+          maxHeight: 200,
+          overflowY: "auto",
           wordWrap: "break-word",
           wordBreak: "break-all",
           whiteSpace: "pre-wrap",
@@ -94,10 +93,10 @@ const EventCard = ({ event }) => {
             </Block>
           </Block>
           <Block show={new Date(event.startDate).getTime() < Date.now() && Date.now() < new Date(event.endDate).getTime()}>
-            <div><span css={{ fontSize: "0.6em", background: "#18acd2", color: "white", padding: 5, marginBottom: 5, display: "inline-block", borderRadius: 10 }}>Event is ongoing!</span></div>
+            <div><span css={{ fontSize: "0.7em", background: "#22c55e", color: "white", padding: "5px 10px", marginBottom: 5, display: "inline-block", borderRadius: 100 }}>Event is ongoing!</span></div>
           </Block>
           <Block show={new Date(event.endDate).getTime() < Date.now()}>
-            <div><span css={{ fontSize: "0.6em", background: "#8c3939", color: "white", padding: 5, marginBottom: 5, display: "inline-block", borderRadius: 10 }}> Event is done.</span></div>
+            <div><span css={{ fontSize: "0.7em", background: "#dc2626", color: "white", padding: "5px 10px", marginBottom: 5, display: "inline-block", borderRadius: 100}}> Event is done.</span></div>
           </Block>
         </div>
       </div>
