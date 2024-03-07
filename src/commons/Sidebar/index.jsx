@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "gatsby";
 import { Dropdown } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
+import { getUser, isLoggedIn } from "../../services/userServices";
 
 import store from "../../reducers/sidebarReducer";
 
@@ -60,7 +61,7 @@ const DropItem = (props) => (
 );
 
 
-const SidebarItems = ({ backupName, backupData }) => (
+const SidebarItems = ({ backupName, backupData, isAdmin }) => (
   <ul css={{
     display: "inline",
     flexDirection: "row",
@@ -88,42 +89,42 @@ const SidebarItems = ({ backupName, backupData }) => (
 
 
      */}
-    <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px" }} title="ADMIN ONLY">
-      <Dropdown.Item as="a">
-        <DropItem to="/users" title="Users" />
-      </Dropdown.Item>
+    {isAdmin && <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px" }} title="ADMIN ONLY">
+                    <Dropdown.Item as="a">
+                      <DropItem to="/users" title="Users" />
+                    </Dropdown.Item>
 
-      <Dropdown.Item as="a">
-        <DropItem to="/colleges" title="Colleges" />
-      </Dropdown.Item>
+                    <Dropdown.Item as="a">
+                      <DropItem to="/colleges" title="Colleges" />
+                    </Dropdown.Item>
 
-      <Dropdown.Item as="a">
-        <DropItem to="/events" title="Events" />
-      </Dropdown.Item>
+                    <Dropdown.Item as="a">
+                      <DropItem to="/events" title="Events" />
+                    </Dropdown.Item>
 
-      <Dropdown.Item as="a">
-        <DropItem to="/judges" title="Judges" />
-      </Dropdown.Item>
+                    <Dropdown.Item as="a">
+                      <DropItem to="/judges" title="Judges" />
+                    </Dropdown.Item>
 
-      <Dropdown.Item as="a">
-        <DropItem to="/notifications" title="Notifications" />
-      </Dropdown.Item>
+                    <Dropdown.Item as="a">
+                      <DropItem to="/notifications" title="Notifications" />
+                    </Dropdown.Item>
 
-      {/* <Dropdown.Item as="a">
-        <DropItem to="/practice-slots" title="Practice Slots" />
-      </Dropdown.Item> */}
+                    {/* <Dropdown.Item as="a">
+                      <DropItem to="/practice-slots" title="Practice Slots" />
+                    </Dropdown.Item> */}
 
 
 
-      {/* <Dropdown.Item as="a">
-                <SidebarItem to="/winners" title="Winners" />
-                </Dropdown.Item> */}
+                    {/* <Dropdown.Item as="a">
+                              <SidebarItem to="/winners" title="Winners" />
+                              </Dropdown.Item> */}
 
-      <Dropdown.Item as="a">
-        <DropItem to="/leaderboard" title="Event Standings" />
-      </Dropdown.Item>
-    </Dropdown>
-
+                    <Dropdown.Item as="a">
+                      <DropItem to="/leaderboard" title="Event Standings" />
+                    </Dropdown.Item>
+                </Dropdown>
+    }
 
     <SidebarSeparator />
     {/* <li>
@@ -159,8 +160,10 @@ const SidebarItems = ({ backupName, backupData }) => (
 
 export default class Sidebar extends Component {
   state = {
-    open: false
+    open: false,
+    isAdmin: false
   };
+
 
   componentDidMount() {
     store.subscribe(() => {
@@ -169,6 +172,11 @@ export default class Sidebar extends Component {
     });
     setInterval(this.updateBackup, 5000);
     this.updateBackup();
+
+    this.setState({
+      isAdmin: isLoggedIn() && getUser().type == 1
+    })
+
   }
 
   updateBackup = () => {
@@ -193,7 +201,7 @@ export default class Sidebar extends Component {
         overflowY: "auto",
       },
     }}>
-      <SidebarItems backupName={this.state.backupName} backupData={this.state.backupData} />
+      <SidebarItems backupName={this.state.backupName} backupData={this.state.backupData} isAdmin={this.state.isAdmin} />
     </div>
   );
 }
