@@ -89,6 +89,18 @@ export default class Events extends React.Component {
 
     try {
       let events = await eventsService.getAll();
+      // Calculating no. of outstation colleges registered
+      events = await Promise.all(events.map(async (e)=>{
+        const team = await eventsService.getTeams(e.id);
+        const alreadyCheckedClgs = [];
+
+        const noOfOutstation= team.filter(t=>{
+          const res = t.college.isOutStationed === true && alreadyCheckedClgs.findIndex((id)=>id === t.college._id) === -1;
+          alreadyCheckedClgs.push(t.college._id)
+          return res;
+        }).length;
+        return {...e, noOfOutstation}
+      }))
       let statues = await participationStatus.get();
       let participationStatusObj = {};
       statues.forEach(obj => {
@@ -117,7 +129,8 @@ export default class Events extends React.Component {
         endDate: event.endDate,
         maxTeamsPerCollege: event.maxTeamsPerCollege,
         faculty: event.faculty,
-        participationStatus: participationStatusObj[event.id]
+        participationStatus: participationStatusObj[event.id],
+        noOfOutstation: event.noOfOutstation
       }));
       events.sort((a, b) => {
         return new Date(a.startDate) - new Date(b.startDate);
@@ -200,7 +213,7 @@ export default class Events extends React.Component {
               <th style={styles.table_th}>Rounds</th>
               <th style={styles.table_th}>Max Teams Per college</th>
               <th style={styles.table_th}>Is Faculty Event</th>
-              <th style={styles.table_th}>OutStationed Campuses</th>
+              <th style={styles.table_th}>Outstation count</th>
             </tr></thead>
             <tbody>
               {
@@ -213,12 +226,17 @@ export default class Events extends React.Component {
                       <tr onClick={() => { navigate("/events/" + event.id) }} className="table-data-row" key={index}>
                         <td style={styles.table_styles}>{event.name}</td>
                         <td style={styles.table_styles}>{event.venue}</td>
-                        <td style={{ ...styles.table_styles, minWidth: "100px" }}>{event.startDate.slice(0, 10)}</td>
-                        <td style={{ ...styles.table_styles, minWidth: "100px" }}>{event.endDate.slice(0, 10)}</td>
+                        <td style={{ ...styles.table_styles, minWidth: "100px" }}>{event.startDate?.slice(0, 10)}</td>
+                        <td style={{ ...styles.table_styles, minWidth: "100px" }}>{event.endDate?.slice(0, 10)}</td>
                         <td style={styles.table_styles}>{event.rounds.length}</td>
                         <td style={styles.table_styles}>{event.maxTeamsPerCollege}</td>
                         <td style={styles.table_styles}>{event.faculty ? "true" : ""}</td>
-                        <td style={styles.table_styles}>{event.participationStatus ? (`${event.participationStatus.yes} Yes, ${event.participationStatus.maybe} Maybe,${event.participationStatus.no} No`) : ""}</td>
+                        {/* This uses the yes/maybe/no system developed for 2023. */}
+                        {/* <td style={styles.table_styles}>{event.participationStatus ? (`${event.participationStatus.yes} Yes, ${event.participationStatus.maybe} Maybe,${event.participationStatus.no} No`) : ""}</td> */}
+
+                        {/* Manually calculated by registration */}
+                        <td style={styles.table_styles}>{JSON.stringify(event.noOfOutstation)}</td>
+
                       </tr>
                     );
                   })
