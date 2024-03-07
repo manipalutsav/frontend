@@ -44,9 +44,10 @@ const College = (props) => {
     <div css={{
       fontSize: "0.8em",
       color: "#ff5800",
-    }}>
+    }}
+    >
       {console.log(props,"props")}
-      <Block show={props.college.teams}>{toUnitText(props.college.teams && props.college.teams.length, "Team")}</Block>
+      <Block show={props.college.teams}>{toUnitText(props.college.teams && props.college.teams.length, "Team")} - </Block>
       <Block show={props.college.events}>{toUnitText(props.college.events && props.college.events.size, "Event")}</Block>
 
     </div>
