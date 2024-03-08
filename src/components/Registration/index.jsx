@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
+import './style.css'
 
 import eventsService from "../../services/events";
 import collegesService from "../../services/colleges";
@@ -10,20 +11,24 @@ import participationStatus from "../../services/participationStatus";
 import { toast } from "../../actions/toastActions";
 import Block from "../../commons/Block";
 import { Tab, Tabs } from "../../commons/Tabs";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClose } from '@fortawesome/free-solid-svg-icons'
 
 const EventCard = ({ event }) => {
   return (
     <div
-
       css={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        marginRight: 20,
-        marginBottom: 20,
+        // marginRight: 20,
+        // marginBottom: 20,
+        textWrap: "wrap",
+        minHeight: 200,
+        height: "auto",
         padding: 20,
-        width: 350,
-        borderRadius: 3,
+        width: "100%",
+        borderRadius: 5,
         border: "2px solid rgba(0, 0, 0, .1)",
         color: "inherit",
         boxShadow: "0px 5px 20px -4px rgba(0, 0, 0, .1)",
@@ -60,7 +65,10 @@ const EventCard = ({ event }) => {
           marginBottom: "8px",
           maxHeight: 200,
           overflowY: "auto",
-          whiteSpace: "pre-wrap"
+          wordWrap: "break-word",
+          wordBreak: "break-all",
+          whiteSpace: "pre-wrap",
+          width: "100%",
         }}>
           {event.description && event.description.replace(/[>]/g, '- ')}
         </div>
@@ -85,10 +93,10 @@ const EventCard = ({ event }) => {
             </Block>
           </Block>
           <Block show={new Date(event.startDate).getTime() < Date.now() && Date.now() < new Date(event.endDate).getTime()}>
-            <div><span css={{ fontSize: "0.6em", background: "#18acd2", color: "white", padding: 5, marginBottom: 5, display: "inline-block", borderRadius: 10 }}>Event is ongoing!</span></div>
+            <div><span css={{ fontSize: "0.7em", background: "#22c55e", color: "white", padding: "5px 10px", marginBottom: 5, display: "inline-block", borderRadius: 100 }}>Event is ongoing!</span></div>
           </Block>
           <Block show={new Date(event.endDate).getTime() < Date.now()}>
-            <div><span css={{ fontSize: "0.6em", background: "#8c3939", color: "white", padding: 5, marginBottom: 5, display: "inline-block", borderRadius: 10 }}> Event is done.</span></div>
+            <div><span css={{ fontSize: "0.7em", background: "#dc2626", color: "white", padding: "5px 10px", marginBottom: 5, display: "inline-block", borderRadius: 100}}> Event is done.</span></div>
           </Block>
         </div>
       </div>
@@ -109,7 +117,8 @@ export default class Events extends React.Component {
       participationStatus: {},
       loading: true,
       disableSubmit: false,
-      tabIndex: 0
+      tabIndex: 0,
+      searchQuery: "",
     };
   }
 
@@ -181,6 +190,10 @@ export default class Events extends React.Component {
 
   }
 
+  handleSearch = (e) => {
+    this.setState({ searchQuery: e.target.value })
+  };
+
   render = () => (
     <div data-theme="lofi">
 
@@ -239,9 +252,28 @@ export default class Events extends React.Component {
           <div>
             <h2 className="mucapp">Registration</h2>
             <p>Register teams for the events in Utsav</p>
+            <div className="flex justify-start items-start mt-2">
+
+              <div className=" border border-1 border-slate-400 flex justify-center items-center rounded-full px-2 mb-5 w-full md:w-1/2 lg:w-1/3 xl:w-72">
+                <input
+                  type="text"
+                  placeholder="Search by event name"
+                  value={this.state.searchQuery}
+                  onChange={this.handleSearch}
+                  title="Enter the event name to search"
+                  className="h-full px-2 py-3 w-full rounded-full outline-none text-md"
+                />
+                <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+                  <FontAwesomeIcon icon={faClose} />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-wrap">
-            {this.state.events.map((event, i) => <EventCard key={i} event={event} />)}
+          <div className="h-auto w-full grid xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-5">
+
+            {this.state.events
+              .filter(event => event.name.toLowerCase().includes(this.state.searchQuery.toLowerCase()))
+              .map((event, i) => <EventCard key={i} event={event} />)}
           </div>
         </LoadContent>
       </div>

@@ -1,0 +1,33 @@
+
+.search-container {
+  border: 1px solid black;
+  width: 300px;
+  margin: 20px auto;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  input {
+    padding: 10px 10px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    outline: none;
+    font-weight: 500;
+  }
+}
+
+.clear-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 40px;
+  color: gray;
+  cursor: pointer;
+}
+
+.clear-icon-container:hover {
+  color: black;
+}

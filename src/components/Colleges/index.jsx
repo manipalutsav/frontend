@@ -14,7 +14,7 @@ const styles = {
     marginRight: 20,
     marginBottom: 20,
     padding: 20,
-    width: 250,
+    width: "100%",
     borderRadius: 3,
     border: "2px solid rgba(0, 0, 0, .1)",
     color: "inherit",
@@ -27,10 +27,15 @@ const styles = {
   },
 };
 
-const College = (props) => (
+const College = (props) => {
+  let hasEvent  = props.college.events;
+  //this is for testing (remove this line before pushing it to the test server )
+  //hasEvent = "e";
+  return(
+
   <div css={{
-    ...styles.collegeCard,
-  }}>
+    backgroundColor:  ( hasEvent==undefined || hasEvent==null || hasEvent==[] ) ? "#e9ebf0" : props.college.isOutStationed ? "#fce6da" : "$ffb98e",
+    ...styles.collegeCard,}}>
     <div>{props.college.name}</div>
     <div css={{
       fontSize: ".9em",
@@ -39,32 +44,34 @@ const College = (props) => (
     <div css={{
       fontSize: "0.8em",
       color: "#ff5800",
-    }}>
-      {console.log(props)}
-      <Block show={props.college.teams}>{toUnitText(props.college.teams && props.college.teams.length, "Team")}</Block>
+    }}
+    >
+      {console.log(props,"props")}
+      <Block show={props.college.teams}>{toUnitText(props.college.teams && props.college.teams.length, "Team")} - </Block>
       <Block show={props.college.events}>{toUnitText(props.college.events && props.college.events.size, "Event")}</Block>
 
     </div>
     <div>
-      <Link to={"/colleges/" + props.college.id + "/edit"} className="p-2"><button className="mucapp" >Edit</button></Link>
-      <Link to={"/colleges/" + props.college.id + "/teams"}><button className="mucapp">Teams</button></Link>
+      <Link to={"/colleges/" + props.college.id + "/edit"} className="p-2 pl-0 my-2"><button className="mucapp" >Edit</button></Link>
+      <Link to={"/colleges/" + props.college.id + "/teams"}><button className="mucapp my-2">Teams</button></Link>
     </div>
   </div>
 
-);
+)};
 
 const CollegeList = (props) => (
-  <div css={{
-    display: "flex",
-    flexWrap: "wrap",
-  }}>
+  <div className="h-auto w-full grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-1 gap-5">
     <Link to="/colleges/add" css={{
       ...styles.collegeCard,
       backgroundColor: "#ff5800",
+      fontWeight:"semi-bold",
       color: "white",
+      transition: "all 200ms ease-in-out",
       ":hover": {
         color: "white",
         boxShadow: "0px 5px 50px -4px rgba(0, 0, 0, .1)",
+        backgroundColor: "#ffd100",
+        color:"black"
       }
     }}>
       Add College
@@ -122,7 +129,7 @@ export default class Colleges extends React.Component {
   render = () => (
     <div>
       <h2 className="mucapp">Colleges</h2>
-      <p>Colleges participating in Utsav.</p>
+      <p className="pb-3">Colleges participating in Utsav.</p>
       <LoadContent loading={this.state.loading}>
         <CollegeList colleges={this.state.colleges} stats={this.state.stats} />
       </LoadContent>
