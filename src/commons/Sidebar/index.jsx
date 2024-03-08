@@ -150,7 +150,7 @@ const SidebarItems = ({ backupName, backupData }) => {
         </a>
       </li> */}
       {/* <SidebarItem to="/stats" title="Stats" /> */}
-      <a href={backupData} download={backupName}>
+      {isAdmin && (<a href={backupData} download={backupName}>
         <div css={{
           display: "block",
           marginTop: 10,
@@ -164,7 +164,7 @@ const SidebarItems = ({ backupName, backupData }) => {
         }}
         >
           <span css={{ padding: 5 }}>🗂</span>Backup
-        </div></a>
+        </div></a>)}
     </ul>
   )
 };
