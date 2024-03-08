@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { Link } from "gatsby";
 import { Dropdown } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
@@ -61,107 +61,117 @@ const DropItem = (props) => (
 );
 
 
-const SidebarItems = ({ backupName, backupData, isAdmin }) => (
-  <ul css={{
-    display: "inline",
-    flexDirection: "row",
-    fontSize: "18px",
-    fontWeight: "lighter",
-    margin: 0,
-    marginTop: 20,
-    listStyle: "none",
-    padding: 0,
-  }}>
-    <SidebarItem to="/" title="HOME" />
-    <SidebarItem to="/register" title="REGISTER" />
-    {/* <SidebarItem to="/teams" title="TEAMS" />  */}
-    {/* <SidebarItem to="/slots" title="SLOTS" /> */}
-    <SidebarItem to="/volunteers" title="VOLUNTEERS" />
-    {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
-    {/* <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" /> */}
-    {/* <SidebarItem to="/certificates" title="Certificates" /> */}
-    <SidebarSeparator />
-    {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
-    {/* <Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />;
-    <SidebarItem to="/users" title="Users" />
-
-
-
-
-     */}
-    {isAdmin && <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px" }} title="ADMIN ONLY">
-                    <Dropdown.Item as="a">
-                      <DropItem to="/users" title="Users" />
-                    </Dropdown.Item>
-
-                    <Dropdown.Item as="a">
-                      <DropItem to="/colleges" title="Colleges" />
-                    </Dropdown.Item>
-
-                    <Dropdown.Item as="a">
-                      <DropItem to="/events" title="Events" />
-                    </Dropdown.Item>
-
-                    <Dropdown.Item as="a">
-                      <DropItem to="/judges" title="Judges" />
-                    </Dropdown.Item>
-
-                    <Dropdown.Item as="a">
-                      <DropItem to="/notifications" title="Notifications" />
-                    </Dropdown.Item>
-
-                    {/* <Dropdown.Item as="a">
-                      <DropItem to="/practice-slots" title="Practice Slots" />
-                    </Dropdown.Item> */}
-
-
-
-                    {/* <Dropdown.Item as="a">
-                              <SidebarItem to="/winners" title="Winners" />
-                              </Dropdown.Item> */}
-
-                    <Dropdown.Item as="a">
-                      <DropItem to="/leaderboard" title="Event Standings" />
-                    </Dropdown.Item>
-                </Dropdown>
+const SidebarItems = ({ backupName, backupData }) => {
+  const [isAdmin, setIsAdmin] = useState(false)
+  useEffect(()=>{
+    const _isAdmin = isLoggedIn() && getUser().type <= 2;
+    if(_isAdmin != isAdmin)
+    {
+      setIsAdmin( _isAdmin );// Admin or support
+      console.log("Render sidebar")
     }
-
-    <SidebarSeparator />
-    {/* <li>
-      <a href="/feedback" css={{
-        display: "block",
-        marginTop: 10,
-        padding: 10,
-        paddingLeft: 50,
-        fontSize: ".9em",
-        color: "#222"
-      }}>
-        Feedback
-      </a>
-    </li> */}
-    {/* <SidebarItem to="/stats" title="Stats" /> */}
-    <a href={backupData} download={backupName}>
-      <div css={{
-        display: "block",
-        marginTop: 10,
-        padding: 10,
-        paddingLeft: 20,
-        fontSize: ".9em",
-        cursor: "pointer",
-        ":hover": {
-          color: "#ff5800",
-        }
-      }}
-      >
-        <span css={{ padding: 5 }}>🗂</span>Backup
-      </div></a>
-  </ul>
-);
+  },)
+  return (
+    <ul css={{
+      display: "inline",
+      flexDirection: "row",
+      fontSize: "18px",
+      fontWeight: "lighter",
+      margin: 0,
+      marginTop: 20,
+      listStyle: "none",
+      padding: 0,
+    }}>
+      <SidebarItem to="/" title="HOME" />
+      <SidebarItem to="/register" title="REGISTER" />
+      {/* <SidebarItem to="/teams" title="TEAMS" />  */}
+      {/* <SidebarItem to="/slots" title="SLOTS" /> */}
+      <SidebarItem to="/volunteers" title="VOLUNTEERS" />
+      {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
+      {/* <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" /> */}
+      {/* <SidebarItem to="/certificates" title="Certificates" /> */}
+      <SidebarSeparator />
+      {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
+      {/* <Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />;
+      <SidebarItem to="/users" title="Users" />
+  
+  
+  
+  
+       */}
+      {isAdmin && <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px" }} title="ADMIN ONLY">
+                      <Dropdown.Item as="a">
+                        <DropItem to="/users" title="Users" />
+                      </Dropdown.Item>
+  
+                      <Dropdown.Item as="a">
+                        <DropItem to="/colleges" title="Colleges" />
+                      </Dropdown.Item>
+  
+                      <Dropdown.Item as="a">
+                        <DropItem to="/events" title="Events" />
+                      </Dropdown.Item>
+  
+                      <Dropdown.Item as="a">
+                        <DropItem to="/judges" title="Judges" />
+                      </Dropdown.Item>
+  
+                      <Dropdown.Item as="a">
+                        <DropItem to="/notifications" title="Notifications" />
+                      </Dropdown.Item>
+  
+                      {/* <Dropdown.Item as="a">
+                        <DropItem to="/practice-slots" title="Practice Slots" />
+                      </Dropdown.Item> */}
+  
+  
+  
+                      {/* <Dropdown.Item as="a">
+                                <SidebarItem to="/winners" title="Winners" />
+                                </Dropdown.Item> */}
+  
+                      <Dropdown.Item as="a">
+                        <DropItem to="/leaderboard" title="Event Standings" />
+                      </Dropdown.Item>
+                  </Dropdown>
+      }
+  
+      <SidebarSeparator />
+      {/* <li>
+        <a href="/feedback" css={{
+          display: "block",
+          marginTop: 10,
+          padding: 10,
+          paddingLeft: 50,
+          fontSize: ".9em",
+          color: "#222"
+        }}>
+          Feedback
+        </a>
+      </li> */}
+      {/* <SidebarItem to="/stats" title="Stats" /> */}
+      {isAdmin && (<a href={backupData} download={backupName}>
+        <div css={{
+          display: "block",
+          marginTop: 10,
+          padding: 10,
+          paddingLeft: 20,
+          fontSize: ".9em",
+          cursor: "pointer",
+          ":hover": {
+            color: "#ff5800",
+          }
+        }}
+        >
+          <span css={{ padding: 5 }}>🗂</span>Backup
+        </div></a>)}
+    </ul>
+  )
+};
 
 export default class Sidebar extends Component {
   state = {
     open: false,
-    isAdmin: false
   };
 
 
@@ -172,12 +182,8 @@ export default class Sidebar extends Component {
     });
     setInterval(this.updateBackup, 5000);
     this.updateBackup();
-
-    this.setState({
-      isAdmin: isLoggedIn() && getUser().type <= 2 // Admin or support
-    })
   }
-
+  
   updateBackup = () => {
     this.setState({
       backupData: "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage)),
@@ -200,7 +206,7 @@ export default class Sidebar extends Component {
         overflowY: "auto",
       },
     }}>
-      <SidebarItems backupName={this.state.backupName} backupData={this.state.backupData} isAdmin={this.state.isAdmin} />
+      <SidebarItems backupName={this.state.backupName} backupData={this.state.backupData}/>
     </div>
   );
 }
