@@ -84,7 +84,7 @@ const SidebarItems = ({ backupName, backupData }) => {
     }}>
       <SidebarItem to="/" title="HOME" />
       <SidebarItem to="/register" title="REGISTER" />
-      {/* <SidebarItem to="/teams" title="TEAMS" />  */}
+      <SidebarItem to="/teams" title="TEAMS" /> 
       {/* <SidebarItem to="/slots" title="SLOTS" /> */}
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
       {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
@@ -193,10 +193,14 @@ export default class Sidebar extends Component {
 
   render = () => (
     <div className="no-print" css={{
-      display: "block",
+      // display: "block",
+      position:"absolute",
+      backgroundColor: "white",
+      boxShadow: "0px 5px 8px 0px rgba(0, 0, 0, .25)",
       height: "100vh",
       overflowX: "scroll",
       overflowY: "visible",
+      zIndex:100,
       minWidth: 200,
       marginLeft: this.state.open ? 0 : -200,
       minHeight: "100vh",

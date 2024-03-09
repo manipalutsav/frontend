@@ -269,7 +269,7 @@ export default class Events extends React.Component {
               </div>
             </div>
           </div>
-          <div className="h-auto w-full grid xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-5">
+          <div className="h-auto w-full grid xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 xs:grid-cols-1 gap-5">
 
             {this.state.events
               .filter(event => event.name.toLowerCase().includes(this.state.searchQuery.toLowerCase()))

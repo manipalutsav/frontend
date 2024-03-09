@@ -27,7 +27,7 @@ export default class Volunteer extends React.Component {
             <div>
                 <h1 className="mucapp"> Volunteers</h1>
                 <p>Select the type of volunteers you want to see</p>
-                <div className="h-auto w-full mt-5 grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-1 gap-5">
+                <div className="h-auto w-full mt-5 grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 gap-5">
                     {/* <br /><br /><br /><br /> */}
                     <AddVolunteer type={"core"} />
                     <AddVolunteer type={"event"} />

@@ -9,11 +9,12 @@ const HeaderLogo = () => (
   <Link to="/" className="mucapp">
     <div css={{
       display: "flex",
-      position: "absolute",
-      top: 0,
-      left: "50%",
-      transform: "translateX(-50%)",
+      // position: "absolute",
+      // top: "50%",
+      // left: "50%",
+      transform: "translateY(-20%)",
       alignItems: "center",
+      justifyContent: "center"
     }}>
       <div css={{
         fontFamily: "TCFColar",
@@ -90,8 +91,16 @@ export default class Header extends Component {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      height: 64,
+      height: "10vh",
       boxShadow: "0 5px 50px 10px #f0f1f2",
+      // border:"2px solid red",
+      // position: "fixed",
+      // left: 0,
+      // right: 0,
+      // top: 0,
+      // backgroundColor: "white",
+      // zindex: 9,
+
     }}>
       <NavigationToggle />
       <HeaderLogo />

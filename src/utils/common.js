@@ -91,15 +91,16 @@ export const getCertificateName = (item, isGroupEvent, isMultipleTeamsEvent) => 
 export const isTeamChangeFreezed = () => {
     const curDate = new Date();
     // New time period for editing
-    const editWindowBeginDate = new Date("15/April/2023, 7:00 PM");
-    const editWindowEndDate = new Date("19/April/2023, 12:00 AM");
+    const editWindowBeginDate = new Date("09/March/2024, 7:00 AM");
+    const editWindowEndDate = new Date("11/March/2024, 11:59 PM");
     if (curDate > editWindowBeginDate && curDate <= editWindowEndDate) {
         return false;
     }
-    const freezeStartDate = new Date("02/April/2023");
-    const freezeEndDate = new Date("15/April/2023");
-    const freezeRestartDate = new Date("27/April/2023");
+    // const freezeStartDate = new Date("02/April/2023");
+    // const freezeEndDate = new Date("15/April/2023");
+    // const freezeRestartDate = new Date("27/April/2023");
 
-    return ((curDate >= freezeStartDate && curDate < freezeEndDate) || (curDate > freezeRestartDate));
+    // return ((curDate >= freezeStartDate && curDate < freezeEndDate) || (curDate > freezeRestartDate));
+    return true;
 }
 export const loop = (count) => Array(count).fill(undefined);
