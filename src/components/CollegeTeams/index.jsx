@@ -5,6 +5,7 @@ import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
 import LoadContent from "../../commons/LoadContent";
 import { isTeamChangeFreezed } from "../../utils/common";
+import { FiEdit } from "react-icons/fi";
 
 const styles = {
   memberCard: {
@@ -29,6 +30,7 @@ const MemberCard = ({ member, team }) => (
   <Link to={!isTeamChangeFreezed() && "/teams/members/" + member.id + "/edit"} css={{
     ...styles.memberCard,
   }}>
+    {!isTeamChangeFreezed() &&<div className="w-100 flex justify-end opacity-60"><FiEdit/></div> }
     <div css={{
       fontSize: "1.3em",
     }}>
