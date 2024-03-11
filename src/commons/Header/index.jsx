@@ -68,13 +68,20 @@ class NavigationToggle extends Component {
     });
   }
 
+  handleBlur = () => {
+    if (window.innerWidth <= 1500) {
+      close(); // Close sidebar when navigation toggle loses focus and width is less than 821px
+    }
+  }
+
   render = () => (
     <button
       css={{
-        fontSize: "1em",
+        fontSize: "1.2em",
         margin: "0 20px",
       }}
       onClick={this.state.menu === "close" ? open : close}
+      onBlur={this.handleBlur}
     >
       {
         this.state.menu === "close"

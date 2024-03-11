@@ -63,11 +63,10 @@ const DropItem = (props) => (
 
 const SidebarItems = ({ backupName, backupData }) => {
   const [isAdmin, setIsAdmin] = useState(false)
-  useEffect(()=>{
+  useEffect(() => {
     const _isAdmin = isLoggedIn() && getUser().type <= 2;
-    if(_isAdmin != isAdmin)
-    {
-      setIsAdmin( _isAdmin );// Admin or support
+    if (_isAdmin != isAdmin) {
+      setIsAdmin(_isAdmin);// Admin or support
       console.log("Render sidebar")
     }
   },)
@@ -84,7 +83,7 @@ const SidebarItems = ({ backupName, backupData }) => {
     }}>
       <SidebarItem to="/" title="HOME" />
       <SidebarItem to="/register" title="REGISTER" />
-      <SidebarItem to="/teams" title="TEAMS" /> 
+      <SidebarItem to="/teams" title="TEAMS" />
       {/* <SidebarItem to="/slots" title="SLOTS" /> */}
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
       {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
@@ -100,42 +99,42 @@ const SidebarItems = ({ backupName, backupData }) => {
   
        */}
       {isAdmin && <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px" }} title="ADMIN ONLY">
-                      <Dropdown.Item as="a">
-                        <DropItem to="/users" title="Users" />
-                      </Dropdown.Item>
-  
-                      <Dropdown.Item as="a">
-                        <DropItem to="/colleges" title="Colleges" />
-                      </Dropdown.Item>
-  
-                      <Dropdown.Item as="a">
-                        <DropItem to="/events" title="Events" />
-                      </Dropdown.Item>
-  
-                      <Dropdown.Item as="a">
-                        <DropItem to="/judges" title="Judges" />
-                      </Dropdown.Item>
-  
-                      <Dropdown.Item as="a">
-                        <DropItem to="/notifications" title="Notifications" />
-                      </Dropdown.Item>
-  
-                      {/* <Dropdown.Item as="a">
+        <Dropdown.Item as="a">
+          <DropItem to="/users" title="Users" />
+        </Dropdown.Item>
+
+        <Dropdown.Item as="a">
+          <DropItem to="/colleges" title="Colleges" />
+        </Dropdown.Item>
+
+        <Dropdown.Item as="a">
+          <DropItem to="/events" title="Events" />
+        </Dropdown.Item>
+
+        <Dropdown.Item as="a">
+          <DropItem to="/judges" title="Judges" />
+        </Dropdown.Item>
+
+        <Dropdown.Item as="a">
+          <DropItem to="/notifications" title="Notifications" />
+        </Dropdown.Item>
+
+        {/* <Dropdown.Item as="a">
                         <DropItem to="/practice-slots" title="Practice Slots" />
                       </Dropdown.Item> */}
-  
-  
-  
-                      {/* <Dropdown.Item as="a">
+
+
+
+        {/* <Dropdown.Item as="a">
                                 <SidebarItem to="/winners" title="Winners" />
                                 </Dropdown.Item> */}
-  
-                      <Dropdown.Item as="a">
-                        <DropItem to="/leaderboard" title="Event Standings" />
-                      </Dropdown.Item>
-                  </Dropdown>
+
+        <Dropdown.Item as="a">
+          <DropItem to="/leaderboard" title="Event Standings" />
+        </Dropdown.Item>
+      </Dropdown>
       }
-  
+
       <SidebarSeparator />
       {/* <li>
         <a href="/feedback" css={{
@@ -183,7 +182,7 @@ export default class Sidebar extends Component {
     setInterval(this.updateBackup, 5000);
     this.updateBackup();
   }
-  
+
   updateBackup = () => {
     this.setState({
       backupData: "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage)),
@@ -191,26 +190,39 @@ export default class Sidebar extends Component {
     })
   }
 
+  handleBlur = () => {
+    if (window.innerWidth <= 1500) {
+      this.setState({ open: false });
+    }
+  }
+
+  handleFocus = () => {
+    if (window.innerWidth <= 1500) {
+      this.setState({ open: true });
+    }
+  }
+
   render = () => (
     <div className="no-print" css={{
       // display: "block",
-      position:"absolute",
+      position: "absolute",
       backgroundColor: "white",
       boxShadow: "0px 5px 8px 0px rgba(0, 0, 0, .25)",
       height: "100vh",
       overflowX: "scroll",
       overflowY: "visible",
-      zIndex:100,
+      zIndex: 100,
       minWidth: 200,
       marginLeft: this.state.open ? 0 : -200,
       minHeight: "100vh",
       boxShadow: "25px 0px 50px -30px rgba(0, 0, 0, .1)",
       transition: "margin .3s ease-out",
+      // border: "2px solid red",
       ":hover": {
         overflowY: "auto",
       },
-    }}>
-      <SidebarItems backupName={this.state.backupName} backupData={this.state.backupData}/>
+    }} onBlur={this.handleBlur} onFocus={this.handleFocus}>
+      <SidebarItems backupName={this.state.backupName} backupData={this.state.backupData} />
     </div>
   );
 }
