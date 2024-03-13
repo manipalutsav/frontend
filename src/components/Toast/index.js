@@ -31,7 +31,7 @@ export default class Toast extends Component{
         return(
             <div css={{
                 position:"fixed",
-                top:"-10%",
+                top:"-50%",
                 width:"100%",
                 animation:this.state.animation
             }}
