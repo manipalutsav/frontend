@@ -11,7 +11,7 @@ import Block from '../../commons/Block'
 import Loader from "../../commons/Loader";
 
 import './style.css';
-import template from '../../images/template.png';
+import template from '../../images/template2024.png';
 
 export default class extends React.Component {
   BUTTON_NORMAL = "Publish";
@@ -62,8 +62,8 @@ export default class extends React.Component {
     const image = new Image();
 
     let first_start = 450;
-    let second_start = 625;
-    let third_start = 805;
+    let second_start = 620;
+    let third_start = 790;
 
     image.src = template;
     
@@ -74,27 +74,29 @@ export default class extends React.Component {
       canvas.width = image.width;
       canvas.height = image.height;
       context.drawImage(image, 0, 0);
-      context.font = "bold 37.4px Verdana";
-      context.fillStyle = "#000000";
+      // context.font = "bold 37.4px Verdana";
+      context.font = "bold 37.4px Rye";
+      context.fillStyle = "#ffffff";
       context.textAlign = "left";
       let textStr = event + " Results";
       let textWidth = context.measureText(textStr).width;
-      context.fillText(event + " Results", (canvas.width / 2) - (textWidth / 2), 300);
-      context.font = "bold 34px HammersmithOne";
+      context.fillText((event + " Results").toUpperCase(), (canvas.width / 2.1) - (textWidth / 2), 375);
+      context.font = "bold 34px Rye";
       for (let i = 0; i < placesArray[0].length; i++) {
         context.font = "bold 34px HammersmithOne";
         let text = placesArray[0][i]["name"];
+        //if placesArray[0].length()==1
         let { width } = context.measureText(text);
         if (i == 0) {
-          context.fillText(text, (canvas.width / 3.4), first_start);
+          context.fillText(text, (canvas.width / 6.4), first_start);
           // context.fillRect((canvas.width / 3.1), first_start + 3, width, 2);
         }
         if (i == 2) {
-          context.fillText(text, (canvas.width / 3.4), first_start + 40);
+          context.fillText(text, (canvas.width / 6.4), first_start + 40);
           // context.fillRect((canvas.width / 3.1), first_start - 37, width, 2);
         }
         if (i == 1) {
-          context.fillText(text, (canvas.width / 3.4), first_start - 40);
+          context.fillText(text, (canvas.width / 6.4), first_start - 40);
           // context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
         }
       }
@@ -103,15 +105,15 @@ export default class extends React.Component {
         let text = placesArray[1][i]["name"];
         let { width } = context.measureText(text);
         if (i == 0) {
-          context.fillText(text, (canvas.width / 3.4), second_start);
+          context.fillText(text, (canvas.width / 6.4), second_start);
           // context.fillRect((canvas.width / 3.1), second_start + 3, width, 2);
         }
         if (i == 2) {
-          context.fillText(text, (canvas.width / 3.4), second_start + 40);
+          context.fillText(text, (canvas.width / 6.4), second_start + 40);
           // context.fillRect((canvas.width / 3.1), second_start - 37, width, 2);
         }
         if (i == 1) {
-          context.fillText(text, (canvas.width / 3.4), second_start - 40);
+          context.fillText(text, (canvas.width / 6.4), second_start - 40);
           // context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
         }
       }
@@ -119,15 +121,15 @@ export default class extends React.Component {
         let text = placesArray[2][i]["name"];
         let { width } = context.measureText(text);
         if (i == 0) {
-          context.fillText(text, (canvas.width / 3.4), third_start);
+          context.fillText(text, (canvas.width / 6.4), third_start);
           // context.fillRect((canvas.width / 3.1), third_start + 3, width, 2);
         }
         if (i == 2) {
-          context.fillText(text, (canvas.width / 3.4), third_start + 40);
+          context.fillText(text, (canvas.width / 6.4), third_start + 40);
           // context.fillRect((canvas.width / 3.1), third_start - 37, width, 2);
         }
         if (i == 1) {
-          context.fillText(text, (canvas.width / 3.4), third_start - 40);
+          context.fillText(text, (canvas.width / 6.4), third_start - 40);
           // context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
         }
       }
