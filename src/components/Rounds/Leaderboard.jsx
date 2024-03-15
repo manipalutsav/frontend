@@ -77,11 +77,13 @@ export default class extends React.Component {
       // context.font = "bold 37.4px Verdana";
       context.font = "bold 37.4px Rye";
       context.fillStyle = "#ffffff";
-      context.textAlign = "left";
+      context.textAlign = "center";
       let textStr = event + " Results";
       let textWidth = context.measureText(textStr).width;
-      context.fillText((event + " Results").toUpperCase(), (canvas.width / 2) - (textWidth/2), 365);
+      context.fillText((textStr).toUpperCase(), (canvas.width/2), 365);
       context.font = "bold 34px Rye";
+      context.textAlign = "left";
+
       for (let i = 0; i < placesArray[0].length; i++) {
         context.font = "bold 34px HammersmithOne";
         let text = placesArray[0][i]["name"];
