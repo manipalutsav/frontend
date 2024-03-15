@@ -38,7 +38,7 @@ export default class Teams extends React.Component {
       <tbody>
         {this.state.ranks.map(eventRanks => <tr>
           <td><Link to={`/events/${eventRanks.event._id}/rounds/${eventRanks.event.rounds.pop()}/leaderboard`}>{eventRanks.event.name}</Link></td>
-          <td>{eventRanks.ranks.map(rank => <span className="pr-5">#{rank.rank}</span>)}</td>
+          {/* <td>{eventRanks.ranks.map(rank => <span className="pr-5">#{rank.rank}</span>)}</td> */}
         </tr>)}
       </tbody>
     </table>
