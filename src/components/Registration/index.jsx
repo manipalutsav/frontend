@@ -81,22 +81,22 @@ const EventCard = ({ event }) => {
       }}>
         <div>
           <Block show={Date.now() < new Date(event.startDate).getTime()}>
-            <Block show={Date.now() < new Date(event.registrationStartDate).getTime()}>
+            {/* <Block show={Date.now() < new Date(event.registrationStartDate).getTime()}>
               <small>Registration starts at {new Date(event.registrationStartDate).toLocaleString()} and ends at {new Date(event.registrationEndDate).toLocaleString()}</small>
-            </Block>
+            </Block> */}
             <Block show={new Date(event.registrationStartDate).getTime() < Date.now() && Date.now() < new Date(event.registrationEndDate).getTime()}>
-              <div><small>Registration ends at {new Date(event.registrationEndDate).toLocaleString()}</small></div>
+              {/* <div><small>Registration ends at {new Date(event.registrationEndDate).toLocaleString()}</small></div> */}
               <Link to={"/register/" + event.id}><Button>Register</Button></Link>
             </Block>
-            <Block show={new Date(event.registrationEndDate).getTime() < Date.now()}>
+            {/* <Block show={new Date(event.registrationEndDate).getTime() < Date.now()}>
               <small>Registration has ended.</small>
-            </Block>
+            </Block> */}
           </Block>
           <Block show={new Date(event.startDate).getTime() < Date.now() && Date.now() < new Date(event.endDate).getTime()}>
             <div><span css={{ fontSize: "0.7em", background: "#22c55e", color: "white", padding: "5px 10px", marginBottom: 5, display: "inline-block", borderRadius: 100 }}>Event is ongoing!</span></div>
           </Block>
           <Block show={new Date(event.endDate).getTime() < Date.now()}>
-            <div><span css={{ fontSize: "0.7em", background: "#dc2626", color: "white", padding: "5px 10px", marginBottom: 5, display: "inline-block", borderRadius: 100}}> Event is done.</span></div>
+            <div><span css={{ fontSize: "0.7em", background: "#dc2626", color: "white", padding: "5px 10px", marginBottom: 5, display: "inline-block", borderRadius: 100 }}> Event is done.</span></div>
           </Block>
         </div>
       </div>
