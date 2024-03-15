@@ -2,3 +2,8 @@
     font-family: 'HammersmithOne';
     src: url('HammersmithOne.ttf');
 }
+
+@font-face {
+    font-family: 'Rye';
+    src: url('RyeRegular.ttf');
+}
