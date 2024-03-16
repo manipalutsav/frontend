@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import utsavLogo from "../../images/loader.gif"
 import Countdown from 'react-countdown';
+import { getSetting } from "../../services/settingsServices";
 
 const cookingEventsOpenDate = new Date("February 27, 2023, 23:59:59");
 const cookingEventsCloseDate = new Date("March 6, 2023, 17:00:00");
@@ -40,12 +41,19 @@ const RegistrationTimer = () => {
 
 }
 
-export default () =>
-  <div css={{ textAlign: "center" }}>
+export default () =>{
+  const [title, setTitle] = useState("UTSAV 2024!")
+  useEffect(() => {
+    getSetting("title").then(data=>setTitle(data || "UTSAV 2024!"));
+  }, [])
+  
+  return (
+    <div css={{ textAlign: "center" }}>
     <h2 className="mucapp">MAHE Utsav Coordinators App</h2>
-    <h1 className="mucapp"> UTSAV 2024!</h1>
+    <h1 className="mucapp">{title}</h1>
     {/* <RegistrationTimer /> */}
     {/* <div className="festival-live-message">The festival is on!</div> */}
     <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} />
   </div >
-  ;
+  ) 
+};
