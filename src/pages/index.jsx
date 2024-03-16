@@ -68,6 +68,7 @@ import PracticeSlots from "../components/PracticeSlots";
 import PublicPracticeSlots from "../components/PublicPracticeSlots";
 import Notifications from "../components/Notifications";
 import PublicEvents from "../components/PublicEvents";
+import Settings from "../components/Settings/Index";
 
 
 if (typeof (document) != 'undefined')
@@ -154,6 +155,9 @@ export default () =>
       <PrivateRoute path="/practice-slots" component={PracticeSlots} type={1} />
       <PrivateRoute path="/practice-slots/public" component={PublicPracticeSlots} type={8} />
       <PrivateRoute path="/notifications" component={Notifications} type={8} />
+
+      <PrivateRoute path="/settings" component={Settings} type={1} />
+
 
 
       {/* <PrivateRoute path="/volunteers/event" component={EventVolunteer} type={1 << 3} /> */}
