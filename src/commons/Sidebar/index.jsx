@@ -191,13 +191,13 @@ export default class Sidebar extends Component {
   }
 
   handleBlur = () => {
-    if (window.innerWidth <= 1500) {
+    if (window.innerWidth <= 1500 || document.body.clientWidth <= 1500) {
       this.setState({ open: false });
     }
   }
 
   handleFocus = () => {
-    if (window.innerWidth <= 1500) {
+    if (window.innerWidth <= 1500 || document.body.clientWidth <= 1500) {
       this.setState({ open: true });
     }
   }
