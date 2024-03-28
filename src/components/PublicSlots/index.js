@@ -4,6 +4,8 @@ import { Link } from "gatsby";
 import { get } from "../../services/eventService";
 import reducer from "../../reducers/commonReducer";
 import Loader from "../../commons/Loader";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const styles = {
   eventCard: {
@@ -60,8 +62,13 @@ export default class Events extends React.Component {
     this.state = {
       events: [],
       loading: true,
+      searchQuery: "",
     };
   }
+
+  handleSearch = (e) => {
+    this.setState({ searchQuery: e.target.value });
+  };
 
   componentWillMount = async () => {
     get();
@@ -96,16 +103,33 @@ export default class Events extends React.Component {
       <div>
         <h2 className="mucapp">Event Slots</h2>
         <p>Go to the event for which you want to see the slotting</p>
+        <div className=" border border-1 border-slate-400 flex justify-center items-center rounded-full px-2 mb-5 w-full md:w-1/2 lg:w-1/3 xl:w-72">
+            <input
+              type="text"
+              placeholder="Search by event name"
+              value={this.state.searchQuery}
+              onChange={this.handleSearch}
+              title="Enter the event name to search"
+              className="h-full px-2 py-3 w-full rounded-full outline-none text-md"
+            />
+            <div className="clear-icon-container" onClick={() => { this.setState({ searchQuery: "" }) }} title="Clear">
+              <FontAwesomeIcon icon={faClose} />
+            </div>
+          </div>
       </div>
       <div css={{
         marginTop: 20,
         display: "flex",
         flexWrap: "wrap",
       }}>
+        
         {
           this.state.loading
             ? <Loader />
-            : this.state.events.map((event, i) => <EventCard key={i} event={event} />)
+            : this.state.events
+                .filter((event) =>
+                       event.name.toLowerCase().trim().includes(this.state.searchQuery.toLowerCase().trim())
+                ).map((event, i) => <EventCard key={i} event={event} />)
         }
       </div>
     </div>
