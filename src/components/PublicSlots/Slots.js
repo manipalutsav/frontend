@@ -14,9 +14,11 @@ export default class extends React.Component {
     this.state = {
       loaded: false,
       event: {},
+      slots: [],
+      showOnlyRegistered: true,
+      slotType: "registered",
       round: null,
       roundOptions: [],
-      slots: [],
       slotted: false,
     }
   }
@@ -41,7 +43,9 @@ export default class extends React.Component {
   fetchRoundSlots = async () => {
     let slots = await eventsService.getSlots2(this.props.event, this.state.round);
     let teams = await eventsService.getTeams(this.props.event)
-
+    let round = await eventsService.getRound(this.props.event, this.state.round)
+    // console.log(round)
+    this.setState({ slotType: round.slotType })
     slots.forEach(slot => {
       let team = teams.find(team => team.index === slot.teamIndex && team.college._id === slot.college._id);
 
@@ -50,7 +54,9 @@ export default class extends React.Component {
       }
     })
 
-    this.setState({ slotted: !!slots.length, slots: slots, loaded: true });
+    this.setState({ slotted: !!slots.length, slots: slots, visibleSlots: slots, loaded: true }, ()=>{
+      this.filterVisibleSlots();
+    });
   }
 
   handleRoundChange = (e) => {
@@ -72,6 +78,16 @@ export default class extends React.Component {
       printWindow.document.close();
 
       printWindow.print();
+    }
+  }
+
+  filterVisibleSlots = () => {
+    if (this.state.showOnlyRegistered) {
+      //comment
+      this.setState({ visibleSlots: this.state.slots.filter(slot => slot.registered) });
+    }
+    else {
+      this.setState({ visibleSlots: this.state.slots })
     }
   }
 
@@ -132,11 +148,15 @@ export default class extends React.Component {
                 }}>
                   <button className="mucapp" onClick={this.showPDF}>Generate PDF</button>
                 </div>
+                {this.state.slotType=="all"?<div css={{ textAlign: "center" }}>
+                    <input type="checkbox" id="slotsFilter" defaultChecked={this.state.showOnlyRegistered} onChange={(e) => { this.setState({ showOnlyRegistered: e.target.checked }, this.filterVisibleSlots); }} /> <label htmlFor="slotsFilter">Show only registered teams</label>
+                </div>:<></>}
                 <div id="slots">
                   {
-                    this.state.slots.map((slot, i) =>
+                    this.state.visibleSlots.map((slot, i) =>
                       <LBList
                         key={i}
+                        color={slot.registered ? "#444" : "#999"}
                         position={slot.number}
                         title={getTeamName(slot)}
                       />

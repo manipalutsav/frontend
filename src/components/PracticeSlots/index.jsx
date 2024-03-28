@@ -37,19 +37,35 @@ export default class extends React.Component {
   }
 
   getTimeSlot = (index) => {
-    let hours = ["06", "07", "08", "09", "10", "11", "12", "01", "02", "03", "04", "05"]
-    let mins = ["00", "15", "30", "45"]
-    let endMin = ["59", "14", "29", "44"]
-    let meridiem = ["AM", "PM"];
-    let startHourIndex = Math.floor(index / 4) % 12;
-    let startMinIndex = index % 4;
-    let startMeridiemIndex = (Math.floor((startHourIndex + 6) / 12)) % 2;
-    let nextIndex = index + 1;
-    let endHourIndex = Math.floor(index / 4) % 12;
-    let endMinIndex = nextIndex % 4;
-    let endMeridiemIndex = (Math.floor((endHourIndex + 6) / 12)) % 2;
-    return `${hours[startHourIndex]}:${mins[startMinIndex]} ${meridiem[startMeridiemIndex]} - ${hours[endHourIndex]}:${endMin[endMinIndex]} ${meridiem[endMeridiemIndex]}`
-  }
+    var totalTeams = this.state.slots.length;
+    // time should start from 6 till 10 am
+    const startTime = new Date();
+    startTime.setHours(6, 0, 0, 0); 
+    const endTime = new Date();
+    endTime.setHours(10, 0, 0, 0);
+    //total  = 10am-6am = 240 minutes
+
+    // total minutes between 6 am to 10 am
+    //can hardcode 240 mins
+    const totalMinutes = (endTime - startTime) / (1000 * 60);
+
+    // time in minutes per team  
+    let timePerTeam = Math.floor(totalMinutes / totalTeams);
+
+    // if it exceeds 15 min then restrict it to 15 only ie (if there are less teams)
+    timePerTeam = Math.min(timePerTeam, 15);
+
+    // calculate slot timing for perticular team
+    const slotStartTime = new Date(startTime.getTime() + index * timePerTeam * 60 * 1000);
+    const slotEndTime = new Date(slotStartTime.getTime() + timePerTeam * 60 * 1000);
+
+    // formating of time
+    const startTimeString = slotStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const endTimeString = slotEndTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    return `${startTimeString} - ${endTimeString}`;
+}
+
 
   animate(slots) {
     this.slots = Object.assign([], slots);
