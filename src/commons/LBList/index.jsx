@@ -24,6 +24,11 @@ const LBList = (props) => (
         {props.title}
       </div>
       <div css={{
+        fontSize: "0.5em"
+      }}>
+        Team : {props.team}
+      </div>
+      <div css={{
         fontSize: "0.9em",
         // color: "rgba(0, 0, 0, .5)",
       }}>
