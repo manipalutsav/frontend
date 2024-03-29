@@ -128,7 +128,7 @@ export default class extends React.Component {
               {" "}
               Slots
             </h2>
-            <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
+            {/* <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button> */}
           </div>
           <div css={{ textAlign: "center" }}>
             <input type="checkbox" id="slotsFilter" defaultChecked={this.state.showOnlyRegistered} onChange={(e) => { this.setState({ showOnlyRegistered: e.target.checked }, this.filterVisibleSlots); }} /> <label htmlFor="slotsFilter">Show only registered teams</label>
@@ -161,7 +161,7 @@ export default class extends React.Component {
                   </>
                 )}
               </h2>
-              <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
+              {/* <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button> */}
 
             </div>
 
