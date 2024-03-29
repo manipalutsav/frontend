@@ -140,7 +140,7 @@ export default class extends React.Component {
               Practice Slots
             </h2>
             <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
-            <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange}>
+            <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className="m-2 py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100">
         {/* Dropdown to select event date */}
         <option value="2024-04-01">April 1, 2024</option>
         <option value="2024-04-02">April 2, 2024</option>
@@ -154,7 +154,7 @@ export default class extends React.Component {
               this.state.slots.map((slot, i) =>
                 <LBList
                   key={i}
-                  color={slot.registered ? "#444" : "#999"}
+                  color={"#444"}
                   position={slot.order}
                   title={`${slot.college}, ${slot.location}`}
                   description={this.getTimeSlot(i)}
@@ -179,7 +179,7 @@ export default class extends React.Component {
                 )}
               </h2>
               <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
-              <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange}>
+              <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100 m-2">
         {/* Dropdown to select event date */}
         <option value="2024-04-01">April 1, 2024</option>
         <option value="2024-04-02">April 2, 2024</option>
@@ -196,7 +196,7 @@ export default class extends React.Component {
 
                     key={i}
                     position={slot.order}
-                    team={slot.team}
+                    team={String.fromCharCode(65 + slot.team)}
                     title={
                       <Scramble
                         autoStart
@@ -243,7 +243,7 @@ export default class extends React.Component {
                   : "Start Slotting"
               }
             </button>
-            <select name="date" style={{"cursor":"pointer"}} id="date" value={this.state.eventDate} onChange={this.handleDateChange}>
+            <select name="date" style={{"cursor":"pointer"}} id="date" value={this.state.eventDate} onChange={this.handleDateChange} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100 m-2">
         {/* Dropdown to select event date */}
         <option value="2024-04-01">April 1, 2024</option>
         <option value="2024-04-02">April 2, 2024</option>
