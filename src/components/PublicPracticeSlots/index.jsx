@@ -72,6 +72,7 @@ handleDateChange = (event) => {
     this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
   );
 }
+
   render = () => (
     
     this.state.loaded
@@ -86,7 +87,7 @@ handleDateChange = (event) => {
             <h2 className="mucapp">
               Practice Slots
             </h2>
-            <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange}>
+            <select name="date" id="date" style={{"cursor":"pointer"}} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100" value={this.state.eventDate} onChange={this.handleDateChange}>
       {/* Dropdown to select event date */}
       <option value="2024-04-01">April 1, 2024</option>
       <option value="2024-04-02">April 2, 2024</option>
@@ -100,9 +101,9 @@ handleDateChange = (event) => {
               this.state.slots.map((slot, i) =>
                 <LBList
                   key={i}
-                  color={slot.registered ? "#444" : "#999"}
+                  color={"#222"}
                   position={slot.order}
-                  team={slot.team}
+                  team={String.fromCharCode(65 + slot.team)}
                   title={`${slot.college}, ${slot.location}`}
                   description={this.getTimeSlot(i)}
                 />
@@ -117,7 +118,7 @@ handleDateChange = (event) => {
           justifyContent: "center",
           alignItems: "center",
         }}>Slots are yet to be generated for 
-        <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange}>
+        <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100">
       {/* Dropdown to select event date */}
       <option value="2024-04-01">April 1, 2024</option>
       <option value="2024-04-02">April 2, 2024</option>
