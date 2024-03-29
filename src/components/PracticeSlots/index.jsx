@@ -42,7 +42,7 @@ export default class extends React.Component {
 
   getTimeSlot = (index) => {
     console.log(this.state.slots,"slots")
-    var totalTeams = this.state.slots.length;
+    var totalTeams = this.state.slots?.length;
     // time should start from 6 till 10 am
     const startTime = new Date();
     startTime.setHours(6, 0, 0, 0); 
