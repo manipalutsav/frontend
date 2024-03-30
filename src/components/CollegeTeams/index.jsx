@@ -6,6 +6,7 @@ import { getUser } from "../../services/userServices";
 import LoadContent from "../../commons/LoadContent";
 import { isTeamChangeFreezed } from "../../utils/common";
 import { FiEdit } from "react-icons/fi";
+import { getSetting } from "../../services/settingsServices";
 
 const styles = {
   memberCard: {
@@ -26,11 +27,11 @@ const styles = {
   },
 };
 
-const MemberCard = ({ member, team }) => (
-  <Link to={!isTeamChangeFreezed() && "/teams/members/" + member.id + "/edit"} css={{
+const MemberCard = ({ member, team, teamEditEnabled }) => (
+  <Link to={teamEditEnabled && "/teams/members/" + member.id + "/edit"} css={{
     ...styles.memberCard,
   }}>
-    {!isTeamChangeFreezed() &&<div className="w-100 flex justify-end opacity-60"><FiEdit/></div> }
+    {teamEditEnabled &&<div className="w-100 flex justify-end opacity-60"><FiEdit/></div> }
     <div css={{
       fontSize: "1.3em",
     }}>
@@ -55,7 +56,8 @@ export default class Teams extends React.Component {
     collegeLoading: true,
     events: [],
     teams: {},
-    teamsLoading: true
+    teamsLoading: true,
+    teamEditEnabled: false,
   };
 
   componentWillMount() {
@@ -85,6 +87,15 @@ export default class Teams extends React.Component {
         });
       });
     });
+
+    getSetting("editTeamEnabled").then((data)=>{
+      if(data)
+      {
+        this.setState({teamEditEnabled: data})
+      }else{
+        this.setState({teamEditEnabled: false})
+      }
+    });
   }
 
   render = () => {
@@ -110,7 +121,7 @@ export default class Teams extends React.Component {
                     {
                       this.state.teams[event].map((team) =>
                         team.members.map((member, i) => (
-                          <MemberCard key={i} member={member} team={team} />
+                          <MemberCard key={i} member={member} team={team} teamEditEnabled={this.state.teamEditEnabled} />
                         ))
                       )
                     }
