@@ -132,6 +132,10 @@ const SidebarItems = ({ backupName, backupData }) => {
         <Dropdown.Item as="a">
           <DropItem to="/leaderboard" title="Event Standings" />
         </Dropdown.Item>
+
+        <Dropdown.Item as="a">
+          <DropItem to="/settings" title="Settings" />
+        </Dropdown.Item>
       </Dropdown>
       }
 
