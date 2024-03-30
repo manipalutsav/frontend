@@ -92,7 +92,7 @@ export const isTeamChangeFreezed = () => {
     const curDate = new Date();
     // New time period for editing
     const editWindowBeginDate = new Date("13/March/2024, 7:00 AM");
-    const editWindowEndDate = new Date("20/March/2024, 11:59 PM");
+    const editWindowEndDate = new Date("31/March/2024, 11:59 PM");
     if (curDate > editWindowBeginDate && curDate <= editWindowEndDate) {
         return false;
     }
