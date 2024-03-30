@@ -34,26 +34,26 @@ const event_renderer = ({ days, hours, minutes, seconds, completed }) => {
     </div>
   }else{
     return (
-      <div className="m-4">
-        <div className="flex gap-5 justify-center scale-75 transition-all">
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] font-bold scale-y-150">{days}</div>
-            <div className=" opacity-75">Day{days > 1?"s":""}</div>
+      <div className="lg:m-4 sm:m-1">
+        <div className="flex gap-5 justify-center lg:scale-75  transition-all my-3">
+          <div className=" max-sm:gap-2 lg:w-[40%] max-w-[128px] lg:p-6 p-3 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-3xl md:text-6xl font-['Barlow_Condensed'] scale-y-150">{days}</div>
+            <div className=" opacity-75 max-sm:text-xs">Day{days > 1?"s":""}</div>
           </div>
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{hours}</div>
-            <div className=" opacity-75">Hour{hours > 1?"s":""}</div>
+          <div className=" max-sm:gap-2 lg:w-[40%] max-w-[128px] lg:p-6 p-3 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-3xl md:text-6xl font-['Barlow_Condensed'] scale-y-150">{hours}</div>
+            <div className=" opacity-75 max-sm:text-xs">Hour{hours > 1?"s":""}</div>
           </div>
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{minutes}</div>
-            <div className=" opacity-75">Minute{minutes > 1?"s":""}</div>
+          <div className=" max-sm:gap-2 lg:w-[40%] max-w-[128px] lg:p-6 p-3 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-3xl md:text-6xl font-['Barlow_Condensed'] scale-y-150">{minutes}</div>
+            <div className=" opacity-75 max-sm:text-xs">Minute{minutes > 1?"s":""}</div>
           </div>
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{seconds}</div>
-            <div className=" opacity-75">Second{seconds > 1?"s":""}</div>
+          <div className=" max-sm:gap-2 lg:w-[40%] max-w-[128px] lg:p-6 p-3 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-3xl md:text-6xl font-['Barlow_Condensed'] scale-y-150">{seconds}</div>
+            <div className=" opacity-75 max-sm:text-xs">Second{seconds > 1?"s":""}</div>
           </div>
         </div>
-        <div className=" text-orange-700 w-[40%] rounded-b m-auto">Until the excitement unfolds!</div>
+        <div className=" text-orange-700 lg:w-[40%] rounded-b m-auto">Until the excitement unfolds!</div>
       </div>
     )
   }
