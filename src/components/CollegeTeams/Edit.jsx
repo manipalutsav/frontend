@@ -5,7 +5,7 @@ import participantsService from "../../services/participants";
 
 import { Button } from "../../commons/Form";
 import { toast } from "../../actions/toastActions";
-import { isTeamChangeFreezed } from "../../utils/common";
+import { getSetting } from "../../services/settingsServices";
 
 export default class EditMember extends React.Component {
   UPDATE = "Update";
@@ -14,6 +14,7 @@ export default class EditMember extends React.Component {
   state = {
     buttonText: this.UPDATE,
     participant: {},
+    teamEditEnabled: false,
   };
 
   handleChange = (e) => {
@@ -44,6 +45,15 @@ export default class EditMember extends React.Component {
 
       this.setState({ participant: participant || {} })
     });
+
+    getSetting("editTeamEnabled").then((data)=>{
+      if(data)
+      {
+        this.setState({teamEditEnabled: data})
+      }else{
+        this.setState({teamEditEnabled: false})
+      }
+    });
   }
 
   render = () => (
@@ -51,7 +61,7 @@ export default class EditMember extends React.Component {
       <div>
         <h2 className="mucapp">Edit Participant {this.state.participant.name}</h2>
       </div>
-      {!isTeamChangeFreezed() ? (<div>
+      {this.state.teamEditEnabled ? (<div>
         <div>
           <div>Name</div>
           <input
