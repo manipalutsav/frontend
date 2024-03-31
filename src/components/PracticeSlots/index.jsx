@@ -42,7 +42,7 @@ export default class extends React.Component {
 
   getTimeSlot = (index) => {
     console.log(this.state.slots,"slots")
-    var totalTeams = this.state.slots.length;
+    var totalTeams = this.state.slots?.length;
     // time should start from 6 till 10 am
     const startTime = new Date();
     startTime.setHours(6, 0, 0, 0); 
@@ -139,7 +139,7 @@ export default class extends React.Component {
             <h2 className="mucapp">
               Practice Slots
             </h2>
-            <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
+            {/* <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button> */}
             <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className="m-2 py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100">
         {/* Dropdown to select event date */}
         <option value="2024-04-01">April 1, 2024</option>
@@ -178,7 +178,7 @@ export default class extends React.Component {
                   </>
                 )}
               </h2>
-              <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
+              {/* <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button> */}
               <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100 m-2">
         {/* Dropdown to select event date */}
         <option value="2024-04-01">April 1, 2024</option>
