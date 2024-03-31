@@ -34,118 +34,97 @@ export default class extends React.Component {
     this.init();
   }
 
-   async download() {
-    let leaderboard = this.state.leaderboard;
-    let ranks = {1: [], 2: [], 3: []}
+  async download() {
+    const { leaderboard } = this.state;
 
-    ranks[1] = leaderboard.filter(item => item.rank == 1);
-    ranks[2] = leaderboard.filter(item => item.rank == 2);
-    ranks[3] = leaderboard.filter(item => item.rank == 3);
+    // Filter leaderboard by ranks
+    const ranks = {
+      1: leaderboard.filter(item => item.rank === 1),
+      2: leaderboard.filter(item => item.rank === 2),
+      3: leaderboard.filter(item => item.rank === 3)
+    };
 
-    let event = await eventService.get(this.props.event);
+    // Get event details
+    const event = await eventService.get(this.props.event);
     const is_group_event = event.maxMembersPerTeam > 1;
     const is_multiple_team_event = event.maxTeamsPerCollege > 1;
-    event = event.name;
+    const eventName = event.name;
 
+    // Prepare data for rendering
     const placesArray = [
-      ranks[1].map(item => ({ 
-        name: getCertificateName(item, is_group_event, is_multiple_team_event),
-      })),
-      ranks[2].map(item => ({ 
-        name: getCertificateName(item, is_group_event, is_multiple_team_event),
-      })),
-      ranks[3].map(item => ({ 
-        name: getCertificateName(item, is_group_event, is_multiple_team_event),
-      }))
+      ranks[1].map(item => ({ name: getCertificateName(item, is_group_event, is_multiple_team_event) })),
+      ranks[2].map(item => ({ name: getCertificateName(item, is_group_event, is_multiple_team_event) })),
+      ranks[3].map(item => ({ name: getCertificateName(item, is_group_event, is_multiple_team_event) }))
     ];
 
+    // Create image element
     const image = new Image();
-
-    let first_start = 450;
-    let second_start = 620;
-    let third_start = 790;
-
     image.src = template;
-    
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    const link = document.createElement('a');
+
+    // Wait for image to load
     image.onload = () => {
+      // Create canvas
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      // Set canvas dimensions
       canvas.width = image.width;
       canvas.height = image.height;
+
+      // Draw image onto canvas
       context.drawImage(image, 0, 0);
-      // context.font = "bold 37.4px Verdana";
+
+      // Customize text styles
       context.font = "bold 37.4px Rye";
       context.fillStyle = "#ffffff";
       context.textAlign = "center";
-      let textStr = event + " Results";
-      let textWidth = context.measureText(textStr).width;
-      context.fillText((textStr).toUpperCase(), (canvas.width/2), 365);
-      context.font = "bold 34px Rye";
-      context.textAlign = "left";
 
-      for (let i = 0; i < placesArray[0].length; i++) {
-        context.font = "bold 34px HammersmithOne";
-        let text = placesArray[0][i]["name"];
-        //if placesArray[0].length()==1
-        let { width } = context.measureText(text);
-        if (i == 0) {
-          context.fillText(text, (canvas.width / 6.4), first_start);
-          // context.fillRect((canvas.width / 3.1), first_start + 3, width, 2);
-        }
-        if (i == 2) {
-          context.fillText(text, (canvas.width / 6.4), first_start + 40);
-          // context.fillRect((canvas.width / 3.1), first_start - 37, width, 2);
-        }
-        if (i == 1) {
-          context.fillText(text, (canvas.width / 6.4), first_start - 40);
-          // context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
-        }
+      // Draw event name on canvas
+      context.fillText(eventName.toUpperCase() + " Results", canvas.width / 2, 365);
+
+      // Draw leaderboard data on canvas
+      let start = 450;
+      for (let i = 0; i < 3; i++) {
+        placesArray[i].forEach(item => {
+          context.font = "bold 34px HammersmithOne";
+          context.fillText(item.name, canvas.width / 6.4, start);
+          start += 40;
+        });
       }
-      for (let i = 0; i < placesArray[1].length; i++) {
-        context.font = "bold 34px HammersmithOne";
-        let text = placesArray[1][i]["name"];
-        let { width } = context.measureText(text);
-        if (i == 0) {
-          context.fillText(text, (canvas.width / 6.4), second_start);
-          // context.fillRect((canvas.width / 3.1), second_start + 3, width, 2);
+
+      // Convert canvas to blob
+      canvas.toBlob(async blob => {
+        // Create a File object from the blob
+        const file = new File([blob], eventName + "-leaderboard.png", { type: 'image/png' });
+
+        // Share image using Web Share API if available
+        if (typeof window.navigator.share === "function") {
+          try {
+            await window.navigator.share({
+              files: [file],
+              title: eventName + " Results",
+              text: "Check out the leaderboard!"
+            });
+            console.log("Share was successful.");
+          } catch (error) {
+            console.log("Sharing failed", error);
+          }
+        } else {
+          // Fallback for browsers that do not support Web Share API
+          console.error("Cannot use Web Share API: API unavailable.");
+          // Download image
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = eventName + "-leaderboard.png";
+          link.click();
+          URL.revokeObjectURL(link.href); // Clean up
         }
-        if (i == 2) {
-          context.fillText(text, (canvas.width / 6.4), second_start + 40);
-          // context.fillRect((canvas.width / 3.1), second_start - 37, width, 2);
-        }
-        if (i == 1) {
-          context.fillText(text, (canvas.width / 6.4), second_start - 40);
-          // context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
-        }
-      }
-      for (let i = 0; i < placesArray[2].length; i++) {
-        let text = placesArray[2][i]["name"];
-        let { width } = context.measureText(text);
-        if (i == 0) {
-          context.fillText(text, (canvas.width / 6.4), third_start);
-          // context.fillRect((canvas.width / 3.1), third_start + 3, width, 2);
-        }
-        if (i == 2) {
-          context.fillText(text, (canvas.width / 6.4), third_start + 40);
-          // context.fillRect((canvas.width / 3.1), third_start - 37, width, 2);
-        }
-        if (i == 1) {
-          context.fillText(text, (canvas.width / 6.4), third_start - 40);
-          // context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
-        }
-      }
-      canvas.toBlob((blob) => {
-        link.href = URL.createObjectURL(blob);
-        link.download = event + "-leaderboard.png"
-        link.style.display = "none";
-        document.body.append(link);
-        link.click();
-        link.remove();
+
+
       }, 'image/png');
     };
-
   }
+
 
   init = async () => {
     try {
