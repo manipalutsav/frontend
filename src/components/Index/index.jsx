@@ -241,23 +241,35 @@ export default () => {
       {/* <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} /> */}
 
       <div className="broadcast-container mt-5 mb-5 overflow-x-auto">
-        <h4 className="text-left">Upcoming Events (Today)</h4>
-        <table className="events-table table table-zebra w-full overflow-x-auto" >
-          <thead><tr>
-            <th style={styles.table_th} >Event Name</th>
-            <th style={styles.table_th}>Venue <span className="capitalize"> ( Click to View in Google Maps ) </span></th>
-            <th style={styles.table_th}>Start Time</th>
-            <th style={styles.table_th}>End Time</th>
-          </tr></thead>
-          <tbody>
-            {
-              events
+        <h4 className="text-left">Upcoming Events ( Today )</h4>
+        {events.filter(event => {
+          const eventStartDate = new Date(event.startDate);
+          const today = new Date();
+          return (
+            eventStartDate.getDate() === today.getDate() &&
+            eventStartDate.getMonth() === today.getMonth() &&
+            eventStartDate.getFullYear() === today.getFullYear()
+          );
+        }).length > 0 ? (
+          <table className="events-table table table-zebra w-full overflow-x-auto">
+            <thead>
+              <tr>
+                <th style={styles.table_th}>Event Name</th>
+                <th style={styles.table_th}>Venue <span className="capitalize">( Click to View in Google Maps )</span></th>
+                <th style={styles.table_th}>Start Time</th>
+                <th style={styles.table_th}>End Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events
                 .filter(event => {
                   const eventStartDate = new Date(event.startDate);
                   const today = new Date();
-                  return eventStartDate.getDate() === today.getDate() &&
+                  return (
+                    eventStartDate.getDate() === today.getDate() &&
                     eventStartDate.getMonth() === today.getMonth() &&
-                    eventStartDate.getFullYear() === today.getFullYear();
+                    eventStartDate.getFullYear() === today.getFullYear()
+                  );
                 })
                 .map((event, index) => {
                   const startTime = new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -274,18 +286,80 @@ export default () => {
                         <div className="flex items-center justify-center ml-2">
                           <MdLocationOn />
                         </div>
-
                       </td>
                       <td style={{ ...styles.table_styles, minWidth: "100px" }}>{startTime}</td>
                       <td style={{ ...styles.table_styles, minWidth: "100px" }}>{endTime}</td>
                     </tr>
                   );
-                })
-            }
-          </tbody>
-        </table>
+                })}
+            </tbody>
+          </table>
+        ) : (
+          <p>No More Events Today</p>
+        )}
       </div>
-      
+
+      <div className="broadcast-container mt-12 mb-5 overflow-x-auto">
+        <h4 className="text-left">Upcoming Events ( Tomorrow )</h4>
+        {events.filter(event => {
+          const eventStartDate = new Date(event.startDate);
+          const tomorrow = new Date();
+          tomorrow.setDate(tomorrow.getDate() + 1); // Get tomorrow's date
+          return (
+            eventStartDate.getDate() === tomorrow.getDate() &&
+            eventStartDate.getMonth() === tomorrow.getMonth() &&
+            eventStartDate.getFullYear() === tomorrow.getFullYear()
+          );
+        }).length > 0 ? (
+          <table className="events-table table table-zebra w-full overflow-x-auto">
+            <thead>
+              <tr>
+                <th style={styles.table_th}>Event Name</th>
+                <th style={styles.table_th}>Venue <span className="capitalize">( Click to View in Google Maps )</span></th>
+                <th style={styles.table_th}>Start Time</th>
+                <th style={styles.table_th}>End Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events
+                .filter(event => {
+                  const eventStartDate = new Date(event.startDate);
+                  const tomorrow = new Date();
+                  tomorrow.setDate(tomorrow.getDate() + 1); // Get tomorrow's date
+                  return (
+                    eventStartDate.getDate() === tomorrow.getDate() &&
+                    eventStartDate.getMonth() === tomorrow.getMonth() &&
+                    eventStartDate.getFullYear() === tomorrow.getFullYear()
+                  );
+                })
+                .map((event, index) => {
+                  const startTime = new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  const endTime = new Date(event.endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  const venue = event.venue;
+                  const locationInfo = venueLocations.find(item => item.venue === venue);
+                  const googleMapsLink = locationInfo ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationInfo.location)}` : null;
+
+                  return (
+                    <tr key={index}>
+                      <td style={styles.table_styles} className="capitalize">{event.name}</td>
+                      <td style={styles.table_styles} className="flex flex-row items-center justify-start">
+                        <a href={googleMapsLink} target="_blank" rel="noopener noreferrer" className="underline">{event.venue}</a>
+                        <div className="flex items-center justify-center ml-2">
+                          <MdLocationOn />
+                        </div>
+                      </td>
+                      <td style={{ ...styles.table_styles, minWidth: "100px" }}>{startTime}</td>
+                      <td style={{ ...styles.table_styles, minWidth: "100px" }}>{endTime}</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        ) : (
+          <p>No More Events tomorrow</p>
+        )}
+      </div>
+
       {/* <div className="broadcast-container mt-5 overflow-x-auto">
         <h4 className="text-left">Completed Events</h4>
         <table className="events-table table table-zebra w-full overflow-x-auto border" >
