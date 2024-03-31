@@ -121,29 +121,15 @@ const event_renderer = ({ days, hours, minutes, seconds, completed }) => {
       </div>
     </div>
   } else {
-    return (
-      <div className="m-4">
-        <div className="flex gap-5 justify-center scale-75 transition-all">
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] font-bold scale-y-150">{days}</div>
-            <div className=" opacity-75">Day{days > 1 ? "s" : ""}</div>
-          </div>
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{hours}</div>
-            <div className=" opacity-75">Hour{hours > 1 ? "s" : ""}</div>
-          </div>
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{minutes}</div>
-            <div className=" opacity-75">Minute{minutes > 1 ? "s" : ""}</div>
-          </div>
-          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
-            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{seconds}</div>
-            <div className=" opacity-75">Second{seconds > 1 ? "s" : ""}</div>
-          </div>
-        </div>
-        <div className=" text-orange-700 w-[40%] rounded-b m-auto">Until the excitement unfolds!</div>
-      </div>
-    )
+    if (days === 0 && hours === 0 && minutes === 0) {
+      return <span>Staff events start in: {seconds} seconds</span>;
+    } else if (days === 0 && hours === 0) {
+      return <span>Staff events start in: {minutes} minutes and {seconds} seconds</span>;
+    } else if (days === 0) {
+      return <span>Staff events start in: {hours} hours, {minutes} minutes and {seconds} seconds</span>;
+    } else {
+      return <span>Staff events start in: {days} days, {hours} hours, {minutes} minutes and {seconds} seconds</span>;
+    }
   }
 
 };
@@ -299,66 +285,7 @@ export default () => {
         )}
       </div>
 
-      <div className="broadcast-container mt-12 mb-5 overflow-x-auto">
-        <h4 className="text-left">Upcoming Events ( Tomorrow )</h4>
-        {events.filter(event => {
-          const eventStartDate = new Date(event.startDate);
-          const tomorrow = new Date();
-          tomorrow.setDate(tomorrow.getDate() + 1); // Get tomorrow's date
-          return (
-            eventStartDate.getDate() === tomorrow.getDate() &&
-            eventStartDate.getMonth() === tomorrow.getMonth() &&
-            eventStartDate.getFullYear() === tomorrow.getFullYear()
-          );
-        }).length > 0 ? (
-          <table className="events-table table table-zebra w-full overflow-x-auto">
-            <thead>
-              <tr>
-                <th style={styles.table_th}>Event Name</th>
-                <th style={styles.table_th}>Venue <span className="capitalize">( Click to View in Google Maps )</span></th>
-                <th style={styles.table_th}>Start Time</th>
-                <th style={styles.table_th}>End Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {events
-                .filter(event => {
-                  const eventStartDate = new Date(event.startDate);
-                  const tomorrow = new Date();
-                  tomorrow.setDate(tomorrow.getDate() + 1); // Get tomorrow's date
-                  return (
-                    eventStartDate.getDate() === tomorrow.getDate() &&
-                    eventStartDate.getMonth() === tomorrow.getMonth() &&
-                    eventStartDate.getFullYear() === tomorrow.getFullYear()
-                  );
-                })
-                .map((event, index) => {
-                  const startTime = new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                  const endTime = new Date(event.endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                  const venue = event.venue;
-                  const locationInfo = venueLocations.find(item => item.venue === venue);
-                  const googleMapsLink = locationInfo ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationInfo.location)}` : null;
 
-                  return (
-                    <tr key={index}>
-                      <td style={styles.table_styles} className="capitalize">{event.name}</td>
-                      <td style={styles.table_styles} className="flex flex-row items-center justify-start">
-                        <a href={googleMapsLink} target="_blank" rel="noopener noreferrer" className="underline">{event.venue}</a>
-                        <div className="flex items-center justify-center ml-2">
-                          <MdLocationOn />
-                        </div>
-                      </td>
-                      <td style={{ ...styles.table_styles, minWidth: "100px" }}>{startTime}</td>
-                      <td style={{ ...styles.table_styles, minWidth: "100px" }}>{endTime}</td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        ) : (
-          <p>No More Events tomorrow</p>
-        )}
-      </div>
 
       {/* <div className="broadcast-container mt-5 overflow-x-auto">
         <h4 className="text-left">Completed Events</h4>

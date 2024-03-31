@@ -44,7 +44,7 @@ button.mucapp {
   text-align: center;
   justify-content: center;
   transition: .15s ease-out;
-  min-width: 100px;
+  /* min-width: 100px; */
 }
 
 button.mucapp:hover {
