@@ -285,15 +285,16 @@ export default () => {
           </tbody>
         </table>
       </div>
-      {/* 
+      
       <div className="broadcast-container mt-5 overflow-x-auto">
         <h4 className="text-left">Completed Events</h4>
         <table className="events-table table table-zebra w-full overflow-x-auto border" >
           <thead><tr>
             <th style={styles.table_th}>Event Name</th>
-            <th style={styles.table_th}>Venue</th>
-            <th style={styles.table_th}>Start Time</th>
-            <th style={styles.table_th}>End Time</th>
+            <th style={styles.table_th}>Total Participants</th>
+            <th style={styles.table_th}>1st Place</th>
+            <th style={styles.table_th}>2nd Place</th>
+            <th style={styles.table_th}>3rd Place</th>
           </tr></thead>
           <tbody>
             {
@@ -312,13 +313,14 @@ export default () => {
                       <td style={styles.table_styles}>{event.venue}</td>
                       <td style={{ ...styles.table_styles, minWidth: "100px" }}>{startTime}</td>
                       <td style={{ ...styles.table_styles, minWidth: "100px" }}>{endTime}</td>
+                      <td style={{ ...styles.table_styles, minWidth: "100px" }}>{endTime}</td>
                     </tr>
                   );
                 })
             }
           </tbody>
         </table>
-      </div> */}
+      </div>
     </div >
   )
 };

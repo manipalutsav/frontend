@@ -204,7 +204,7 @@ class UserLink extends Component {
     loggedIn: false,
     backupName: "", // Initialize backupName state
     backupData: "", // Initialize backupData state
-    screenWidth: window.innerWidth, // Initialize screenWidth state
+    screenWidth: (typeof window !== "undefined") ? window.innerWidth : "", // Initialize screenWidth state
   };
 
   async checkLoggedIn() {
@@ -222,13 +222,25 @@ class UserLink extends Component {
 
 
     // Add event listener for window resize
-    window.addEventListener('resize', this.handleResize);
+    if (typeof window !== "undefined") {
+      window.addEventListener('resize', this.handleResize);
+    }
+
+
+    store.subscribe(() => {
+      this.setState({ open: store.getState() === "open" });
+      this.updateBackup();
+    });
+    setInterval(this.updateBackup, 5000);
+    this.updateBackup();
 
   }
 
   componentWillUnmount() {
     // Remove event listener when component unmounts
-    window.removeEventListener('resize', this.handleResize);
+    if (typeof window !== "undefined") {
+      window.removeEventListener('resize', this.handleResize);
+    }
   }
 
   handleResize = () => {
@@ -236,14 +248,14 @@ class UserLink extends Component {
     this.setState({ screenWidth: window.innerWidth });
   }
 
-  componentDidMount() {
-    store.subscribe(() => {
-      this.setState({ open: store.getState() === "open" });
-      this.updateBackup();
-    });
-    setInterval(this.updateBackup, 5000);
-    this.updateBackup();
-  }
+  // componentDidMount() {
+  //   store.subscribe(() => {
+  //     this.setState({ open: store.getState() === "open" });
+  //     this.updateBackup();
+  //   });
+  //   setInterval(this.updateBackup, 5000);
+  //   this.updateBackup();
+  // }
 
   updateBackup = () => {
     this.setState({
@@ -319,19 +331,23 @@ export default class Header extends Component {
   state = {
     backupName: "", // Initialize backupName state
     backupData: "", // Initialize backupData state
-    screenWidth: window.innerWidth, // Initialize screenWidth state
+    screenWidth: (typeof window !== "undefined") ? window.innerWidth : "", // Initialize screenWidth state
   };
 
   componentDidMount() {
     this.updateBackup();
 
     // Add event listener for window resize
-    window.addEventListener('resize', this.handleResize);
+    if (typeof window !== "undefined") {
+      window.addEventListener('resize', this.handleResize);
+    }
   }
 
   componentWillUnmount() {
     // Remove event listener when component unmounts
-    window.removeEventListener('resize', this.handleResize);
+    if (typeof window !== "undefined") {
+      window.removeEventListener('resize', this.handleResize);
+    }
   }
 
   handleResize = () => {
