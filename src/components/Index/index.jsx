@@ -286,7 +286,7 @@ export default () => {
         </table>
       </div>
       
-      <div className="broadcast-container mt-5 overflow-x-auto">
+      {/* <div className="broadcast-container mt-5 overflow-x-auto">
         <h4 className="text-left">Completed Events</h4>
         <table className="events-table table table-zebra w-full overflow-x-auto border" >
           <thead><tr>
@@ -320,7 +320,7 @@ export default () => {
             }
           </tbody>
         </table>
-      </div>
+      </div> */}
     </div >
   )
 };
