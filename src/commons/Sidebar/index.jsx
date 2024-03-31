@@ -84,10 +84,10 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/" title="HOME" />
       <SidebarItem to="/register" title="REGISTER" />
       <SidebarItem to="/teams" title="TEAMS" />
-      {/* <SidebarItem to="/slots" title="SLOTS" /> */}
+      <SidebarItem to="/slots" title="SLOTS" />
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
-      {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
-      {/* <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" /> */}
+      <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
+      <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
       {/* <SidebarItem to="/certificates" title="Certificates" /> */}
       <SidebarSeparator />
       {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
@@ -132,6 +132,10 @@ const SidebarItems = ({ backupName, backupData }) => {
         <Dropdown.Item as="a">
           <DropItem to="/leaderboard" title="Event Standings" />
         </Dropdown.Item>
+
+        <Dropdown.Item as="a">
+          <DropItem to="/settings" title="Settings" />
+        </Dropdown.Item>
       </Dropdown>
       }
 
@@ -148,7 +152,7 @@ const SidebarItems = ({ backupName, backupData }) => {
           Feedback
         </a>
       </li> */}
-      {/* <SidebarItem to="/stats" title="Stats" /> */}
+      <SidebarItem to="/stats" title="Stats" />
       {isAdmin && (<a href={backupData} download={backupName}>
         <div css={{
           display: "block",
@@ -214,7 +218,7 @@ export default class Sidebar extends Component {
       overflowY: "visible",
       zIndex: 100,
       minWidth: 200,
-      marginLeft: this.state.open ? 0 : -200,
+      marginLeft: this.state.open ? 0 : -210,
       minHeight: "100vh",
       boxShadow: "25px 0px 50px -30px rgba(0, 0, 0, .1)",
       transition: "margin .3s ease-out",

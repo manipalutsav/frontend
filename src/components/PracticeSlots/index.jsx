@@ -27,29 +27,50 @@ export default class extends React.Component {
       newSlots: [],
       slotting: false,
       slotted: false,
+      eventDate: "2024-04-01"
     }
   }
 
   componentWillMount() {
-    practiceSlotsService.getPracticeSlot().then(slots =>
-      this.setState({ slots, loaded: true, slotted: slots.length > 0 })
+    console.log("check");
+
+    practiceSlotsService.getPracticeSlot(this.state.eventDate).then(slots =>
+      this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
     );
+    console.log(this.state.slots,"sltos")
   }
 
   getTimeSlot = (index) => {
-    let hours = ["06", "07", "08", "09", "10", "11", "12", "01", "02", "03", "04", "05"]
-    let mins = ["00", "15", "30", "45"]
-    let endMin = ["59", "14", "29", "44"]
-    let meridiem = ["AM", "PM"];
-    let startHourIndex = Math.floor(index / 4) % 12;
-    let startMinIndex = index % 4;
-    let startMeridiemIndex = (Math.floor((startHourIndex + 6) / 12)) % 2;
-    let nextIndex = index + 1;
-    let endHourIndex = Math.floor(index / 4) % 12;
-    let endMinIndex = nextIndex % 4;
-    let endMeridiemIndex = (Math.floor((endHourIndex + 6) / 12)) % 2;
-    return `${hours[startHourIndex]}:${mins[startMinIndex]} ${meridiem[startMeridiemIndex]} - ${hours[endHourIndex]}:${endMin[endMinIndex]} ${meridiem[endMeridiemIndex]}`
-  }
+    console.log(this.state.slots,"slots")
+    var totalTeams = this.state.slots?.length;
+    // time should start from 6 till 10 am
+    const startTime = new Date();
+    startTime.setHours(6, 0, 0, 0); 
+    const endTime = new Date();
+    endTime.setHours(10, 0, 0, 0);
+    //total  = 10am-6am = 240 minutes
+
+    // total minutes between 6 am to 10 am
+    //can hardcode 240 mins
+    const totalMinutes = (endTime - startTime) / (1000 * 60);
+
+    // time in minutes per team  
+    let timePerTeam = Math.floor(totalMinutes / totalTeams);
+
+    // if it exceeds 15 min then restrict it to 15 only ie (if there are less teams)
+    timePerTeam = Math.min(timePerTeam, 15);
+
+    // calculate slot timing for perticular team
+    const slotStartTime = new Date(startTime.getTime() + index * timePerTeam * 60 * 1000);
+    const slotEndTime = new Date(slotStartTime.getTime() + timePerTeam * 60 * 1000);
+
+    // formating of time
+    const startTimeString = slotStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const endTimeString = slotEndTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    return `${startTimeString} - ${endTimeString}`;
+}
+
 
   animate(slots) {
     this.slots = Object.assign([], slots);
@@ -71,19 +92,17 @@ export default class extends React.Component {
 
   startSlotting() {
     this.setState({ slotting: true, });
-
-    practiceSlotsService.createPracticeSlot().then(slots =>
+    practiceSlotsService.createPracticeSlot(this.state.eventDate).then(slots =>
       this.setState({ slots }, () =>
         this.animate(this.state.slots)
       )
     )
-
   }
 
   deleteSlots() {
 
     if (typeof window !== "undefined" && window.confirm("Are you sure you want to reset slots?")) {
-      practiceSlotsService.deletePracticeSlot().then(() => {
+      practiceSlotsService.deletePracticeSlot(this.state.eventDate).then(() => {
         this.slots = [];
         this.timer = null;
 
@@ -96,7 +115,19 @@ export default class extends React.Component {
       });
     }
   }
-
+  handleDateChange = (event) => {
+    // Function to handle date selection from dropdown
+    this.setState({ eventDate: event.target.value });
+    this.setState({
+      slots: [],
+      newSlots: [],
+      slotting: false,
+      slotted: false,
+    })
+    practiceSlotsService.getPracticeSlot(event.target.value).then(slots =>
+      this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
+    );
+  }
   render = () => (
     this.state.loaded
       ? this.state.slotted
@@ -108,16 +139,24 @@ export default class extends React.Component {
             <h2 className="mucapp">
               Practice Slots
             </h2>
-            <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
+            {/* <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button> */}
+            <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className="m-2 py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100">
+        {/* Dropdown to select event date */}
+        <option value="2024-04-01">April 1, 2024</option>
+        <option value="2024-04-02">April 2, 2024</option>
+        <option value="2024-04-03">April 3, 2024</option>
+        <option value="2024-04-04">April 4, 2024</option>
+        <option value="2024-04-05">April 5, 2024</option>
+      </select>
           </div>
           <div>
             {
               this.state.slots.map((slot, i) =>
                 <LBList
                   key={i}
-                  color={slot.registered ? "#444" : "#999"}
-                  position={slot.number}
-                  title={`${slot.name}, ${slot.location}`}
+                  color={"#444"}
+                  position={slot.order}
+                  title={`${slot.college}, ${slot.location}`}
                   description={this.getTimeSlot(i)}
                 />
               )
@@ -132,15 +171,22 @@ export default class extends React.Component {
             }}>
               <h2 className="mucapp">
                 Practice slots
-                {this.state.event.rounds && this.state.event.rounds.length > 1 && (
+                {this.state.event?.rounds && this.state.event.rounds?.length > 1 && (
                   <>
                     {" "}
                     Round {this.state.event.rounds.indexOf(this.props.round) + 1}
                   </>
                 )}
               </h2>
-              <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button>
-
+              {/* <button className="mucapp" onClick={this.deleteSlots}>Reset Slots</button> */}
+              <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100 m-2">
+        {/* Dropdown to select event date */}
+        <option value="2024-04-01">April 1, 2024</option>
+        <option value="2024-04-02">April 2, 2024</option>
+        <option value="2024-04-03">April 3, 2024</option>
+        <option value="2024-04-04">April 4, 2024</option>
+        <option value="2024-04-05">April 5, 2024</option>
+      </select>
             </div>
 
             <div>
@@ -149,13 +195,14 @@ export default class extends React.Component {
                   <LBList
 
                     key={i}
-                    position={slot.number}
+                    position={slot.order}
+                    team={String.fromCharCode(65 + slot.team)}
                     title={
                       <Scramble
                         autoStart
                         preScramble
                         speed="slow"
-                        text={`${slot.name}, ${slot.location}`}
+                        text={`${slot.college}, ${slot.location}`}
                         steps={[
                           {
                             action: "-",
@@ -171,7 +218,7 @@ export default class extends React.Component {
             </div>
             <div>
               {
-                this.state.slots.length !== this.slots.length && this.slots.length
+                this.state.slots?.length !== this.slots?.length && this.slots?.length
                   ? <Shuffle />
                   : null
               }
@@ -196,6 +243,14 @@ export default class extends React.Component {
                   : "Start Slotting"
               }
             </button>
+            <select name="date" style={{"cursor":"pointer"}} id="date" value={this.state.eventDate} onChange={this.handleDateChange} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100 m-2">
+        {/* Dropdown to select event date */}
+        <option value="2024-04-01">April 1, 2024</option>
+        <option value="2024-04-02">April 2, 2024</option>
+        <option value="2024-04-03">April 3, 2024</option>
+        <option value="2024-04-04">April 4, 2024</option>
+        <option value="2024-04-05">April 5, 2024</option>
+      </select>
           </div>
       : <div>Please wait while we check for slots...</div>
   );

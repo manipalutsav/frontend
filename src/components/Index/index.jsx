@@ -5,6 +5,7 @@ import { Link, navigate } from "gatsby";
 import eventsService from "../../services/events";
 import participationStatus from "../../services/participationStatus";
 import { MdLocationOn, MdOpenInNew } from 'react-icons/md'
+import { getSetting } from "../../services/settingsServices";
 
 const cookingEventsOpenDate = new Date("February 27, 2023, 23:59:59");
 const cookingEventsCloseDate = new Date("March 6, 2023, 17:00:00");
@@ -95,7 +96,7 @@ const styles = {
   }
 };
 
-const renderer = ({ days, hours, minutes, seconds, completed }) => {
+const reg_renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     return <span>registrations are closed!</span>;
   } else {
@@ -111,17 +112,53 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
   }
 };
 
+
+const event_renderer = ({ days, hours, minutes, seconds, completed }) => {
+  if (completed) {
+    return <div className="m-4 flex justify-center">
+      <div className="p-4 rounded-md bg-orange-200 text-3xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2">
+        The event is on! <span className="font-['Noto_Color_Emoji']">🎉</span>
+      </div>
+    </div>
+  } else {
+    return (
+      <div className="m-4">
+        <div className="flex gap-5 justify-center scale-75 transition-all">
+          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] font-bold scale-y-150">{days}</div>
+            <div className=" opacity-75">Day{days > 1 ? "s" : ""}</div>
+          </div>
+          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{hours}</div>
+            <div className=" opacity-75">Hour{hours > 1 ? "s" : ""}</div>
+          </div>
+          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{minutes}</div>
+            <div className=" opacity-75">Minute{minutes > 1 ? "s" : ""}</div>
+          </div>
+          <div className="w-[120px] p-6 rounded-md bg-orange-200 gap-6 flex flex-col outline outline-orange-500">
+            <div id="ct-day" className=" text-6xl font-['Barlow_Condensed'] scale-y-150">{seconds}</div>
+            <div className=" opacity-75">Second{seconds > 1 ? "s" : ""}</div>
+          </div>
+        </div>
+        <div className=" text-orange-700 w-[40%] rounded-b m-auto">Until the excitement unfolds!</div>
+      </div>
+    )
+  }
+
+};
+
 const RegistrationTimer = () => {
   const current_date = new Date();
   if (current_date >= studentEventsOpenDate) {
     return (<>
       <span>Student event </span>
-      <Countdown date={studentEventsCloseDate} renderer={renderer} />
+      <Countdown date={studentEventsCloseDate} renderer={reg_renderer} />
     </>)
   } else if (current_date >= cookingEventsOpenDate) {
     return (<>
       <span>Cooking event </span>
-      <Countdown date={cookingEventsCloseDate} renderer={renderer} />
+      <Countdown date={cookingEventsCloseDate} renderer={reg_renderer} />
     </>)
   }
   return <></>
@@ -194,16 +231,18 @@ export default () => {
     <div css={{
       textAlign: "center",
 
-    }}>
+    }} className="mt-5">
       <h2 className="mucapp">MAHE Utsav Coordinators App</h2>
       <h1 className="mucapp"> UTSAV 2024!</h1>
+      <Countdown date={new Date("April 1, 2024, 10:30:00")} renderer={event_renderer} />
+
       {/* <RegistrationTimer /> */}
       {/* <div className="festival-live-message">The festival is on!</div> */}
       {/* <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} /> */}
 
       <div className="broadcast-container mt-5 mb-5 overflow-x-auto">
         <h4 className="text-left">Upcoming Events (Today)</h4>
-        <table className="events-table table table-zebra w-full overflow-x-auto border" >
+        <table className="events-table table table-zebra w-full overflow-x-auto" >
           <thead><tr>
             <th style={styles.table_th} >Event Name</th>
             <th style={styles.table_th}>Venue <span className="capitalize"> ( Click to View in Google Maps ) </span></th>
@@ -246,7 +285,7 @@ export default () => {
           </tbody>
         </table>
       </div>
-{/* 
+      {/* 
       <div className="broadcast-container mt-5 overflow-x-auto">
         <h4 className="text-left">Completed Events</h4>
         <table className="events-table table table-zebra w-full overflow-x-auto border" >
@@ -282,5 +321,4 @@ export default () => {
       </div> */}
     </div >
   )
-}
-  ;
+};

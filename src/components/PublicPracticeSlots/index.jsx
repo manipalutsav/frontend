@@ -23,51 +23,88 @@ export default class extends React.Component {
       newSlots: [],
       slotting: false,
       slotted: false,
+      eventDate: "2024-04-01"
     }
   }
 
   componentWillMount() {
-    practiceSlotsService.getPracticeSlot().then(slots =>
-      this.setState({ slots, loaded: true, slotted: slots.length > 0 })
+    //console.log("check");
+    practiceSlotsService.getPracticeSlot(this.state.eventDate).then(slots =>
+      this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
     );
   }
 
   getTimeSlot = (index) => {
-    let hours = ["06", "07", "08", "09", "10", "11", "12", "01", "02", "03", "04", "05"]
-    let mins = ["00", "15", "30", "45"]
-    let endMin = ["59", "14", "29", "44"]
-    let meridiem = ["AM", "PM"];
-    let startHourIndex = Math.floor(index / 4) % 12;
-    let startMinIndex = index % 4;
-    let startMeridiemIndex = (Math.floor((startHourIndex + 6) / 12)) % 2;
-    let nextIndex = index + 1;
-    let endHourIndex = Math.floor(index / 4) % 12;
-    let endMinIndex = nextIndex % 4;
-    let endMeridiemIndex = (Math.floor((endHourIndex + 6) / 12)) % 2;
-    return `${hours[startHourIndex]}:${mins[startMinIndex]} ${meridiem[startMeridiemIndex]} - ${hours[endHourIndex]}:${endMin[endMinIndex]} ${meridiem[endMeridiemIndex]}`
-  }
+    console.log(this.state.slots,"slots")
+    var totalTeams = this.state.slots?.length;
+    // time should start from 6 till 10 am
+    const startTime = new Date();
+    startTime.setHours(6, 0, 0, 0); 
+    const endTime = new Date();
+    endTime.setHours(10, 0, 0, 0);
+    //total  = 10am-6am = 240 minutes
 
+    // total minutes between 6 am to 10 am
+    //can hardcode 240 mins
+    const totalMinutes = (endTime - startTime) / (1000 * 60);
+
+    // time in minutes per team  
+    let timePerTeam = Math.floor(totalMinutes / totalTeams);
+
+    // if it exceeds 15 min then restrict it to 15 only ie (if there are less teams)
+    timePerTeam = Math.min(timePerTeam, 15);
+
+    // calculate slot timing for perticular team
+    const slotStartTime = new Date(startTime.getTime() + index * timePerTeam * 60 * 1000);
+    const slotEndTime = new Date(slotStartTime.getTime() + timePerTeam * 60 * 1000);
+
+    // formating of time
+    const startTimeString = slotStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const endTimeString = slotEndTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    return `${startTimeString} - ${endTimeString}`;
+}
+
+handleDateChange = (event) => {
+  // Function to handle date selection from dropdown
+  this.setState({ eventDate: event.target.value });
+  practiceSlotsService.getPracticeSlot(event.target.value).then(slots =>
+    this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
+  );
+}
 
   render = () => (
+    
     this.state.loaded
       ? this.state.slotted
         ? <div>
+          
           <div css={{
             textAlign: "center",
             marginBottom: 30,
           }}>
+            
             <h2 className="mucapp">
               Practice Slots
             </h2>
+            <select name="date" id="date" style={{"cursor":"pointer"}} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100" value={this.state.eventDate} onChange={this.handleDateChange}>
+      {/* Dropdown to select event date */}
+      <option value="2024-04-01">April 1, 2024</option>
+      <option value="2024-04-02">April 2, 2024</option>
+      <option value="2024-04-03">April 3, 2024</option>
+      <option value="2024-04-04">April 4, 2024</option>
+      <option value="2024-04-05">April 5, 2024</option>
+    </select>
           </div>
           <div>
             {
               this.state.slots.map((slot, i) =>
                 <LBList
                   key={i}
-                  color={slot.registered ? "#444" : "#999"}
-                  position={slot.number}
-                  title={`${slot.name}, ${slot.location}`}
+                  color={"#222"}
+                  position={slot.order}
+                  team={String.fromCharCode(65 + slot.team)}
+                  title={`${slot.college}, ${slot.location}`}
                   description={this.getTimeSlot(i)}
                 />
               )
@@ -80,7 +117,16 @@ export default class extends React.Component {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-        }}>Slots are yet to be generated</div>
+        }}>Slots are yet to be generated for 
+        <select name="date" id="date" style={{"cursor":"pointer"}} value={this.state.eventDate} onChange={this.handleDateChange} className=" py-2 px-4 border border-orange-500 rounded-md bg-slate-300 bg-opacity-100">
+      {/* Dropdown to select event date */}
+      <option value="2024-04-01">April 1, 2024</option>
+      <option value="2024-04-02">April 2, 2024</option>
+      <option value="2024-04-03">April 3, 2024</option>
+      <option value="2024-04-04">April 4, 2024</option>
+      <option value="2024-04-05">April 5, 2024</option>
+    </select>
+        </div>
       : <div css={{
         height: "100%",
         display: "flex",
