@@ -93,10 +93,10 @@ const SidebarItems = ({ backupName, backupData }) => {
       {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
       {/* <Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />;
       <SidebarItem to="/users" title="Users" />
-
-
-
-
+  
+  
+  
+  
        */}
       {isAdmin && <Dropdown style={{ fontSize: "30px", color: "#999", paddingTop: "20px", marginLeft: "40px", width: "50px" }} title="ADMIN ONLY">
         <Dropdown.Item as="a">
@@ -119,9 +119,9 @@ const SidebarItems = ({ backupName, backupData }) => {
           <DropItem to="/notifications" title="Notifications" />
         </Dropdown.Item>
 
-        <Dropdown.Item as="a">
-          <DropItem to="/practice-slots" title="Practice Slots" />
-        </Dropdown.Item>
+        {/* <Dropdown.Item as="a">
+                        <DropItem to="/practice-slots" title="Practice Slots" />
+                      </Dropdown.Item> */}
 
 
 
@@ -167,7 +167,8 @@ const SidebarItems = ({ backupName, backupData }) => {
         }}
         >
           <span css={{ padding: 5 }}>🗂</span>Backup
-        </div></a>)}
+        </div>
+      </a>)}
     </ul>
   )
 };
@@ -195,13 +196,13 @@ export default class Sidebar extends Component {
   }
 
   handleBlur = () => {
-    if (window.innerWidth <= 1500) {
+    if (window.innerWidth <= 1800 || document.body.clientWidth <= 1800) {
       this.setState({ open: false });
     }
   }
 
   handleFocus = () => {
-    if (window.innerWidth <= 1500) {
+    if (window.innerWidth <= 1800 || document.body.clientWidth <= 1800) {
       this.setState({ open: true });
     }
   }
@@ -217,7 +218,7 @@ export default class Sidebar extends Component {
       overflowY: "visible",
       zIndex: 100,
       minWidth: 200,
-      marginLeft: this.state.open ? 0 : -200,
+      marginLeft: this.state.open ? 0 : -210,
       minHeight: "100vh",
       boxShadow: "25px 0px 50px -30px rgba(0, 0, 0, .1)",
       transition: "margin .3s ease-out",
