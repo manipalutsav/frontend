@@ -34,6 +34,8 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/register" title="REGISTER" />
       <SidebarItem to="/teams" title="TEAMS" />
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
+      <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
+      <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
 
       {isAdmin &&
         <li css={{ width: 150 }}><Dropdown
@@ -65,9 +67,9 @@ const SidebarItems = ({ backupName, backupData }) => {
             <DropItem to="/notifications" title="Notifications" />
           </Dropdown.Item>
 
-          {/* <Dropdown.Item as="a">
-                        <DropItem to="/practice-slots" title="Practice Slots" />
-                      </Dropdown.Item> */}
+          <Dropdown.Item as="a">
+            <DropItem to="/practice-slots" title="Practice Slots" />
+          </Dropdown.Item>
 
 
 
@@ -80,8 +82,14 @@ const SidebarItems = ({ backupName, backupData }) => {
           </Dropdown.Item>
 
           <Dropdown.Item as="a">
+          <DropItem to="/settings" title="Settings" />
+        </Dropdown.Item>
+
+          <Dropdown.Item as="a">
             <DropItemwithDownload to={backupData} title="🗂 Backup" download={backupName} />
           </Dropdown.Item>
+
+          
 
         </Dropdown>
         </li>
@@ -139,11 +147,11 @@ const SidebarItem = (props) => (
   <li>
     <Link to={props.to} title={props.title} css={{
       display: "block",
-      marginTop: 10,
       // padding: 10,
-      margin: "5px 10px",
+      margin: "5px 5px",
+      marginTop: 10,
       padding: "5px 18px",
-      fontSize: "16px",
+      fontSize: "14px",
       fontWeight: 500,
       textDecoration: "none !important",
       color: path() === props.to ? "#003B73" : "black",
