@@ -17,7 +17,7 @@ export default class Teams extends React.Component {
   }
   init = async () => {
     let user = getUser();
-    let response = await collegesService.getAllEventRankings(user.college);
+    let response = await collegesService.getPublishedEventRankings(user.college);
     let college = await collegesService.get(user.college);
     console.log(response);
     this.setState({ ranks: response, college, showLoader: false })
@@ -36,11 +36,14 @@ export default class Teams extends React.Component {
         </tr>
       </thead>
       <tbody>
-        {this.state.ranks.map(eventRanks => <tr>
+        {this.state.ranks.map(eventRanks => {
+          console.log(eventRanks)
+          return <tr>
           <td><Link to={`/events/${eventRanks.event._id}/rounds/${eventRanks.event.rounds.pop()}/leaderboard`}>{eventRanks.event.name}</Link></td>
           {/* uncomment this to show ranks to public */}
-          {/* <td>{eventRanks.ranks.map(rank => <span className="pr-5">#{rank.rank}</span>)}</td> */}
-        </tr>)}
+          <td>{eventRanks.ranks.map(rank => <span className="pr-5">#{rank.rank}</span>)}</td>
+        </tr>
+        })}
       </tbody>
     </table>
   </LoadContent>)

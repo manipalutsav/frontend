@@ -123,6 +123,21 @@ const getAllEventRankings = async (collegeID) => {
     return [];
   }
 };
+
+const getPublishedEventRankings = async (collegeID) => {
+  let response;
+  if (collegeID)
+    response = await request("/colleges/" + collegeID + "/public-rankings");
+
+  if (response && response.status === 200) {
+    return response.data;
+  } else {
+    if (response && response.status === "401")
+      toast("Your session has expired, please logout and login again.")
+    return [];
+  }
+};
+
 export default {
   create,
   update,
@@ -131,5 +146,6 @@ export default {
   getTeams,
   getParticipants,
   getCollege,
-  getAllEventRankings
+  getAllEventRankings,
+  getPublishedEventRankings,
 };
