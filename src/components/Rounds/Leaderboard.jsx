@@ -74,14 +74,14 @@ export default class extends React.Component {
       canvas.width = image.width;
       canvas.height = image.height;
       context.drawImage(image, 0, 0);
-      // context.font = "bold 37.4px Verdana";
-      context.font = "bold 37.4px Rye";
+      context.font = "bold 37.4px Verdana";
+      // context.font = "bold 37.4px Rye";
       context.fillStyle = "#ffffff";
       context.textAlign = "center";
       let textStr = event + " Results";
       let textWidth = context.measureText(textStr).width;
       context.fillText((textStr).toUpperCase(), (canvas.width / 2), 365);
-      context.font = "bold 34px Rye";
+      context.font = "bold 34px Verdana";
       context.textAlign = "left";
 
       for (let i = 0; i < placesArray[0].length; i++) {
