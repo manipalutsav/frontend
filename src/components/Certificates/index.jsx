@@ -2,7 +2,7 @@ import React from "react";
 
 import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
-import certificateURL from '../../images/participation-certificate.jpg'
+import certificateURL from '../../images/participation-certificate.png'
 import JSZip from "jszip";
 
 export default class Certificates extends React.Component {
@@ -56,8 +56,8 @@ export default class Certificates extends React.Component {
       context.font = "bold 71px Blogger Sans";
       context.fillStyle = "#000000";
       context.textAlign = "center";
-      context.fillText(member.name, (canvas.width / 2), 480);
-      context.fillText(event, (canvas.width / 2), 760);
+      context.fillText(member.name, (canvas.width / 2), 600);
+      context.fillText(event, (canvas.width / 2), 870);
       canvas.toBlob((blob) => {
         link.href = URL.createObjectURL(blob);
         link.download = member.name + " - " + event + ".png"
@@ -90,8 +90,8 @@ export default class Certificates extends React.Component {
           context.font = "bold 71px Blogger Sans";
           context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, (canvas.width / 2) , 480);
-          context.fillText(list[i].event, (canvas.width / 2), 760);
+          context.fillText(list[i].name, (canvas.width / 2) , 520);
+          context.fillText(list[i].event, (canvas.width / 2), 780);
           canvas.toBlob((blob) => {
             this.setState({ buttonName: `Processing ${Math.round(i / total * 100)}%...` });
             resolve(blob)
