@@ -116,7 +116,7 @@ const reg_renderer = ({ days, hours, minutes, seconds, completed }) => {
 const event_renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     return <div className="m-4 flex justify-center">
-      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2">
+      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2" css={{width: 250}}>
         The Event is on! <span className="font-['Noto_Color_Emoji']">🎉</span>
       </div>
     </div>
@@ -226,7 +226,7 @@ export default () => {
       {/* <div className="festival-live-message">The festival is on!</div> */}
       {/* <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} /> */}
 
-      <div className="broadcast-container mt-5 mb-5 overflow-x-auto">
+      {/* <div className="broadcast-container mt-5 mb-5 overflow-x-auto">
         <h4 className="text-left">Upcoming Events ( Today )</h4>
         {events.filter(event => {
           const eventStartDate = new Date(event.startDate);
@@ -283,7 +283,7 @@ export default () => {
         ) : (
           <p>No More Events Today</p>
         )}
-      </div>
+      </div> */}
 
 
 
