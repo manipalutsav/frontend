@@ -203,8 +203,7 @@ export default class extends React.Component {
     );
   }
   handleShare = (e) => {
-    console.log(e.target.value, "value");
-    this.download(e.target.value);
+    this.download(e);
   }
   render = () => (
     <div>
@@ -238,12 +237,21 @@ export default class extends React.Component {
                         {this.state.button}
                       </Button>
                   }
-                  {/* <button onClick={() => this.download()}>Download</button> */}
-                  <select name="share" style={{"cursor":"pointer","padding":".5rem"}} id="share" onChange={this.handleShare}>
+                  <Button 
+                  onClick={()=>this.handleShare("download")}
+                  >
+                  Download
+                  </Button>
+                  <Button 
+                  onClick={()=>this.handleShare("Send")}
+                  >
+                  Send
+                  </Button>
+                  {/* <select name="share" style={{"cursor":"pointer","padding":".5rem"}} id="share" onChange={this.handleShare}>
                     <option value="share">Share</option>
                     <option value="download">Download</option>
                     <option value="Send">Send</option>
-                  </select>
+                  </select> */}
                   {/* <Link to={`/events/${this.props.event}/rounds/${this.props.round}/leaderboard/download`}><Button styles={{ marginLeft: 20 }}>Download</Button></Link> */}
                 </div>
               </>
