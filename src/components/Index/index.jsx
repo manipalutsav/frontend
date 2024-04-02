@@ -210,7 +210,8 @@ export default () => {
       }
     };
     fetchData();
-  }, []);
+    console.log(events,"events data")
+  }, [events]);
 
 
   return (
@@ -226,7 +227,7 @@ export default () => {
       {/* <div className="festival-live-message">The festival is on!</div> */}
       {/* <img className="mucapp" css={{ width: "60%" }} alt="Logo" src={utsavLogo} /> */}
 
-      {/* <div className="broadcast-container mt-5 mb-5 overflow-x-auto">
+      <div className="broadcast-container mt-5 mb-5 overflow-x-auto">
         <h4 className="text-left">Upcoming Events ( Today )</h4>
         {events.filter(event => {
           const eventStartDate = new Date(event.startDate);
@@ -283,7 +284,7 @@ export default () => {
         ) : (
           <p>No More Events Today</p>
         )}
-      </div> */}
+      </div>
 
 
 
