@@ -6,6 +6,7 @@ import eventsService from "../../services/events";
 import participationStatus from "../../services/participationStatus";
 import { MdLocationOn, MdOpenInNew } from 'react-icons/md'
 import { getSetting } from "../../services/settingsServices";
+import mucapp_sardar from '../../images/mucapp_sardar.png'
 
 const cookingEventsOpenDate = new Date("February 27, 2023, 23:59:59");
 const cookingEventsCloseDate = new Date("March 6, 2023, 17:00:00");
@@ -210,7 +211,8 @@ export default () => {
       }
     };
     fetchData();
-  }, []);
+    console.log(events,"events data")
+  }, [events]);
 
 
   return (
@@ -220,6 +222,9 @@ export default () => {
     }} className="mt-5">
       <h2 className="mucapp">MAHE Utsav Coordinators App</h2>
       <h1 className="mucapp"> UTSAV 2024!</h1>
+      <div className="hero-image-container h-72 flex justify-center items-center my-5" >
+        <img src={mucapp_sardar} alt="" className="h-full"/>
+      </div>
       <Countdown date={new Date("April 1, 2024, 10:30:00")} renderer={event_renderer} />
 
       {/* <RegistrationTimer /> */}
