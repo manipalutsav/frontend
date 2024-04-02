@@ -33,9 +33,11 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/" title="HOME" />
       <SidebarItem to="/register" title="REGISTER" />
       <SidebarItem to="/teams" title="TEAMS" />
-      <SidebarItem to="/volunteers" title="VOLUNTEERS" />
+      <SidebarItem to="/slots" title="SLOTS" />
+      <SidebarItem to="/volunteers" title="VOLUNTEERS" /> 
       <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
       <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
+      <SidebarItem to="/stats" title="STATS" />
 
       {isAdmin &&
         <li css={{ width: 150 }}><Dropdown
@@ -107,7 +109,6 @@ const SidebarItems = ({ backupName, backupData }) => {
           Feedback
         </a>
       </li> */}
-      <SidebarItem to="/stats" title="STATS" />
     </ul>
   )
 };
@@ -148,7 +149,7 @@ const SidebarItem = (props) => (
     <Link to={props.to} title={props.title} css={{
       display: "block",
       // padding: 10,
-      margin: "5px 5px",
+      margin: "5px 0px",
       marginTop: 10,
       padding: "5px 18px",
       fontSize: "14px",
