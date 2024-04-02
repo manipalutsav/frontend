@@ -108,7 +108,7 @@ const SidebarItems = ({ backupName, backupData }) => {
           Feedback
         </a>
       </li> */}
-      {/* <SidebarItem to="/stats" title="Stats" /> */}
+      <SidebarItem to="/stats" title="STATS" />
     </ul>
   )
 };
@@ -289,10 +289,10 @@ class UserLink extends Component {
 
       <Link to={this.state.loggedIn ? "/profile" : "/login"}
         css={{ textDecoration: "none" }}>
-        <button className="mucapp" css={{
+        <button className="mucapp flex items-center justify-center" css={{
           margin: "0 20px",
         }}>
-          <FiUser />&ensp;{this.state.loggedIn ? "Profile" : "Login"}
+          <FiUser/><span className="ml-2">{this.state.loggedIn ? "Profile" : "Login"}</span>
         </button>
       </Link>
 
