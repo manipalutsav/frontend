@@ -88,6 +88,7 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
       <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
       <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
+      <SidebarItem to="/stats" title="STATS" />
       {/* <SidebarItem to="/certificates" title="Certificates" /> */}
       <SidebarSeparator />
       {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
@@ -152,7 +153,6 @@ const SidebarItems = ({ backupName, backupData }) => {
           Feedback
         </a>
       </li> */}
-      <SidebarItem to="/stats" title="Stats" />
       {isAdmin && (<a href={backupData} download={backupName}>
         <div css={{
           display: "block",
