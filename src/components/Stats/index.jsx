@@ -76,8 +76,8 @@ export default class extends React.PureComponent {
       }}>
         <StatsCard
           name="Colleges"
-          count={this.state.stats.colleges && this.state.stats.colleges.total}
-          // count={25}
+          // count={this.state.stats.colleges && this.state.stats.colleges.total}
+          count={25}
           meta={"From " + (this.state.stats.colleges && this.state.stats.colleges.locations) + " locations"}
         />
         <StatsCard
