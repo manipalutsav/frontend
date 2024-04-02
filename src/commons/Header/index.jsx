@@ -107,7 +107,7 @@ const SidebarItems = ({ backupName, backupData }) => {
           Feedback
         </a>
       </li> */}
-      {/* <SidebarItem to="/stats" title="Stats" /> */}
+      <SidebarItem to="/stats" title="STATS" />
     </ul>
   )
 };
