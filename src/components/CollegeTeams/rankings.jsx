@@ -24,6 +24,21 @@ export default class Teams extends React.Component {
 
   }
 
+  ordinal_suffix_of(i) {
+    let j = i % 10,
+        k = i % 100;
+    if (j === 1 && k !== 11) {
+        return i + "st";
+    }
+    if (j === 2 && k !== 12) {
+        return i + "nd";
+    }
+    if (j === 3 && k !== 13) {
+        return i + "rd";
+    }
+    return i + "th";
+  }
+
   render = () => (<LoadContent loading={this.state.showLoader}>
     <div>
       <h2 className="mucapp">{this.state.college ? (this.state.college.name + " " + this.state.college.location) : ""}</h2>
@@ -41,7 +56,7 @@ export default class Teams extends React.Component {
           return <tr>
           <td><Link to={`/events/${eventRanks.event._id}/rounds/${eventRanks.event.rounds.pop()}/leaderboard`}>{eventRanks.event.name}</Link></td>
           {/* uncomment this to show ranks to public */}
-          <td>{eventRanks.ranks.map(rank => <span className="pr-5">#{rank.rank}</span>)}</td>
+          <td>{eventRanks.ranks.map(rank => <span className="pr-5">{this.ordinal_suffix_of(rank.rank)}</span>)}</td>
         </tr>
         })}
       </tbody>
