@@ -26,7 +26,8 @@ export default class extends React.Component {
       leaderboard: [],
       published: false,
       button: this.BUTTON_NORMAL,
-      loading: true
+      loading: true,
+      EventType:true //true is for group and false for solo
     };
   }
 
@@ -173,9 +174,11 @@ export default class extends React.Component {
   init = async () => {
     try {
       let event = await eventService.get(this.props.event);
+      this.setState({EventType:(event.maxMembersPerTeam >1)? true :false })
       let round = await eventService.getRound(this.props.event, this.props.round);
       let leaderboard = await leaderboardService.getRound(this.props.event, this.props.round);
       let teams = await eventService.getTeams(this.props.event);
+      console.log(event.maxTeamsPerCollege,"event")
       let participants = [];
       await Promise.all(leaderboard.map(async item => {
         let _participants = await collegeService.getParticipants(item.slot.college._id);
@@ -186,7 +189,7 @@ export default class extends React.Component {
       leaderboard = leaderboard.map(item => ({ ...item, team: teams.find(team => team.college._id === item.slot.college._id && team.index === item.slot.teamIndex) }))
 
       console.log({ leaderboard });
-      this.setState({ event, round, leaderboard, published: round.published, loading: false })
+      this.setState({ event, round, leaderboard, published: round.published, loading: false})
     } catch (error) {
       console.log(error)
     }
@@ -203,6 +206,7 @@ export default class extends React.Component {
     );
   }
   handleShare = (e) => {
+    console.log(this.EventType,"event type")
     this.download(e);
   }
   render = () => (
@@ -221,7 +225,7 @@ export default class extends React.Component {
             this.state.leaderboard.length
               ? <>
                 {
-                  this.state.leaderboard.map((item, i) => (<Leaderboard item={item} key={i} />
+                  this.state.leaderboard.map((item, i) => (<Leaderboard item={item} key={i} EventType={this.state.EventType} />
                   ))
                 }
                 <div style={{ textAlign: "center", padding: 20 }}>
@@ -263,8 +267,8 @@ export default class extends React.Component {
   );
 };
 
-const Leaderboard = ({ item, key }) => (
-  item.team.participants.length == 1 ? (
+const Leaderboard = ({ item, key,EventType }) => (
+  !EventType ? (
     <LBList
       key={key}
       position={item.rank}
