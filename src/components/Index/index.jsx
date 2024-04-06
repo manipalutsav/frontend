@@ -117,7 +117,7 @@ const reg_renderer = ({ days, hours, minutes, seconds, completed }) => {
 const event_renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     return <div className="m-4 flex justify-center">
-      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2" css={{ width: 250 }}>
+      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2" css={{ width: 300 }}>
         See you at Utsav 2025! <span className="font-['Noto_Color_Emoji']"></span>
       </div>
     </div>
