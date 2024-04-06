@@ -51,7 +51,7 @@ export default class Teams extends React.Component {
         </tr>
       </thead>
       <tbody>
-        {this.state.ranks.map(eventRanks => {
+        {this.state.ranks.filter((eventRanks)=>eventRanks.event.faculty==false).map(eventRanks => {
           console.log(eventRanks)
           return <tr>
           <td><Link to={`/events/${eventRanks.event._id}/rounds/${eventRanks.event.rounds.pop()}/leaderboard`}>{eventRanks.event.name}</Link></td>
