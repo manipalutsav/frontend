@@ -117,8 +117,8 @@ const reg_renderer = ({ days, hours, minutes, seconds, completed }) => {
 const event_renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     return <div className="m-4 flex justify-center">
-      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2" css={{width: 250}}>
-        The Event is on! <span className="font-['Noto_Color_Emoji']">🎉</span>
+      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2" css={{ width: 300 }}>
+        See you at Utsav 2025! <span className="font-['Noto_Color_Emoji']"></span>
       </div>
     </div>
   } else {
@@ -211,7 +211,7 @@ export default () => {
       }
     };
     fetchData();
-    console.log(events,"events data")
+    console.log(events, "events data")
   }, [events]);
 
 
@@ -223,7 +223,7 @@ export default () => {
       <h2 className="mucapp">MAHE Utsav Coordinators App</h2>
       <h1 className="mucapp"> UTSAV 2024!</h1>
       <div className="hero-image-container h-72 flex justify-center items-center my-5" >
-        <img src={mucapp_sardar} alt="" className="h-full"/>
+        <img src={mucapp_sardar} alt="" className="h-full" />
       </div>
       <Countdown date={new Date("April 1, 2024, 10:30:00")} renderer={event_renderer} />
 
