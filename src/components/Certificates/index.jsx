@@ -56,8 +56,8 @@ export default class Certificates extends React.Component {
       context.font = "bold 71px Blogger Sans";
       context.fillStyle = "#000000";
       context.textAlign = "center";
-      context.fillText(member.name, (canvas.width / 2), 600);
-      context.fillText(event, (canvas.width / 2), 870);
+      context.fillText(member.name, (canvas.width / 2), 450);
+      context.fillText(event, (canvas.width / 2), 690);
       canvas.toBlob((blob) => {
         link.href = URL.createObjectURL(blob);
         link.download = member.name + " - " + event + ".png"
@@ -90,8 +90,8 @@ export default class Certificates extends React.Component {
           context.font = "bold 71px Blogger Sans";
           context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, (canvas.width / 2) , 520);
-          context.fillText(list[i].event, (canvas.width / 2), 780);
+          context.fillText(list[i].name, (canvas.width / 2) , 420);
+          context.fillText(list[i].event, (canvas.width / 2), 680);
           canvas.toBlob((blob) => {
             this.setState({ buttonName: `Processing ${Math.round(i / total * 100)}%...` });
             resolve(blob)
