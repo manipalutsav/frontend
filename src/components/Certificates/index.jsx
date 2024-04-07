@@ -144,10 +144,7 @@ export default class Certificates extends React.Component {
             {
               this.state.events.map((event, i) => (
                 this.state.teams[event].map((team, j) => (
-                  team.members.filter((member)=>{
-                    console.log(member)
-                    return true;
-                  }).map((member, k) => (<tr key={`${i}.${j}.${k}`}>
+                  team.members.map((member, k) => (<tr key={`${i}.${j}.${k}`}>
                     <td>{member.registrationID}</td>
                     <td>{member.name}</td>
                     <td>{event}</td>
