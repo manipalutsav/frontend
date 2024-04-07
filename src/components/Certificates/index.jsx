@@ -27,7 +27,7 @@ export default class Certificates extends React.Component {
       let sortedTeams = {};
       collegesService.getParticipants(user.college).then(participants => {
         for (let team of teams) {
-          let members = participants.filter(member => team.members.includes(member.id));
+          let members = participants.filter(member => team.members.includes(member.id) && member.certificateEligible);
           team.members = members;
         }
 
@@ -144,7 +144,10 @@ export default class Certificates extends React.Component {
             {
               this.state.events.map((event, i) => (
                 this.state.teams[event].map((team, j) => (
-                  team.members.map((member, k) => (<tr key={`${i}.${j}.${k}`}>
+                  team.members.filter((member)=>{
+                    console.log(member)
+                    return true;
+                  }).map((member, k) => (<tr key={`${i}.${j}.${k}`}>
                     <td>{member.registrationID}</td>
                     <td>{member.name}</td>
                     <td>{event}</td>
