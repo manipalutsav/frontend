@@ -13,6 +13,7 @@ const get = async (participantID) => {
 };
 
 const update = async (participantID, participant) => {
+  console.log(participant)
   let response = await request("/participants/" + participantID, "PATCH", participant);
 
   if (response && response.status === 200) {

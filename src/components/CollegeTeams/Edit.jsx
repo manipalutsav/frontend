@@ -42,7 +42,6 @@ export default class EditMember extends React.Component {
 
   componentWillMount() {
     participantsService.get(this.props.member).then(participant => {
-
       this.setState({ participant: participant || {} })
     });
 
@@ -87,6 +86,29 @@ export default class EditMember extends React.Component {
             placeholder="Registration Number"
             css={{ width: 300 }}
             className="input input-bordered"
+          />
+        </div>
+
+        <div className="flex my-2">
+          <div>Eligible for certification</div>
+          <input
+            onChange={(e)=>{
+              const val = e.target.checked;
+              this.setState((prev)=>{
+                return {
+                  participant: {
+                    ...prev.participant,
+                    certificateEligible: val,
+                  }
+                }
+              });
+            }}
+            autoComplete="off"
+            name="certificateEligible"
+            type="checkbox"
+            checked={this.state.participant.certificateEligible}
+            placeholder="Eligible for certificate"
+            css={{ width: 50 }}
           />
         </div>
 

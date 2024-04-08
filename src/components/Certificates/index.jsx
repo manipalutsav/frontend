@@ -27,7 +27,7 @@ export default class Certificates extends React.Component {
       let sortedTeams = {};
       collegesService.getParticipants(user.college).then(participants => {
         for (let team of teams) {
-          let members = participants.filter(member => team.members.includes(member.id));
+          let members = participants.filter(member => team.members.includes(member.id) && member.certificateEligible);
           team.members = members;
         }
 
