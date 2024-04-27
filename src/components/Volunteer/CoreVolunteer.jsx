@@ -45,7 +45,7 @@ class CoreVolunteer extends React.Component {
     let total = list.length;
     list.map((vol) => {
       vol.college = this.state.colleges.find(
-        (clg) => clg.value == vol.collegeId
+        (clg) => clg.value == vol.collegeId 
       ).label;
       return vol;
     });
@@ -70,7 +70,7 @@ class CoreVolunteer extends React.Component {
 
           // Breaking the lines if it is too big to fit
           const lines = [];
-          if (list[i].college.length > 50) {
+          if (list[i]?.college?.length > 50) {
             const sep = list[i].college.split(" ");
 
             let line = "";
@@ -91,7 +91,7 @@ class CoreVolunteer extends React.Component {
               context.fillText(
                 ln,
                 canvas.width / 2,
-                890 - (lines.length - idx) * 63
+                1150 - (lines.length - idx) * 63
               );
             });
           } else {

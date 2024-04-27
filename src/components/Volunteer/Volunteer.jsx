@@ -91,7 +91,7 @@ class Volunteer extends React.Component {
               context.fillText(
                 ln,
                 canvas.width / 2,
-                890 - (lines.length - idx) * 63
+                1150 - (lines.length - idx) * 63
               );
             });
           } else {
