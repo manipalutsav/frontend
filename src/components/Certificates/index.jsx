@@ -10,7 +10,8 @@ export default class Certificates extends React.Component {
     college: {},
     events: [],
     teams: {},
-    buttonName: "Download All"
+    buttonName: "Download All",
+    name:""
   };
 
   constructor(props) {
@@ -128,6 +129,10 @@ export default class Certificates extends React.Component {
         <div>
           <h2 className="mucapp">Participation Certificates</h2>
         </div>
+        <div>
+          <input type="search" style={{"padding":".2rem","border":"2px solid grey","borderRadius":"5rem","textAlign":"center","margin":".5rem 0","outline":"none"}} placeholder="Search by Name" value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
+        </div>
+        
         <div className="output">
 
         </div>
@@ -144,7 +149,8 @@ export default class Certificates extends React.Component {
             {
               this.state.events.map((event, i) => (
                 this.state.teams[event].map((team, j) => (
-                  team.members.map((member, k) => (<tr key={`${i}.${j}.${k}`}>
+                  team.members.map((member, k) => (member.name).toLowerCase().includes(this.state.name.toLowerCase()) && (<tr key={`${i}.${j}.${k}`}>
+                    {console.log("member name : "+member.name +"=="+this.state.name+" => " +(member.name).includes(this.state.name))}
                     <td>{member.registrationID}</td>
                     <td>{member.name}</td>
                     <td>{event}</td>

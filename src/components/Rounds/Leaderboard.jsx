@@ -102,6 +102,10 @@ export default class extends React.Component {
           context.fillText(text, (canvas.width / 6.4), first_start - 40);
           // context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
         }
+        if (i == 3) {
+          context.fillText(text, (canvas.width / 6.4), first_start + 80);
+          // context.fillRect((canvas.width / 3.1), first_start + 43, width, 2);
+        }
       }
       for (let i = 0; i < placesArray[1].length; i++) {
         context.font = "bold 34px HammersmithOne";
@@ -119,6 +123,10 @@ export default class extends React.Component {
           context.fillText(text, (canvas.width / 6.4), second_start - 40);
           // context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
         }
+        if (i == 3) {
+          context.fillText(text, (canvas.width / 6.4), second_start + 80);
+          // context.fillRect((canvas.width / 3.1), second_start + 43, width, 2);
+        }
       }
       for (let i = 0; i < placesArray[2].length; i++) {
         let text = placesArray[2][i]["name"];
@@ -133,6 +141,10 @@ export default class extends React.Component {
         }
         if (i == 1) {
           context.fillText(text, (canvas.width / 6.4), third_start - 40);
+          // context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
+        }
+        if (i == 3) {
+          context.fillText(text, (canvas.width / 6.4), third_start + 80);
           // context.fillRect((canvas.width / 3.1), third_start + 43, width, 2);
         }
       }
