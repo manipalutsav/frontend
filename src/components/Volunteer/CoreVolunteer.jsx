@@ -10,7 +10,7 @@ import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 import { Link } from "gatsby";
 
-import certificateURL from "../../images/volunteer-certificate-core.jpg";
+import certificateURL from "../../images/volunteer-certificate-core.png";
 import JSZip from "jszip";
 const sizes = [
   { value: "XS", label: "Extra Small" },
@@ -63,9 +63,9 @@ class CoreVolunteer extends React.Component {
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
           context.font = "bold 71px Blogger Sans";
-          context.fillStyle = "#fff4e4";
+          context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, canvas.width / 2, 480);
+          context.fillText(list[i].name, canvas.width / 2, 725);
           context.font = "bold 60px Blogger Sans";
 
           // Breaking the lines if it is too big to fit
@@ -95,7 +95,7 @@ class CoreVolunteer extends React.Component {
               );
             });
           } else {
-            context.fillText(list[i].college, canvas.width / 2, 820);
+            context.fillText(list[i].college, canvas.width / 2, 1050);
           }
           canvas.toBlob((blob) => {
             this.setState({
@@ -205,9 +205,9 @@ class CoreVolunteer extends React.Component {
         <div>
           <div>
             <h2 className="mucapp">Core Volunteers</h2>
-            {/* <button className="mucapp" onClick={this.downloadAll}>
+            <button className="mucapp" onClick={this.downloadAll}>
               {this.state.downloadButtonName}
-            </button> */}
+            </button>
           </div>
         </div>
         <div className="coreVolunteers">

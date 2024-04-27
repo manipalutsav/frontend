@@ -9,7 +9,7 @@ import { Link } from "gatsby";
 import { keyToDisplay } from "../../utils/common";
 import Block from "../../commons/Block";
 
-import certificateURL from "../../images/volunteer-certificate-event.jpg";
+import certificateURL from "../../images/volunteer-certificate-event.png";
 import JSZip from "jszip";
 
 const sizes = [
@@ -63,9 +63,9 @@ class Volunteer extends React.Component {
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
           context.font = "bold 71px Blogger Sans";
-          context.fillStyle = "#fff4e4";
+          context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, canvas.width / 2, 480);
+          context.fillText(list[i].name, canvas.width / 2, 725);
           context.font = "bold 60px Blogger Sans";
 
           // Breaking the lines if it is too big to fit
@@ -95,7 +95,7 @@ class Volunteer extends React.Component {
               );
             });
           } else {
-            context.fillText(list[i].college, canvas.width / 2, 820);
+            context.fillText(list[i].college, canvas.width / 2, 1050);
           }
           canvas.toBlob((blob) => {
             this.setState({
@@ -211,11 +211,11 @@ class Volunteer extends React.Component {
             <h2 className="mucapp">
               {keyToDisplay(this.props.type)} Volunteers
             </h2>
-            {/* {this.props.type == "event" && (
+            {this.props.type == "event" && (
               <button className="mucapp" onClick={this.downloadAll}>
                 {this.state.downloadButtonName}
               </button>
-            )} */}
+            )}
           </div>
         </div>
         <div className="coreVolunteers">

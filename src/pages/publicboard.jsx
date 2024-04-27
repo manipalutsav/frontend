@@ -30,6 +30,16 @@ export default class extends React.Component {
   }
   componentWillMount() {
     this.init();
+
+    //just testing delete this block before pushing 
+    
+    leaderboardService.getPublic().then(lb =>
+      this.setState({
+        leaderboard: lb.sort((a, b) => parseFloat(b.points) - parseFloat(a.points)),
+      })
+    );
+    console.log(this.leaderboard,"leaderboard");
+    //block ends here
   }
   async init() {
     await this.setState({ status: "Fetching events..." });
