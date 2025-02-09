@@ -84,12 +84,12 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/" title="HOME" />
       <SidebarItem to="/register" title="REGISTER" />
       <SidebarItem to="/teams" title="TEAMS" />
-      <SidebarItem to="/slots" title="SLOTS" />
-      <SidebarItem to="/volunteers" title="VOLUNTEERS" />
-      <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
-      <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
-      <SidebarItem to="/stats" title="STATS" />
-      <SidebarItem to="/certificates" title="CERTIFICATES" />
+      {/* <SidebarItem to="/slots" title="SLOTS" /> */}
+      {/* <SidebarItem to="/volunteers" title="VOLUNTEERS" /> */}
+      {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
+      {/* <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" /> */}
+      {/* <SidebarItem to="/stats" title="STATS" /> */}
+      {/* <SidebarItem to="/certificates" title="CERTIFICATES" /> */}
       <SidebarSeparator />
       {/* <li style={{ fontSize: "0.5em", color: "#999", paddingTop: "20px", paddingLeft: "50px" }}>Admin</li> */}
       {/* <Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />;

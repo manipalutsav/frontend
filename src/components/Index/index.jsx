@@ -221,7 +221,7 @@ export default () => {
 
     }} className="mt-5">
       <h2 className="mucapp">MAHE Utsav Coordinators App</h2>
-      <h1 className="mucapp"> UTSAV 2024!</h1>
+      <h1 className="mucapp"> UTSAV 2025!</h1>
       <div className="hero-image-container h-72 flex justify-center items-center my-5" >
         <img src={mucapp_sardar} alt="" className="h-full" />
       </div>
