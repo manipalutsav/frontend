@@ -123,7 +123,6 @@ export default class Certificates extends React.Component {
 
   }
   render = () => {
-
     return (
       <div>
         <div>
@@ -149,7 +148,7 @@ export default class Certificates extends React.Component {
             {
               this.state.events.map((event, i) => (
                 this.state.teams[event].map((team, j) => (
-                  team.members.map((member, k) => (member.name).toLowerCase().includes(this.state.name.toLowerCase()) && (<tr key={`${i}.${j}.${k}`}>
+                  team.members.map((member, k) => (<tr key={`${i}.${j}.${k}`}>
                     {console.log("member name : "+member.name +"=="+this.state.name+" => " +(member.name).includes(this.state.name))}
                     <td>{member.registrationID}</td>
                     <td>{member.name}</td>

@@ -211,11 +211,11 @@ class Volunteer extends React.Component {
             <h2 className="mucapp">
               {keyToDisplay(this.props.type)} Volunteers
             </h2>
-            {this.props.type == "event" && (
+            {/* {this.props.type == "event" && (
               <button className="mucapp" onClick={this.downloadAll}>
                 {this.state.downloadButtonName}
               </button>
-            )}
+            )} */}
           </div>
         </div>
         <div className="coreVolunteers">
