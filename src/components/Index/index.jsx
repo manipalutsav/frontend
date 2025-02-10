@@ -8,10 +8,10 @@ import { MdLocationOn, MdOpenInNew } from 'react-icons/md'
 import { getSetting } from "../../services/settingsServices";
 import mucapp_sardar from '../../images/mucapp_sardar.png'
 
-const cookingEventsOpenDate = new Date("February 27, 2023, 23:59:59");
-const cookingEventsCloseDate = new Date("March 6, 2023, 17:00:00");
-const studentEventsOpenDate = new Date("March 15, 2023, 21:00:00");
-const studentEventsCloseDate = new Date("March 27, 2023, 23:59:59");
+const cookingEventsOpenDate = new Date("February 27, 2025, 23:59:59");
+const cookingEventsCloseDate = new Date("March 6, 2025, 17:00:00");
+const studentEventsOpenDate = new Date("March 15, 2025, 21:00:00");
+const studentEventsCloseDate = new Date("March 27, 2025, 23:59:59");
 
 // JSON for the google map location for each venue. Since location is not being saved, this json should be updated everytime a new venue is added or removed
 // venue: *name of the venue on the website
@@ -117,8 +117,8 @@ const reg_renderer = ({ days, hours, minutes, seconds, completed }) => {
 const event_renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     return <div className="m-4 flex justify-center">
-      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2" css={{ width: 300 }}>
-        See you at Utsav 2025! <span className="font-['Noto_Color_Emoji']"></span>
+      <div className="mb-16 p-4 rounded-md bg-orange-200 text-2xl gap-2 align-middle justify-center flex outline outline-orange-500 outline-2 font-bold" css={{ width: 300 }}>
+        Welcome to Utsav 2025! <span className="font-['Noto_Color_Emoji']"></span>
       </div>
     </div>
   } else {
