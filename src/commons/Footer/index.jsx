@@ -19,9 +19,11 @@ export default () => (
     <div>
       If you have any issues or queries, please feel free to contact
       <br />
-      <Contact name="Poornima" number="9980853396" />
+      <Contact name="Poornima" number="99808 53396" />
       &ensp;or&ensp;
-      <Contact name="Sambit" number="9986104763" />
+      <Contact name="Sambit" number="99861 04763" />
+       &ensp;or&ensp;
+      <Contact name="Prajwal" number="97432 86929" />
     </div>
     <div>
       <Link to="/devs" css={{ color: "white" }}><span role="img" aria-label="unicorn">🦄</span></Link>
