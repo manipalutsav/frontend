@@ -80,3 +80,6 @@ constants.js
 .idea
 
 ssl/
+
+# Scripts
+createRootUser.js

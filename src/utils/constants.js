@@ -1,4 +1,4 @@
-import serverUrl from './serverUrl'
+import serverUrl from './serverUrl.js'
 
 const userTypes = {
   ADMINISTRATOR: 1 << 0,
@@ -62,5 +62,15 @@ export default {
     light: "#f5f5f5",
     white: "#ffffff",
   },
-  server: serverUrl,
+  // server: serverUrl,
+  server: servers.development,
 };
+
+export const COMMANDS = [
+  { name: "info", emoji: "ℹ️" },
+        { name: "success", emoji: "✅" },
+        { name: "error", emoji: "❌" }
+]
+export const USER_TYPES = {
+  ADMINISTRATOR: "admin",
+}

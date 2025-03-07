@@ -1,7 +1,7 @@
-import request from "../utils/request";
-import { send } from '../actions/commonActions';
-import { getUser } from './userServices';
-import { toast } from "../actions/toastActions";
+import request from "../utils/request.js";
+import { send } from '../actions/commonActions.js';
+import { getUser } from './userServices.js';
+import { toast } from "../actions/toastActions.js";
 
 export const getAll = async () => {
   let response = await request("/colleges");

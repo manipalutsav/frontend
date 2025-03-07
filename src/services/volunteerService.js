@@ -1,4 +1,4 @@
-import request from "../utils/request";
+import request from "../utils/request.js";
 
 export const addCoreVolunteer = async (payload) => {
   let response = await request(`/coreVolunteer/`, "POST", payload);

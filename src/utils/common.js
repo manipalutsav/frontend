@@ -1,4 +1,4 @@
-import collegeService from '../services/colleges';
+import collegeService from '../services/colleges.js';
 
 export const toUnitText = (quantity, unit) => `${quantity} ${quantity > 1 ? `${unit}s` : unit}`;
 

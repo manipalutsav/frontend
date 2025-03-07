@@ -1,6 +1,6 @@
-import request from "../utils/request";
-import constants from "../utils/constants";
-import { toast } from "../actions/toastActions";
+import request from "../utils/request.js";
+import constants from "../utils/constants.js";
+import { toast } from "../actions/toastActions.js";
 
 const create = async (college) => {
   let response = await request("/colleges", "POST", college);

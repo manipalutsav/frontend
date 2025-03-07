@@ -1,5 +1,5 @@
-import request from "../utils/request";
-import { send } from '../actions/commonActions';
+import request from "../utils/request.js";
+import { send } from '../actions/commonActions.js';
 
 export const getEventLeaderboard = async (eventId) => {
   let response = await request(`/events/${eventId}/leaderboard`);
