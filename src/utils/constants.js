@@ -62,15 +62,5 @@ export default {
     light: "#f5f5f5",
     white: "#ffffff",
   },
-  // server: serverUrl,
-  server: servers.development,
+  server: serverUrl,
 };
-
-export const COMMANDS = [
-  { name: "info", emoji: "ℹ️" },
-        { name: "success", emoji: "✅" },
-        { name: "error", emoji: "❌" }
-]
-export const USER_TYPES = {
-  ADMINISTRATOR: "admin",
-}
