@@ -4,7 +4,7 @@ import { FiX } from "react-icons/fi";
 import './style.css'
 
 import reducer from "../../reducers/commonReducer";
-import { getAll } from "../../services/judgeServices";
+import { getAll, deleteJudgeById } from "../../services/judgeServices";
 import Loader from "../../commons/Loader";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
@@ -30,13 +30,24 @@ const styles = {
   },
 };
 
-const Judge = (props) => {
-  let handleDelete = (judge) => {
-    typeof window !== "undefined"
-      && window.confirm("Are you sure you want to delete the judge " + judge.name + "?");
-    // if (surety && !judge.rounds.length)
-    // TODO: DELETE /judges/:judge
-  }
+/*
+Currently we are deleteing the judge regardless of whether it has associated rounds or not. This is because we should be able to delete previous years judges also. If you want to restrict the deletion to only judges without associated rounds, we have to just remove the commented code.
+*/
+  const Judge = (props) => {
+    let handleDelete = async (judge) => {
+      if (typeof window !== "undefined" && window.confirm(`Are you sure you want to delete the judge ${judge.name}?`)) {
+        // if (!judge.rounds.length) {
+          try {
+            await deleteJudgeById(judge.id);
+            getAll(); // Refresh the judges list after deletion
+          } catch (error) {
+            console.error("Error deleting judge:", error);
+          }
+        // } else {
+        //   alert("Cannot delete judge assigned to rounds.");
+        // }
+      }
+    };
 
   return (
     <div css={{

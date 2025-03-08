@@ -3,6 +3,7 @@
   "private": true,
   "description": "",
   "version": "2.0.0",
+
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",

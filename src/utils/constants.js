@@ -1,4 +1,4 @@
-import serverUrl from './serverUrl'
+import serverUrl from './serverUrl.js'
 
 const userTypes = {
   ADMINISTRATOR: 1 << 0,

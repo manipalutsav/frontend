@@ -15,10 +15,10 @@ export default (props) => (
     <Main>
       <Sidebar />
       <Content>
-        { props.children }
+        {props.children}
       </Content>
     </Main>
     <Footer />
-    <Toast/>
+    <Toast />
   </>
 );
