@@ -1,4 +1,4 @@
-import request from "../utils/request";
+import request from "../utils/request.js";
 
 const get = async () => {
   let response = await request("/stats");

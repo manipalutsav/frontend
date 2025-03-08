@@ -1,6 +1,6 @@
-import request from "../utils/request";
-import { send } from "../actions/commonActions";
-import { toast } from "../actions/toastActions";
+import request from "../utils/request.js";
+import { send } from "../actions/commonActions.js";
+import { toast } from "../actions/toastActions.js";
 
 export const isBrowser = () => typeof window !== "undefined";
 
