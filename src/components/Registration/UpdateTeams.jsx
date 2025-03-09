@@ -11,7 +11,7 @@ import { toast } from "../../actions/toastActions";
 
 const Participant = (props) => (
   <div>
-    <h3 className="mucapp">Participant {props.count}</h3>
+    <h3 className="mucapp">Participant {props.cnt}</h3>
     <Input
       name="registrationID"
       type="text"
@@ -135,8 +135,9 @@ export default class Events extends React.Component {
       collegesService.getTeams(user.college).then(teams=>{
         let team = teams.find((t)=>t._id == this.props.team);
         const remainingMemberCount = (event.maxMembersPerTeam - team.members.length);
-        for (let i = 0; i < remainingMemberCount; i++) {
-            participantsInput.push(<Participant handleChange={this.handleChange} key={i} count={i + 1} />);
+        // for (let i = (event.maxMembersPerTeam-remainingMemberCount); i < remainingMemberCount; i++) {
+        for (let i = 0 , j=(event.maxMembersPerTeam-remainingMemberCount); i <remainingMemberCount ; i++,j++) {
+            participantsInput.push(<Participant handleChange={this.handleChange} key={i} count={i + 1} cnt={j+1}/>);
         }
         this.setState({
             event,
