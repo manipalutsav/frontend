@@ -1,5 +1,5 @@
-import request from "../utils/request";
-import toast from '../reducers/toastReducer';
+import request from "../utils/request.js";
+import toast from '../reducers/toastReducer.js';
 
 const get = async (participantID) => {
   let response = await request("/participants/" + participantID);

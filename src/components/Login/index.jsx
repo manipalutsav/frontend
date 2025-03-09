@@ -79,9 +79,9 @@ export default class Login extends Component {
 							marginBottom: "16px",
 						}}>Login to MUCAPP</div>
 						<div css={{
-							display: "flex",
-							flexDirection: "column",
-						}}>
+								display: "flex",
+								flexDirection: "column",
+							}}>
 							<Input onChange={this.handleChange} name="email" type="email" placeholder="Email" />
 							<Input onChange={this.handleChange} type="password" name="password" placeholder="Password" />
 						</div>
@@ -90,8 +90,7 @@ export default class Login extends Component {
 								styles={{
 									width: "100%",
 								}}
-
-							>
+								>
 								{this.state.loginButton}
 							</Button>
 						</div>

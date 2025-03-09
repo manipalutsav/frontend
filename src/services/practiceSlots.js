@@ -1,5 +1,5 @@
-import request from "../utils/request";
-import { toast } from "../actions/toastActions";
+import request from "../utils/request.js";
+import { toast } from "../actions/toastActions.js";
 
 const createPracticeSlot = async (date) => {
   let response = await request("/practiceslots", "POST", {date});

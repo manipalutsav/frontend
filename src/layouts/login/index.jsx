@@ -9,7 +9,7 @@ import "../base.css";
 export default (props) => (
   <>
     <Header />
-    <Main>
+    <Main style={{ backgroundColor: "red" }}>
       { props.children }
     </Main>
     <Footer />

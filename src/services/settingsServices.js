@@ -1,5 +1,5 @@
-import { toast } from "../actions/toastActions";
-import request from "../utils/request";
+import { toast } from "../actions/toastActions.js";
+import request from "../utils/request.js";
 
 
 /**

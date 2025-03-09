@@ -1,4 +1,4 @@
-import reducer from "../reducers/toastReducer";
+import reducer from "../reducers/toastReducer.js";
 
 export const toast = (message) =>  {
 

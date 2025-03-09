@@ -1,4 +1,4 @@
-import reducer from "../reducers/userReducer";
+import reducer from "../reducers/userReducer.js";
 
 export const login = (email, password) => {
   reducer.dispatch({type: 'LOGIN', email, password});
