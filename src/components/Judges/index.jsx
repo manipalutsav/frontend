@@ -64,7 +64,7 @@ const Judge = (props) => {
         }}
       >
         <span>{props.info.name}</span>
-        {/* <span
+        <span
           css={{
             cursor: 'pointer',
             ':hover': {
@@ -73,7 +73,7 @@ const Judge = (props) => {
           }}
         >
           <FiX onClick={() => handleDelete(props.info)} />
-        </span> */}
+        </span>
       </div>
       <div
         css={{
