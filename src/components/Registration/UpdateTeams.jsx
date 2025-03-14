@@ -68,7 +68,7 @@ export default class Events extends React.Component {
           ? true
           : false,
     }));
-
+    
     //VALIDATIONS
     for (let i = 0; i < this.state.participants.length; i++) {
       let participant = this.state.participants[i];
