@@ -3,7 +3,7 @@ import React from "react";
 import {getSettings, updateSettings} from "../../services/settingsServices";
 import Loader from "../../commons/Loader";
 import { toast } from "../../actions/toastActions";
-import ManualSlot from "../ManualSlot";
+import ManualSlot from "../ManualSlot/Index";
 
 const styles = {
   teamCard: {
