@@ -71,7 +71,6 @@ import PublicEvents from "../components/PublicEvents";
 import Settings from "../components/Settings/Index";
 // import { overflow } from "html2canvas/dist/types/css/property-descriptors/overflow";
 
-
 if (typeof (document) != 'undefined')
   document.title = "MUCAPP";
 

@@ -3,6 +3,7 @@ import React from "react";
 import {getSettings, updateSettings} from "../../services/settingsServices";
 import Loader from "../../commons/Loader";
 import { toast } from "../../actions/toastActions";
+import ManualSlot from "../ManualSlot/Index";
 
 const styles = {
   teamCard: {
@@ -57,6 +58,7 @@ export default class Settings extends React.Component {
   
 
   render = () => (
+    <div className="flex  gap-4">
     <div className=" w-[400px] bg-zinc-50 border p-4 rounded-md ">
       <h2 className="mucapp">Settings</h2>
       
@@ -73,6 +75,14 @@ export default class Settings extends React.Component {
 
         <button className="mucapp mt-4 w-[200px]" onClick={this.handleSave.bind(this)}>Save</button>
       </div>
+      
+    </div>
+    <div className=" w-[400px] bg-zinc-50 border p-4 rounded-md ">
+      <h2 className="mucapp">Manual Slotting</h2>
+      <ManualSlot/>
+      
+      
+    </div>
     </div>
   );
 };
