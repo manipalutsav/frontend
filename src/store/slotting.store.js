@@ -33,6 +33,9 @@ const useSlottingStore = create((set) => ({
       if (response && response.status === 200) {
         set({ isLoading: false });
         toast(response.message);
+      }else if(response&&response.status===309){
+        set({ isLoading: false });
+        toast(response.message);
       } else {
         if (response && response.status === 401) {
           toast("Your session has expired, please logout and login again.");
