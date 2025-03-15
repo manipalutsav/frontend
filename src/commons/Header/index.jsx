@@ -88,10 +88,10 @@ const SidebarItems = ({ backupName, backupData }) => {
           <Dropdown.Item as="a">
           <DropItem to="/settings" title="Settings" />
         </Dropdown.Item>
-
           <Dropdown.Item as="a">
             <DropItemwithDownload to={backupData} title="🗂 Backup" download={backupName} />
           </Dropdown.Item>
+          
 
           
 
