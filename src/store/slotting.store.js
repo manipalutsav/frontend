@@ -18,6 +18,8 @@ const useSlottingStore = create((set) => ({
       } else {
         if (response && response.status === 401) {
           toast("Your session has expired, please logout and login again.");
+        }else if(response&&response.status===404){
+          toast(response.message);
         }
         set({ isLoading: false, error: "Failed to fetch registered events" });
       }
@@ -39,8 +41,11 @@ const useSlottingStore = create((set) => ({
       } else {
         if (response && response.status === 401) {
           toast("Your session has expired, please logout and login again.");
+        }else if(response&&response.status===404){
+          toast(response.message);
         }
-        set({ isLoading: false, error: "Failed to slot teams" });
+        set({ isLoading: false});
+        toast(response.message);
       }
     } catch (error) {
       toast(error.message);
