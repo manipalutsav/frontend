@@ -34,9 +34,7 @@ export default class extends React.Component {
   componentWillMount() {
     console.log('check');
 
-    practiceSlotsService
-      .getPracticeSlot(this.state.eventDate)
-      .then((slots) =>
+    practiceSlotsService.getPracticeSlotByDate(this.state.eventDate).then((slots) =>
         this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
       );
     console.log(this.state.slots, 'sltos');
