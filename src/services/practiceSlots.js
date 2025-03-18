@@ -1,8 +1,12 @@
 import request from '../utils/request.js';
 import { toast } from '../actions/toastActions.js';
 
-const createPracticeSlot = async (date) => {
-  let response = await request('/practiceslots', 'POST', { date });
+const createPracticeSlot = async (date, startTime, endTime) => {
+  let response = await request('/practiceslots', 'POST', {
+    date: date,
+    startTime: startTime,
+    endTime: endTime,
+  });
 
   if (response && response.status === 200) {
     // let slots=[];
@@ -33,7 +37,9 @@ const getPracticeSlot = async (date) => {
 };
 
 const getPracticeSlotByDate = async (date) => {
-  let response = await request('/practiceslots/getSlotsByDate', 'POST', { date: date });
+  let response = await request('/practiceslots/getSlotsByDate', 'POST', {
+    date: date,
+  });
 
   if (response && response.status === 200) {
     console.log(response.data);
