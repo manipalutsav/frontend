@@ -144,9 +144,7 @@ export default class extends React.Component {
       slotting: false,
       slotted: false,
     });
-    practiceSlotsService
-      .getPracticeSlot(event.target.value)
-      .then((slots) =>
+    practiceSlotsService.getPracticeSlotByDate(event.target.value).then((slots) =>
         this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
       );
   };
