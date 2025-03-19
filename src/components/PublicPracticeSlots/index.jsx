@@ -80,9 +80,8 @@ export default class extends React.Component {
   handleDateChange = (event) => {
     // Function to handle date selection from dropdown
     this.setState({ eventDate: event.target.value });
-    practiceSlotsService
-      .getPracticeSlot(event.target.value)
-      .then((slots) =>
+    
+    practiceSlotsService.getPracticeSlotByDate(event.target.value).then((slots) =>
         this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
       );
   };

@@ -249,7 +249,11 @@ export default () => {
     };
     fetchData();
     console.log(events, 'events data');
-  }, [events]);
+
+  // }, [events]);
+  
+}, []); // Commented to avoid infinite loop
+
 
   return (
     <div
