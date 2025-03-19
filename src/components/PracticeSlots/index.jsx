@@ -1,10 +1,11 @@
 import React from 'react';
 import Scramble from 'react-scramble';
-
+import Dialog from '../../commons/Dialog';
 import practiceSlotsService from '../../services/practiceSlots';
 import LBList from '../../commons/LBList';
 import Shuffle from '../../commons/Shuffle';
 import { getTeamName } from '../../utils/common';
+import { toast } from '../../actions/toastActions';
 
 export default class extends React.Component {
   constructor(props) {
@@ -18,6 +19,10 @@ export default class extends React.Component {
     this.deleteSlots = this.deleteSlots.bind(this);
 
     this.state = {
+      timeError: '',
+      showSlottingForm: false,
+      startTime: null,
+      endTime: null,
       loaded: false,
       event: {},
       slots: [],
@@ -102,7 +107,11 @@ export default class extends React.Component {
   startSlotting() {
     this.setState({ slotting: true });
     practiceSlotsService
-      .createPracticeSlot(this.state.eventDate)
+      .createPracticeSlot(
+        this.state.eventDate,
+        this.state.startTime,
+        this.state.endTime
+      )
       .then((slots) =>
         this.setState({ slots }, () => this.animate(this.state.slots))
       );
@@ -141,6 +150,43 @@ export default class extends React.Component {
         this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
       );
   };
+
+  openSlottingForm = () => {
+    this.setState({ timeError: '', showSlottingForm: true });
+  };
+
+  closeSlottingForm = () => {
+    this.setState({ timeError: '', showSlottingForm: false });
+  };
+
+  handleInputChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  SubmitSlottingForm = () => {
+    const { startTime, endTime } = this.state;
+
+    if (!startTime || !endTime) {
+      this.setState({
+        timeError: 'Please fill in both Start Time and End Time.',
+      });
+      return;
+    }
+
+    if (startTime >= endTime) {
+      this.setState({ timeError: 'End Time must be later than Start Time.' });
+      return;
+    }
+
+    // Clear error if validation passes
+    this.setState({ timeError: '', showSlottingForm: false });
+    this.startSlotting();
+    this.closeSlottingForm();
+
+    console.log(this.state);
+  };
+  
+
   render = () =>
     this.state.loaded ? (
       this.state.slotted ? (
@@ -175,10 +221,11 @@ export default class extends React.Component {
             {this.state.slots.map((slot, i) => (
               <LBList
                 key={i}
-                color={'#444'}
+                color={'#444'} 
                 position={slot.order}
                 title={`${slot.college}, ${slot.location}`}
-                description={this.getTimeSlot(i)}
+                // description={this.getTimeSlot(i)}
+                description={ `${slot.startTime} - ${slot.endTime}`}
               />
             ))}
           </div>
@@ -240,7 +287,7 @@ export default class extends React.Component {
                     ]}
                   />
                 }
-                description={this.getTimeSlot(i)}
+                description={ `${slot.startTime} - ${slot.endTime}`}
               />
             ))}
           </div>
@@ -266,7 +313,7 @@ export default class extends React.Component {
             Practice slots are not yet generated
           </div>
           <p css={{ color: 'green' }}>Generate slots now!</p>
-          <button className="mucapp" onClick={this.startSlotting}>
+          <button className="mucapp" onClick={this.openSlottingForm}>
             {this.state.slotting ? 'Slotting...' : 'Start Slotting'}
           </button>
           <select
@@ -284,6 +331,64 @@ export default class extends React.Component {
             <option value="2025-03-27">March 27, 2025</option>
             <option value="2025-03-28">March 28, 2025</option>
           </select>
+          <Dialog
+            title="Enter the Start Time And End Time"
+            body={
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label
+                    htmlFor="startTime"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Start Time
+                  </label>
+                  <input
+                    className="w-[90%] px-3 py-2 mt-1 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    type="time"
+                    name="startTime"
+                    id="startTime"
+                    value={this.state.startTime}
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="endTime"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    End Time
+                  </label>
+                  <input
+                    className={`w-[90%] px-3 py-2 mt-1 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
+                      this.state.timeError ? 'border-red-500' : ''
+                    }`}
+                    type="time"
+                    name="endTime"
+                    id="endTime"
+                    value={this.state.endTime}
+                    onChange={this.handleInputChange}
+                  />
+                  <p
+                    className={`text-sm mt-1  ${
+                      this.state.timeError ? `text-red-500` : `text-transparent`
+                    } `}
+                  >
+                    {this.state.timeError}
+                  </p>
+                </div>
+              </div>
+            }
+            positiveButton={{
+              label: 'Submit',
+              handler: this.SubmitSlottingForm,
+            }}
+            negativeButton={{
+              label: 'Cancel',
+              handler: this.closeSlottingForm,
+            }}
+            show={this.state.showSlottingForm}
+          />
         </div>
       )
     ) : (

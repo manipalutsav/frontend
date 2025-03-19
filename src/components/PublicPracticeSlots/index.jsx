@@ -122,7 +122,7 @@ export default class extends React.Component {
                 position={slot.order}
                 team={String.fromCharCode(65 + slot.team)}
                 title={`${slot.college}, ${slot.location}`}
-                description={this.getTimeSlot(i)}
+                description={ `${slot.startTime} - ${slot.endTime}`}
               />
             ))}
           </div>
