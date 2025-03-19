@@ -39,7 +39,9 @@ export default class extends React.Component {
   componentWillMount() {
     console.log('check');
 
-    practiceSlotsService.getPracticeSlotByDate(this.state.eventDate).then((slots) =>
+    practiceSlotsService
+      .getPracticeSlotByDate(this.state.eventDate)
+      .then((slots) =>
         this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
       );
     console.log(this.state.slots, 'sltos');
@@ -145,7 +147,7 @@ export default class extends React.Component {
       slotted: false,
     });
     practiceSlotsService
-      .getPracticeSlot(event.target.value)
+      .getPracticeSlotByDate(event.target.value)
       .then((slots) =>
         this.setState({ slots, loaded: true, slotted: slots?.length > 0 })
       );
@@ -185,7 +187,6 @@ export default class extends React.Component {
 
     console.log(this.state);
   };
-  
 
   render = () =>
     this.state.loaded ? (
@@ -221,11 +222,11 @@ export default class extends React.Component {
             {this.state.slots.map((slot, i) => (
               <LBList
                 key={i}
-                color={'#444'} 
+                color={'#444'}
                 position={slot.order}
                 title={`${slot.college}, ${slot.location}`}
                 // description={this.getTimeSlot(i)}
-                description={ `${slot.startTime} - ${slot.endTime}`}
+                description={`${slot.startTime} - ${slot.endTime}`}
               />
             ))}
           </div>
@@ -287,7 +288,7 @@ export default class extends React.Component {
                     ]}
                   />
                 }
-                description={ `${slot.startTime} - ${slot.endTime}`}
+                description={`${slot.startTime} - ${slot.endTime}`}
               />
             ))}
           </div>
