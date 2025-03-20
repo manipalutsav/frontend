@@ -3,7 +3,6 @@
   "private": true,
   "description": "",
   "version": "2.0.0",
-
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -43,7 +42,8 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "rsuite": "^5.30.0",
-    "typography": "^0.16.19"
+    "typography": "^0.16.19",
+    "zustand": "^3.7.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.8",

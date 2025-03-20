@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 
-import { addVolunteer, getVolunteers } from "../../services/volunteerService";
+import { addVolunteer, getVolunteers, deleteVolunteer } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
@@ -193,6 +193,22 @@ class Volunteer extends React.Component {
       this.setState({ buttonText: this.ADD_VOLUNTEER });
     }
   };
+  deleteHandler = async(id)=>{
+    if(window.confirm("Are you sure you want to delete this volunteer?")){
+      try{
+        const response = await deleteVolunteer(id,{type: this.props.type});
+        if(response.status === 200){
+          toast("Volunteer deleted successfully");
+          this.getVolunteers();
+        }else{
+          toast(response.message || "Deletion failed");
+        }
+      }catch(error){
+        toast(error.message || "Error deleting volunteer");
+      }
+
+    }
+  }
 
   getVolunteers = async () => {
     const response = await getVolunteers(this.props.type);
@@ -382,7 +398,7 @@ class Volunteer extends React.Component {
                         ).label
                       }
                     </td>
-                    <td>
+                    <td className="flex gap-2">
                       <Link
                         to={`/volunteers/${this.props.type}/${volunteer._id}`}
                       >
