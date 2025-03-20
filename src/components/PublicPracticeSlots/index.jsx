@@ -119,7 +119,7 @@ export default class extends React.Component {
                 key={i}
                 color={'#222'}
                 position={slot.order}
-                team={String.fromCharCode(65 + slot.team)}
+                // team={String.fromCharCode(65 + slot.team)}
                 title={`${slot.college}, ${slot.location}`}
                 description={ `${slot.startTime} - ${slot.endTime}`}
               />
