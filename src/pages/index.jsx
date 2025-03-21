@@ -67,7 +67,7 @@ import PublicPracticeSlots from '../components/PublicPracticeSlots';
 import Notifications from '../components/Notifications';
 import PublicEvents from '../components/PublicEvents';
 import Settings from '../components/Settings/Index';
-import JudgeFeedBack from '../components/Rounds/JudgeFeedBack';
+import JudgeFeedback from '../components/Rounds/JudgeFeedback';
 // import { overflow } from "html2canvas/dist/types/css/property-descriptors/overflow";
 
 if (typeof document != 'undefined') document.title = 'MUCAPP';
@@ -158,7 +158,7 @@ export default () => (
       <PrivateRoute
         path="/events/:event/rounds/:round/judgefeedBack"
         exact
-        component={JudgeFeedBack}
+        component={JudgeFeedback}
         type={1}
       />
       <PrivateRoute
