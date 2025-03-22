@@ -14,7 +14,7 @@ import Dialog from '../../commons/Dialog';
 import { saveAs } from 'file-saver';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import useFeedbackStore from "../../store/feedback.store";
+import useFeedbackStore from '../../store/feedback.store';
 
 export default class Judge extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ export default class Judge extends Component {
     this.state = {
       event: {},
       round: {},
-      inputError:'',
+      inputError: '',
       judgeFeedBack: 0,
       showFeedBackForm: false,
       judgeName: '',
@@ -277,7 +277,7 @@ export default class Judge extends Component {
                     (score2) =>
                       score.slot == score2.slot &&
                       JSON.stringify(score.points) ==
-                      JSON.stringify(score2.points)
+                        JSON.stringify(score2.points)
                   )
               );
 
@@ -291,7 +291,6 @@ export default class Judge extends Component {
                 // this.setState({ showFeedBackForm: true });
                 this.SubmitFeedBackForm();
                 navigate('/events/' + this.props.event + '/rounds');
-
               } else {
                 typeof window !== 'undefined' &&
                   window.confirm(
@@ -342,36 +341,39 @@ export default class Judge extends Component {
     this.setState({ showFeedBackForm: true });
     // navigate('/events/' + this.props.event + '/rounds');
   };
-  
+
+  onFeedBackFormSubmitClick = () => {
+    const { judgeFeedBack, judgeName, judgeComments } = this.state;
+    if (!judgeFeedBack || !judgeName.trim() || !judgeComments.trim()) {
+      this.setState({
+        inputError:
+          'Please fill in all the fields before submitting feedback. ❗',
+      });
+      return;
+    } else {
+      this.submitScore();
+    }
+  };
+
   SubmitFeedBackForm = () => {
     const { judgeFeedBack, judgeName, judgeComments } = this.state;
     const judge = this.state.judge;
     const event = this.props.event;
 
-    if (!judgeFeedBack || !judgeName.trim() || !judgeComments.trim()) {
-      this.setState({inputError:'Please fill in all the fields before submitting feedback. ❗'});
-      return;
-    } else {
-      //Logic to submit feed back
-      const createFeedback = useFeedbackStore.getState().createFeedback;
-      try {
-        createFeedback({
-          rating: judgeFeedBack,
-          comment: judgeComments,
-          signature: judgeName,
-          judge,
-          event,
-        }).then((res) => {
-          this.setState({ showFeedBackForm: false });
-          
-          
-        });
-
-      } catch (e) {
-        toast(e.message);
-        console.error(e);
-      }
-
+    const createFeedback = useFeedbackStore.getState().createFeedback;
+    try {
+      createFeedback({
+        rating: judgeFeedBack,
+        comment: judgeComments,
+        signature: judgeName,
+        judge,
+        event,
+      }).then((res) => {
+        this.setState({ showFeedBackForm: false });
+      });
+    } catch (e) {
+      toast(e.message);
+      console.error(e);
     }
 
     console.log(this.state);
@@ -428,8 +430,8 @@ export default class Judge extends Component {
                     : team.points.length !== 0 &&
                       !team.points.includes(null) &&
                       !team.points.includes('')
-                      ? 'rgba(255, 193, 167, 0.53)'
-                      : ''
+                    ? 'rgba(255, 193, 167, 0.53)'
+                    : ''
                 }
                 onClick={() => this.changeTeam(team)}
               />
@@ -680,7 +682,7 @@ export default class Judge extends Component {
       />
 
       <Dialog
-        title="How would you rate this event out of 5 stars?"
+        title="How would you rate the quality of this event ?"
         body={
           <>
             {/* Star Rating */}
@@ -690,10 +692,11 @@ export default class Judge extends Component {
                   key={star}
                   icon={faStar}
                   size="2x"
-                  className={`cursor-pointer transition-colors ${star <= this.state.judgeFeedBack
+                  className={`cursor-pointer transition-colors ${
+                    star <= this.state.judgeFeedBack
                       ? 'text-yellow-500'
                       : 'text-gray-300'
-                    }`}
+                  }`}
                   onClick={() => this.handleRating(star)}
                 />
               ))}
@@ -718,8 +721,9 @@ export default class Judge extends Component {
               onChange={this.handleInputChange}
             />
             <p
-              className={`text-sm mt-1  ${this.state.inputError ? `text-red-500` : `text-transparent`
-                } `}
+              className={`text-sm mt-1  ${
+                this.state.inputError ? `text-red-500` : `text-transparent`
+              } `}
             >
               {this.state.inputError}
             </p>
@@ -727,7 +731,7 @@ export default class Judge extends Component {
         }
         positiveButton={{
           label: 'Submit',
-          handler: this.submitScore,
+          handler: this.onFeedBackFormSubmitClick,
           disableAutoDismiss: true,
         }}
         negativeButton={{
