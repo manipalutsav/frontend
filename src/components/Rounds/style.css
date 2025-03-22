@@ -7,3 +7,8 @@
     font-family: 'Rye';
     src: url('RyeRegular.ttf');
 }
+@font-face {
+    font-family: 'Hagrid-Regular';
+    src: url('Hagrid-Regular.ttf') format('truetype');
+}
+
