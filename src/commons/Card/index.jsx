@@ -1,34 +1,38 @@
 import React from 'react';
-import { Button, Input } from '../Form'
+import { Button, Input } from '../Form';
 import { navigate } from 'gatsby';
-import { FiX } from "react-icons/fi";
+import { FiX } from 'react-icons/fi';
 
 const RoundCard = (props) => (
   <div
     css={{
-      margin: "2%",
+      margin: '2%',
       padding: 20,
-      borderRadius: "4px",
+      borderRadius: '4px',
       // border: "2px solid #efefef",
-      minWidth: "100px",
-      maxWidth: "400px",
-      display: "inline-block",
-      boxShadow: "0px 5px 12px -5px rgba(0, 0, 0, .1)",
+      minWidth: '100px',
+      maxWidth: '400px',
+      display: 'inline-block',
+      boxShadow: '0px 5px 12px -5px rgba(0, 0, 0, .1)',
     }}
   >
-    <div css={{
-      display: "flex",
-      justifyContent: "space-between",
-      marginBottom: 20,
-      fontSize: "1.2em",
-    }}>
+    <div
+      css={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+        fontSize: '1.2em',
+      }}
+    >
       <span>{props.title}</span>
-      <span css={{
-        cursor: "pointer",
-        ":hover": {
-          color: "red",
-        },
-      }}>
+      <span
+        css={{
+          cursor: 'pointer',
+          ':hover': {
+            color: 'red',
+          },
+        }}
+      >
         <FiX onClick={() => props.onClick(props.roundId)} />
       </span>
     </div>
@@ -39,12 +43,79 @@ const RoundCard = (props) => (
               margin: 16,
             }} type={props.type}/>*/}
     <div>
-      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/edit`) }} styles={{ color: "black", backgroundColor: "#f5f5f5", width: "100%" }} color="#f5f5f5" >Edit Round</Button>
-      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/slot`) }} styles={{ marginTop: "16px", color: "black", backgroundColor: "#f5f5f5", width: "100%" }} color="#f5f5f5" >View Slots</Button>
-      <Button onClick={event => { navigate(`/judge/${props.eventId}/rounds/${props.roundId}`); }} styles={{ marginTop: "16px", width: "100%" }} value="Start Round" >Start Round</Button>
-      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/bias`); }} styles={{ marginTop: "16px", width: "100%" }} >Bias</Button>
-      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/scoresheet`); }} styles={{ marginTop: "16px", width: "100%" }} value="View Scoresheet" >View Scoresheet</Button>
-      <Button onClick={event => { navigate(`/events/${props.eventId}/rounds/${props.roundId}/leaderboard`); }} styles={{ marginTop: "16px", width: "100%" }} value="Start Round" >View Leaderboard</Button>
+      <Button
+        onClick={(event) => {
+          navigate(`/events/${props.eventId}/rounds/${props.roundId}/edit`);
+        }}
+        styles={{ color: 'black', backgroundColor: '#f5f5f5', width: '100%' }}
+        color="#f5f5f5"
+      >
+        Edit Round
+      </Button>
+      <Button
+        onClick={(event) => {
+          navigate(`/events/${props.eventId}/rounds/${props.roundId}/slot`);
+        }}
+        styles={{
+          marginTop: '16px',
+          color: 'black',
+          backgroundColor: '#f5f5f5',
+          width: '100%',
+        }}
+        color="#f5f5f5"
+      >
+        View Slots
+      </Button>
+      <Button
+        onClick={(event) => {
+          navigate(`/judge/${props.eventId}/rounds/${props.roundId}`);
+        }}
+        styles={{ marginTop: '16px', width: '100%' }}
+        value="Start Round"
+      >
+        Start Round
+      </Button>
+      <Button
+        onClick={(event) => {
+          navigate(`/events/${props.eventId}/rounds/${props.roundId}/bias`);
+        }}
+        styles={{ marginTop: '16px', width: '100%' }}
+      >
+        Bias
+      </Button>
+      <Button
+        onClick={(event) => {
+          navigate(
+            `/events/${props.eventId}/rounds/${props.roundId}/scoresheet`
+          );
+        }}
+        styles={{ marginTop: '16px', width: '100%' }}
+        value="View Scoresheet"
+      >
+        View Scoresheet
+      </Button>
+      <Button
+        onClick={(event) => {
+          navigate(
+            `/events/${props.eventId}/rounds/${props.roundId}/leaderboard`
+          );
+        }}
+        styles={{ marginTop: '16px', width: '100%' }}
+        value="Start Round"
+      >
+        View Leaderboard
+      </Button>
+      <Button
+        onClick={(event) => {
+          navigate(
+            `/events/${props.eventId}/rounds/${props.roundId}/judgefeedBack`
+          );
+        }}
+        styles={{ marginTop: '16px', width: '100%' }}
+        value="Start Round"
+      >
+        View Judge FeedBack
+      </Button>
     </div>
   </div>
 );
@@ -52,25 +123,27 @@ const RoundCard = (props) => (
 const CriteriaCard = (props) => (
   <div
     css={{
-      margin: "2%",
-      borderRadius: "4px",
-      width: (props.single) ? "100%" : "40%",
-      display: "inline-block",
-      boxShadow: "0px 5px 12px -5px rgba(0, 0, 0, .1)",
+      margin: '2%',
+      borderRadius: '4px',
+      width: props.single ? '100%' : '40%',
+      display: 'inline-block',
+      boxShadow: '0px 5px 12px -5px rgba(0, 0, 0, .1)',
     }}
   >
     <div
       css={{
-        padding: "16px",
-        fontSize: "1em",
-        textAlign: "center"
+        padding: '16px',
+        fontSize: '1em',
+        textAlign: 'center',
       }}
-    >{props.criterion.criterion} </div>
-    <div className='text-xs'>out of {props.criterion.weightage}</div>
+    >
+      {props.criterion.criterion}{' '}
+    </div>
+    <div className="text-xs">out of {props.criterion.weightage}</div>
 
     <div
       css={{
-        padding: "16px",
+        padding: '16px',
       }}
     >
       <Input
@@ -81,9 +154,9 @@ const CriteriaCard = (props) => (
         placeholder="Enter points here"
         disabled={props.disabled}
         styles={{
-          width: "100%",
-          textAlign: "center",
-          fontSize: "1.3em",
+          width: '100%',
+          textAlign: 'center',
+          fontSize: '1.3em',
           margin: 0,
         }}
       />
@@ -91,7 +164,4 @@ const CriteriaCard = (props) => (
   </div>
 );
 
-export {
-  RoundCard,
-  CriteriaCard
-}
+export { RoundCard, CriteriaCard };
