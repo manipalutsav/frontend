@@ -57,6 +57,7 @@ export default class extends React.Component {
     let leaderboard = this.state.leaderboard;
     console.log(leaderboard);
     let ranks = { 1: [], 2: [], 3: [] };
+    let consolation = { 4: [] , 5: [] , 6: [] , 7: []}
 
     ranks[1] = leaderboard.filter((item) => item.rank == 1);
     ranks[2] = leaderboard.filter((item) => item.rank == 2);
@@ -66,10 +67,10 @@ export default class extends React.Component {
     // Adding consolation prizes to ranks array.
     if( this.state.event.name == eventName && this.state.isConsolationSet === true){
       for(let i = 4; i <= Number(this.state.consolation) + 3 && i <= this.state.leaderboard.length ; i++){
-        ranks[i] = leaderboard.filter((item) => item.rank == i);
+        consolation[i] = leaderboard.filter((item) => item.rank == i);
       }
     }
-    console.log(ranks); 
+    console.log(consolation); 
 
     let event = await eventService.get(this.props.event);
     const is_group_event = event.maxMembersPerTeam > 1;
@@ -92,12 +93,13 @@ export default class extends React.Component {
     //Adding certificate names for consolation prizes.
     if( this.state.event.name == eventName && this.state.isConsolationSet === true){
       for(let i = 4; i <= Number(this.state.consolation) + 3 ; i++){
-        placesArray[i - 1] = ranks[i].map((item) => ({
+        placesArray[i - 1] = consolation[i].map((item) => ({
           name: getCertificateName(item, is_group_event, is_multiple_team_event),
         }));
         
       }
     }
+    console.log(placesArray);
     
     const image = new Image();
     image.src = template;
@@ -127,13 +129,14 @@ export default class extends React.Component {
       let baseFontSize = Math.max(20, 60 - maxTeams * 10);
       context.font = `bold ${baseFontSize}px Hagrid-Regular`;
       context.textAlign = 'left';
+      console.log("base font size: " + baseFontSize);
 
       // Dynamic starting positions
       let first_start = 650 - placesArray[0].length * 15;
       let second_start = 900 - placesArray[1].length * 15;
       let third_start = 1150 - placesArray[2].length * 15;
 
-      if( this.state.event.name == "Testing" && this.state.isConsolationSet === true && this.state.consolation > 0){
+      if( this.state.event.name == eventName && this.state.isConsolationSet === true && this.state.consolation > 0){
         first_start = 650 - placesArray[0].length * 15;
         second_start = 820 - placesArray[1].length * 15;
         third_start = 1000 - placesArray[2].length * 15;
@@ -168,7 +171,7 @@ export default class extends React.Component {
       let textX = canvas.width / 6;
 
       // Render team names under their respective ranks
-      context.font = `bold ${baseFontSize}px HammersmithOne`;
+      context.font = `bold ${baseFontSize - 10 }px HammersmithOne`;
 
       placesArray[0].forEach((team, i) => {
         context.fillText(team.name, textX, first_start + i * spacing);
@@ -191,12 +194,16 @@ export default class extends React.Component {
         let consolationCount = 1;
         for(let i = 3; i < Number(this.state.consolation) + 3 ; i++){
           console.log(placesArray[i-1]);
-          if(placesArray[i] != undefined)
+          if(placesArray[i] != undefined){
             placesArray[i].forEach((team, j) => {
               console.log(i, j);
               context.fillText(team.name, textX, consolationStart + consolationCount * spacing);
               consolationCount++;
             });
+            if(consolationCount-1 >= Number(this.state.consolation)){
+              break;
+            }
+          }
         }
         
       }
@@ -345,6 +352,8 @@ export default class extends React.Component {
           id="consolation"
           value={this.state.consolation}
           onChange={this.handleConsolationChange}
+          min = "0"
+          max = "4"
         />
       </div>
       } 
