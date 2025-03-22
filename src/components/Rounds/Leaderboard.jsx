@@ -242,7 +242,11 @@ export default class extends React.Component {
   }
 
   handleConsolationChange = (e) =>{
-    this.setState({consolation: e.target.value});
+    let value = Number(e.target.value);
+    // Ensure value is within the range [0, 4]
+    if (value < 0) value = 0;
+    if (value > 4) value = 4;
+    this.setState({consolation: value });
   }
 
   handleSubmitDailogButton = () => {
