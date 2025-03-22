@@ -64,7 +64,7 @@ export default class extends React.Component {
     
     
     // Adding consolation prizes to ranks array.
-    if( this.state.event.name == "Testing" && this.state.isConsolationSet === true){
+    if( this.state.event.name == eventName && this.state.isConsolationSet === true){
       for(let i = 4; i <= Number(this.state.consolation) + 3 && i <= this.state.leaderboard.length ; i++){
         ranks[i] = leaderboard.filter((item) => item.rank == i);
       }
