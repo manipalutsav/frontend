@@ -63,6 +63,8 @@ export default class extends React.Component {
     ranks[2] = leaderboard.filter((item) => item.rank == 2);
     ranks[3] = leaderboard.filter((item) => item.rank == 3);
     
+  
+
     
     // Adding consolation prizes to ranks array.
     if( this.state.event.name == eventName && this.state.isConsolationSet === true){
@@ -187,27 +189,29 @@ export default class extends React.Component {
 
       
 
-      let consolationStart = 1100;
+      
       if( this.state.event.name == eventName && this.state.isConsolationSet === true && this.state.consolation > 0){
         context.fillText("Consolation Prizes", canvas.width / 8 , 1090);
-        context.font = `normal ${baseFontSize-14}px HammersmithOne`;
+        let countOfTeam = [placesArray[3], placesArray[4], placesArray[5], placesArray[6]].filter(Boolean).flat().length;
+        let baseFontSizeForConsolation = Math.min(baseFontSize , Math.max(20, 60 - countOfTeam * 10));
+        let baseConsolationFontSizeReductionFactor = (countOfTeam)* 4;
+        let consolationStartReductionFactor = (countOfTeam) * 3.5;
+        let consolationStart = 1100 - consolationStartReductionFactor;
+        context.font = `normal ${baseFontSize-baseConsolationFontSizeReductionFactor}px HammersmithOne`;
         let consolationCount = 1;
         for(let i = 3; i < Number(this.state.consolation) + 3 ; i++){
           console.log(placesArray[i-1]);
           if(placesArray[i] != undefined){
             placesArray[i].forEach((team, j) => {
               console.log(i, j);
-              context.fillText(team.name, textX, consolationStart + consolationCount * spacing);
+              context.fillText(team.name, textX, consolationStart + consolationCount * (spacing-10));
               consolationCount++;
             });
-            if(consolationCount-1 >= Number(this.state.consolation)){
-              break;
-            }
           }
         }
         
       }
-
+      this.setState({ consolation: 0 , isConsolationSet : false});
       // Save or Share
       canvas.toBlob(async (blob) => {
         if (shareOption == 'download') {
@@ -218,10 +222,10 @@ export default class extends React.Component {
           link.click();
           link.remove();
         }
-        if( this.state.event.name == eventName && this.state.isConsolationSet === true && this.state.consolation > 0){
-          shareOption = "Send";
-        }
-        if (navigator.share && shareOption == 'Send') {
+        // if( this.state.event.name == eventName && this.state.isConsolationSet === true && this.state.consolation > 0){
+        //   shareOption = "Send";
+        // }
+        else if (navigator.share && shareOption == 'Send') {
           try {
             await navigator.share({
               files: [
