@@ -119,6 +119,10 @@ export default class extends React.Component {
 
       // Title
       context.font = 'bold 40px Verdana';
+
+      if(event.length >= 25){
+        context.font = 'bold 35px Verdana';
+      }
       let textStr = event + ' Results';
       context.fillText(textStr.toUpperCase(), canvas.width / 2, 525);
 
