@@ -29,12 +29,13 @@ export default class Settings extends React.Component {
   state = {
     title: "",
     enableTeamEdit: false,
+    enableDownloadCertificate: false,
   };
 
 
 
   handleSave() {
-    const data = { title: this.state.title, editTeamEnabled: this.state.enableTeamEdit };
+    const data = { title: this.state.title, editTeamEnabled: this.state.enableTeamEdit , downloadCertificateEnabled: this.state.enableDownloadCertificate};
     console.log(data)
     updateSettings(data).then(data => {
       toast("Updated ✔")
@@ -48,6 +49,7 @@ export default class Settings extends React.Component {
         this.setState({
           title: settings.title || "",
           enableTeamEdit: settings.editTeamEnabled || false,
+          enableDownloadCertificate: settings.downloadCertificateEnabled || false,
         })
       }
     }).catch((err) => {
@@ -70,6 +72,10 @@ export default class Settings extends React.Component {
           <div className="input-group gap-2 flex">
             <label htmlFor="enable_team_edit" className=" text-md">Enable Team Edit</label>
             <input className=" border rounded-sm w-[20px]" type="checkbox" id="enable_team_edit" value={this.state.enableTeamEdit} onChange={(e) => this.setState({ enableTeamEdit: e.target.checked })} checked={this.state.enableTeamEdit} />
+          </div>
+          <div className="input-group gap-2 flex">
+            <label htmlFor="enable_certificate_download" className=" text-md">Enable Certificate Download</label>
+            <input className=" border rounded-sm w-[20px]" type="checkbox" id="enable_certificate_download" value={this.state.enableDownloadCertificate} onChange={(e) => this.setState({ enableDownloadCertificate: e.target.checked })} checked={this.state.enableDownloadCertificate} />
           </div>
 
           <button className="mucapp mt-4 w-[200px]" onClick={this.handleSave.bind(this)}>Save</button>
