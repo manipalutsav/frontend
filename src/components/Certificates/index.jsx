@@ -128,9 +128,9 @@ export default class Certificates extends React.Component {
         <div>
           <h2 className="mucapp">Participation Certificates</h2>
         </div>
-        <div>
+        {/*<div>
           <input type="search" style={{"padding":".2rem","border":"2px solid grey","borderRadius":"5rem","textAlign":"center","margin":".5rem 0","outline":"none"}} placeholder="Search by Name" value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
-        </div>
+        </div>*/}
         
         <div className="output">
 

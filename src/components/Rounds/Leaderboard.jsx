@@ -71,8 +71,7 @@ export default class extends React.Component {
       for(let i = 4; i <= Number(this.state.consolation) + 3 && i <= this.state.leaderboard.length ; i++){
         consolation[i] = leaderboard.filter((item) => item.rank == i);
       }
-    }
-    console.log(consolation); 
+    } 
 
     let event = await eventService.get(this.props.event);
     const is_group_event = event.maxMembersPerTeam > 1;
@@ -101,7 +100,6 @@ export default class extends React.Component {
         
       }
     }
-    console.log(placesArray);
     
     const image = new Image();
     image.src = template;
@@ -120,7 +118,9 @@ export default class extends React.Component {
       // Title
       context.font = 'bold 40px Verdana';
 
-      if(event.length >= 25){
+      if(event.length >= 30){
+        context.font = 'bold 28px Verdana';
+      }else if(event.length >= 25){
         context.font = 'bold 35px Verdana';
       }
 
@@ -128,8 +128,8 @@ export default class extends React.Component {
       // Setting shadow properties
       context.shadowColor = "rgba(0, 0, 0, 0.5)"; // Shadow color with transparency
       context.shadowBlur = 10; // Blur intensity
-      context.shadowOffsetX = 5; // Horizontal shadow offset
-      context.shadowOffsetY = 5; // Vertical shadow offset
+      context.shadowOffsetX = 3; // Horizontal shadow offset
+      context.shadowOffsetY = 3; // Vertical shadow offset
 
 
       let textStr = event + ' Results';
