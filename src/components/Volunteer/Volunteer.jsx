@@ -4,6 +4,7 @@ import Select from "react-select";
 import { addVolunteer, getVolunteers, deleteVolunteer } from "../../services/volunteerService";
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
+import { getSettings } from "../../services/settingsServices";
 import { toast } from "../../actions/toastActions";
 import { Link } from "gatsby";
 import { keyToDisplay } from "../../utils/common";
@@ -37,6 +38,7 @@ class Volunteer extends React.Component {
     colleges: [],
     volunteers: [],
     downloadButtonName: "Download Certificates",
+    isDownloadButtonEnabled: false,
   };
   constructor(props) {
     super(props);
@@ -59,14 +61,14 @@ class Volunteer extends React.Component {
     const link = document.createElement("a");
     const result = [];
     for (let i = 0; i < total; i++) {
-      if(this.props.type === "event") {
-          image.src = eventCertificateURL;
-      }else if(this.props.type == "mucapp"){
-          image.src = websiteCertificateURL;
-      }else if(this.props.type == "social-media"){
-          image.src = socialMediaCertificateURL;
-      }else if(this.props.type == "design"){
-          image.src = deisgnTeamCertificateURL;
+      if (this.props.type === "event") {
+        image.src = eventCertificateURL;
+      } else if (this.props.type == "mucapp") {
+        image.src = websiteCertificateURL;
+      } else if (this.props.type == "social-media") {
+        image.src = socialMediaCertificateURL;
+      } else if (this.props.type == "design") {
+        image.src = deisgnTeamCertificateURL;
       }
       const blob = await new Promise((resolve) => {
         image.onload = () => {
@@ -98,16 +100,21 @@ class Volunteer extends React.Component {
           }
 
           if (lines.length > 1) {
-            lines.map((ln, idx) => {
+            let spacing = 0;
+            lines.forEach((ln, idx) => {  // Use forEach instead of map since we're not transforming the array
+              if (idx !== 0) {
+                spacing = 30;
+              }
               context.fillText(
                 ln,
                 canvas.width / 2,
-                1530 - (lines.length - idx) * 63
+                1530 - (lines.length - idx) * 70 + spacing // Remove the incorrect semicolon
               );
             });
           } else {
             context.fillText(list[i].college, canvas.width / 2, 1500);
           }
+
           canvas.toBlob((blob) => {
             this.setState({
               downloadButtonName: `Processing ${Math.round((i / total) * 100)}%...`,
@@ -141,6 +148,18 @@ class Volunteer extends React.Component {
   componentWillMount() {
     this.getColleges();
     this.getVolunteers();
+
+    getSettings().then(settings => {
+      console.log(settings);
+      if (settings) {
+        console.log(settings.downloadCertificateEnabled);
+        this.setState({
+          enableDownloadCertificate: settings.downloadCertificateEnabled || false,
+        })
+      }
+    }).catch((err) => {
+      console.error(err)
+    })
   }
 
   getColleges = async () => {
@@ -205,17 +224,17 @@ class Volunteer extends React.Component {
       this.setState({ buttonText: this.ADD_VOLUNTEER });
     }
   };
-  deleteHandler = async(id)=>{
-    if(window.confirm("Are you sure you want to delete this volunteer?")){
-      try{
-        const response = await deleteVolunteer(id,{type: this.props.type});
-        if(response.status === 200){
+  deleteHandler = async (id) => {
+    if (window.confirm("Are you sure you want to delete this volunteer?")) {
+      try {
+        const response = await deleteVolunteer(id, { type: this.props.type });
+        if (response.status === 200) {
           toast("Volunteer deleted successfully");
           this.getVolunteers();
-        }else{
+        } else {
           toast(response.message || "Deletion failed");
         }
-      }catch(error){
+      } catch (error) {
         toast(error.message || "Error deleting volunteer");
       }
 
@@ -239,9 +258,9 @@ class Volunteer extends React.Component {
             <h2 className="mucapp">
               {keyToDisplay(this.props.type)} Volunteers
             </h2>
-              <button className="mucapp" onClick={this.downloadAll}>
-                {this.state.downloadButtonName}
-              </button>
+            {this.state.enableDownloadCertificate && <button className="mucapp" onClick={this.downloadAll}>
+              {this.state.downloadButtonName}
+            </button>}
           </div>
         </div>
         <div className="coreVolunteers">

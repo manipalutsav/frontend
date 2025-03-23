@@ -5,8 +5,10 @@ import {
   addCoreVolunteer,
   getCoreVolunteers,
 } from "../../services/volunteerService";
+
 import { Input, Button } from "../../commons/Form";
 import { getColleges } from "../../services/collegeServices";
+import { getSettings } from "../../services/settingsServices";
 import { toast } from "../../actions/toastActions";
 import { Link } from "gatsby";
 
@@ -34,6 +36,7 @@ class CoreVolunteer extends React.Component {
     colleges: [],
     volunteers: [],
     downloadButtonName: "Download Certificates",
+    isDownloadButtonEnabled: false,
   };
   constructor(props) {
     super(props);
@@ -87,16 +90,21 @@ class CoreVolunteer extends React.Component {
           }
 
           if (lines.length > 1) {
-            lines.map((ln, idx) => {
+            let spacing = 0;
+            lines.forEach((ln, idx) => {  // Use forEach instead of map since we're not transforming the array
+              if (idx !== 0) {
+                spacing = 30;
+              }
               context.fillText(
                 ln,
                 canvas.width / 2,
-                1530 - (lines.length - idx) * 64
+                1530 - (lines.length - idx) * 70 + spacing // Remove the incorrect semicolon
               );
             });
           } else {
             context.fillText(list[i].college, canvas.width / 2, 1500);
           }
+          
           canvas.toBlob((blob) => {
             this.setState({
               downloadButtonName: `Processing ${Math.round((i / total) * 100)}%...`,
@@ -129,6 +137,18 @@ class CoreVolunteer extends React.Component {
   componentWillMount() {
     this.getColleges();
     this.getVolunteers();
+
+    getSettings().then(settings => {
+      console.log(settings);
+      if (settings) {
+        console.log(settings.downloadCertificateEnabled);
+        this.setState({
+          enableDownloadCertificate: settings.downloadCertificateEnabled || false,
+        })
+      }
+    }).catch((err) => {
+      console.error(err)
+    })
   }
 
   getColleges = async () => {
@@ -205,9 +225,9 @@ class CoreVolunteer extends React.Component {
         <div>
           <div>
             <h2 className="mucapp">Core Volunteers</h2>
-            <button className="mucapp" onClick={this.downloadAll}>
+            {this.state.enableDownloadCertificate && <button className="mucapp" onClick={this.downloadAll}>
               {this.state.downloadButtonName}
-            </button>
+            </button>}
           </div>
         </div>
         <div className="coreVolunteers">
