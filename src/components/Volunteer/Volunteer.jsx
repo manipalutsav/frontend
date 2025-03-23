@@ -9,7 +9,10 @@ import { Link } from "gatsby";
 import { keyToDisplay } from "../../utils/common";
 import Block from "../../commons/Block";
 
-import certificateURL from "../../images/volunteer-certificate-event.png";
+import eventCertificateURL from "../../images/eventVolunteers25.jpg";
+import websiteCertificateURL from "../../images/websiteTeam25.jpg";
+import socialMediaCertificateURL from "../../images/socialMedia25.jpg";
+import deisgnTeamCertificateURL from "../../images/designTeam25.jpg";
 import JSZip from "jszip";
 
 const sizes = [
@@ -41,7 +44,7 @@ class Volunteer extends React.Component {
   }
   async downloadAll() {
     const list = Object.values(this.state.volunteers);
-
+    console.log(this.state.volunteers);
     let total = list.length;
     list.map((vol) => {
       vol.college = this.state.colleges.find(
@@ -56,17 +59,25 @@ class Volunteer extends React.Component {
     const link = document.createElement("a");
     const result = [];
     for (let i = 0; i < total; i++) {
-      image.src = certificateURL;
+      if(this.props.type === "event") {
+          image.src = eventCertificateURL;
+      }else if(this.props.type == "mucapp"){
+          image.src = websiteCertificateURL;
+      }else if(this.props.type == "social-media"){
+          image.src = socialMediaCertificateURL;
+      }else if(this.props.type == "design"){
+          image.src = deisgnTeamCertificateURL;
+      }
       const blob = await new Promise((resolve) => {
         image.onload = () => {
           canvas.width = image.width;
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
-          context.font = "bold 71px Blogger Sans";
+          context.font = "bold 100px Blogger Sans";
           context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, canvas.width / 2, 725);
-          context.font = "bold 60px Blogger Sans";
+          context.fillText(list[i].name, canvas.width / 2, 1050);
+          context.font = "bold 80px Blogger Sans";
 
           // Breaking the lines if it is too big to fit
           const lines = [];
@@ -91,11 +102,11 @@ class Volunteer extends React.Component {
               context.fillText(
                 ln,
                 canvas.width / 2,
-                1150 - (lines.length - idx) * 63
+                1530 - (lines.length - idx) * 63
               );
             });
           } else {
-            context.fillText(list[i].college, canvas.width / 2, 1050);
+            context.fillText(list[i].college, canvas.width / 2, 1500);
           }
           canvas.toBlob((blob) => {
             this.setState({
@@ -117,7 +128,8 @@ class Volunteer extends React.Component {
     });
     this.setState({ downloadButtonName: `Zipping...` });
     zip.generateAsync({ type: "blob" }).then((content) => {
-      link.download = "event-volunteers-cert";
+      let fileName = this.props.type + "-volunteers-cert";
+      link.download = fileName;
       link.href = URL.createObjectURL(content);
       link.style.display = "none";
       document.body.append(link);
@@ -227,11 +239,9 @@ class Volunteer extends React.Component {
             <h2 className="mucapp">
               {keyToDisplay(this.props.type)} Volunteers
             </h2>
-            {/* {this.props.type == "event" && (
               <button className="mucapp" onClick={this.downloadAll}>
                 {this.state.downloadButtonName}
               </button>
-            )} */}
           </div>
         </div>
         <div className="coreVolunteers">
