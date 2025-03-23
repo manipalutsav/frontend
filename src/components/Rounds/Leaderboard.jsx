@@ -123,8 +123,24 @@ export default class extends React.Component {
       if(event.length >= 25){
         context.font = 'bold 35px Verdana';
       }
+
+
+      // Setting shadow properties
+      context.shadowColor = "rgba(0, 0, 0, 0.7)"; // Shadow color with transparency
+      context.shadowBlur = 10; // Blur intensity
+      context.shadowOffsetX = 5; // Horizontal shadow offset
+      context.shadowOffsetY = 5; // Vertical shadow offset
+
+
       let textStr = event + ' Results';
-      context.fillText(textStr.toUpperCase(), canvas.width / 2, 525);
+      context.fillText(textStr.toUpperCase(), canvas.width / 2, 540);
+
+      // Reset shadow properties to remove the effect
+      context.shadowColor = "transparent"; 
+      context.shadowBlur = 0;
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 0;
+
 
       // Dynamic font size. Not checking this for consolation prize as staff veriety entertainment has only 1 team per college.
       let maxTeams = Math.max(
@@ -135,7 +151,6 @@ export default class extends React.Component {
       let baseFontSize = Math.max(20, 60 - maxTeams * 10);
       context.font = `bold ${baseFontSize}px Hagrid-Regular`;
       context.textAlign = 'left';
-      console.log("base font size: " + baseFontSize);
 
       // Dynamic starting positions
       let first_start = 650 - placesArray[0].length * 15;
@@ -195,7 +210,7 @@ export default class extends React.Component {
 
       
       if( this.state.event.name == eventName && this.state.isConsolationSet === true && this.state.consolation > 0){
-        context.fillText("Consolation Prizes", canvas.width / 8 , 1090);
+        context.fillText("Special Mentions", canvas.width / 8 , 1090);
         let countOfTeam = [placesArray[3], placesArray[4], placesArray[5], placesArray[6]].filter(Boolean).flat().length;
         let baseFontSizeForConsolation = Math.min(baseFontSize , Math.max(20, 60 - countOfTeam * 10));
         let baseConsolationFontSizeReductionFactor = (countOfTeam)* 4;
