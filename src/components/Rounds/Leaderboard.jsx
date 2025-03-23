@@ -126,7 +126,7 @@ export default class extends React.Component {
 
 
       // Setting shadow properties
-      context.shadowColor = "rgba(0, 0, 0, 0.7)"; // Shadow color with transparency
+      context.shadowColor = "rgba(0, 0, 0, 0.5)"; // Shadow color with transparency
       context.shadowBlur = 10; // Blur intensity
       context.shadowOffsetX = 5; // Horizontal shadow offset
       context.shadowOffsetY = 5; // Vertical shadow offset
