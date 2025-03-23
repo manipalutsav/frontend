@@ -2,7 +2,7 @@ import React from "react";
 
 import collegesService from "../../services/colleges";
 import { getUser } from "../../services/userServices";
-import certificateURL from '../../images/participation-certificate.png'
+import certificateURL from '../../images/participation25.jpg'
 import JSZip from "jszip";
 
 export default class Certificates extends React.Component {
@@ -54,11 +54,11 @@ export default class Certificates extends React.Component {
       canvas.width = image.width;
       canvas.height = image.height;
       context.drawImage(image, 0, 0);
-      context.font = "bold 71px Blogger Sans";
+      context.font = "bold 100px Blogger Sans";
       context.fillStyle = "#000000";
       context.textAlign = "center";
-      context.fillText(member.name, (canvas.width / 2), 450);
-      context.fillText(event, (canvas.width / 2), 690);
+      context.fillText(member.name, (canvas.width / 2), 1050);
+      context.fillText(event, (canvas.width / 2), 1500);
       canvas.toBlob((blob) => {
         link.href = URL.createObjectURL(blob);
         link.download = member.name + " - " + event + ".png"
@@ -88,11 +88,11 @@ export default class Certificates extends React.Component {
           canvas.width = image.width;
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
-          context.font = "bold 71px Blogger Sans";
+          context.font = "bold 100px Blogger Sans";
           context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, (canvas.width / 2) , 420);
-          context.fillText(list[i].event, (canvas.width / 2), 680);
+          context.fillText(list[i].name, (canvas.width / 2) , 1050);
+          context.fillText(list[i].event, (canvas.width / 2), 1500);
           canvas.toBlob((blob) => {
             this.setState({ buttonName: `Processing ${Math.round(i / total * 100)}%...` });
             resolve(blob)

@@ -10,7 +10,7 @@ import { getColleges } from "../../services/collegeServices";
 import { toast } from "../../actions/toastActions";
 import { Link } from "gatsby";
 
-import certificateURL from "../../images/volunteer-certificate-core.png";
+import certificateURL from "../../images/coreVolunteers25.jpg";
 import JSZip from "jszip";
 const sizes = [
   { value: "XS", label: "Extra Small" },
@@ -62,11 +62,11 @@ class CoreVolunteer extends React.Component {
           canvas.width = image.width;
           canvas.height = image.height;
           context.drawImage(image, 0, 0);
-          context.font = "bold 71px Blogger Sans";
+          context.font = "bold 100px Blogger Sans";
           context.fillStyle = "#000000";
           context.textAlign = "center";
-          context.fillText(list[i].name, canvas.width / 2, 725);
-          context.font = "bold 60px Blogger Sans";
+          context.fillText(list[i].name, canvas.width / 2, 1050);
+          context.font = "bold 80px Blogger Sans";
 
           // Breaking the lines if it is too big to fit
           const lines = [];
@@ -91,11 +91,11 @@ class CoreVolunteer extends React.Component {
               context.fillText(
                 ln,
                 canvas.width / 2,
-                1150 - (lines.length - idx) * 63
+                1530 - (lines.length - idx) * 64
               );
             });
           } else {
-            context.fillText(list[i].college, canvas.width / 2, 1050);
+            context.fillText(list[i].college, canvas.width / 2, 1500);
           }
           canvas.toBlob((blob) => {
             this.setState({
@@ -205,9 +205,9 @@ class CoreVolunteer extends React.Component {
         <div>
           <div>
             <h2 className="mucapp">Core Volunteers</h2>
-            {/* <button className="mucapp" onClick={this.downloadAll}>
+            <button className="mucapp" onClick={this.downloadAll}>
               {this.state.downloadButtonName}
-            </button> */}
+            </button>
           </div>
         </div>
         <div className="coreVolunteers">
