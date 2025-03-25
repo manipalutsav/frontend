@@ -14,7 +14,7 @@ const useSlottingStore = create((set) => ({
       const response = await request("/slotting/getRegisteredEvents", "POST", payload);
       // Now we use response.eventDetails since the API returns a top-level eventDetails key
       if (response && response.status === 200) {
-        set({ eventDetails: response.eventDetails, isLoading: false });
+        set({ eventDetails: response.data.events, isLoading: false });
       } else {
         if (response && response.status === 401) {
           toast("Your session has expired, please logout and login again.");

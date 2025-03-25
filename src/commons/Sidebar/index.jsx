@@ -95,6 +95,7 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/teams" title="TEAMS" />
       <SidebarItem to="/slots" title="SLOTS" />
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
+      
       {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
       <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
       <SidebarItem to="/stats" title="STATS" />
@@ -147,9 +148,10 @@ const SidebarItems = ({ backupName, backupData }) => {
                                 <SidebarItem to="/winners" title="Winners" />
                                 </Dropdown.Item> */}
 
-          <Dropdown.Item as="a">
+
+          {/* <Dropdown.Item as="a">
             <DropItem to="/leaderboard" title="Event Standings" />
-          </Dropdown.Item>
+          </Dropdown.Item> */}
 
           <Dropdown.Item as="a">
             <DropItem to="/settings" title="Settings" />

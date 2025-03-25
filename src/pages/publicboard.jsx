@@ -10,7 +10,7 @@ import ReactDOMServer from 'react-dom/server';
 import "./index.css"
 
 const remove_college_list = [{name:"Cultural Coordination Committee", location:"Manipal"}, {name:"Kasturba Hospital", location:"Manipal"}, {name:"MAHE", location:"Manipal"}];
-const remove_event_list = ["Staff Cooking: Vegetarian", "Staff Cooking: Non-Vegetarian", "Staff Cooking: Sweets and Desserts", "Staff Vegetable & Fruit Carving", "Staff Variety Entertainment", "Poetry (Kannada)"];
+const remove_event_list = ["Staff Cooking: Vegetarian", "Staff Cooking: Non-Vegetarian", "Staff Cooking: Sweets and Desserts", "Staff Vegetable & Fruit Carving","Staff Variety Entertainment", "Poetry (Kannada)"];
 // const remove_event_list = ["Some event", "Hello World"]; // Testing
 export default class extends React.Component {
   state = {
@@ -45,6 +45,7 @@ export default class extends React.Component {
     await this.setState({ status: "Fetching events..." });
     let events = await eventsService.getAll();
     events = events.sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
+    console.log(events);
     events = events.filter((ev)=>{
       return (remove_event_list.find(r_ev => r_ev == ev.name) == undefined);
     })
@@ -58,6 +59,7 @@ export default class extends React.Component {
     let set = [];
     for (let i = 0; i < events.length; i++) {
       let event = events[i];
+      console.log(event.name);
       if (event.faculty)
         continue;
       let round = await eventsService.getRound(event.id, event.rounds[0]);
@@ -68,7 +70,7 @@ export default class extends React.Component {
       if (event.rounds.length == 0)
         continue;//skip if no rounds found
       let leaderboard = await leaderboardService.getRound(event.id, event.rounds[event.rounds.length - 1]);
-
+      console.log(leaderboard , "leaderboard");
       //Get rank
       leaderboard.forEach(item => {
         // #TODO, two teams of same college winning in one event.
@@ -86,6 +88,7 @@ export default class extends React.Component {
     colleges.forEach(college => {
       total[college.id] = this.getTotal(college);
     })
+    console.log(total);
     this.setState({ status: "Done", showButton: true, total });
   }
   getPoints(event, college) {
@@ -223,7 +226,7 @@ export default class extends React.Component {
   }
   render = () => (
     <Layout>
-      <h1 className="mucapp"> Leaderboard</h1>
+      <h1 className="mucapp">Public Leaderboard</h1>
       <div className="no-print">
         {this.state.status}
         {this.state.showButton ? <Button onClick={this.sortByRank} styles={{ marginLeft: 20 }}>Sort By Rank</Button> : ''}
