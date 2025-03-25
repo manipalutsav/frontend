@@ -204,11 +204,11 @@ export default () => (
       <PrivateRoute path="/winners" component={Winners} type={2} />
 
       <PrivateRoute path="/leaderboard" component={Leaderboard} type={2} />
-      <PrivateRoute
+      {/* <PrivateRoute
         path="/leaderboard/public"
         component={PublicLeaderboard}
         type={8}
-      />
+      /> */}
 
       <PrivateRoute path="/teams" component={CollegeTeams} type={8} />
       <PrivateRoute
