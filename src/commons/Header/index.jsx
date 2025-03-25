@@ -80,9 +80,9 @@ const SidebarItems = ({ backupName, backupData }) => {
                                 <SidebarItem to="/winners" title="Winners" />
                                 </Dropdown.Item> */}
 
-            <Dropdown.Item as="a">
+            {/* <Dropdown.Item as="a">
               <DropItem to="/leaderboard" title="Event Standings" />
-            </Dropdown.Item>
+            </Dropdown.Item> */}
 
             <Dropdown.Item as="a">
               <DropItem to="/settings" title="Settings" />
