@@ -95,7 +95,8 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/teams" title="TEAMS" />
       <SidebarItem to="/slots" title="SLOTS" />
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
-      <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
+      
+      {/* <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" /> */}
       <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
       <SidebarItem to="/stats" title="STATS" />
       {/* <SidebarItem to="/certificates" title="CERTIFICATES" /> */}
