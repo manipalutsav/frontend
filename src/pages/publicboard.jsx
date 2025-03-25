@@ -70,7 +70,6 @@ export default class extends React.Component {
       if (event.rounds.length == 0)
         continue;//skip if no rounds found
       let leaderboard = await leaderboardService.getRound(event.id, event.rounds[event.rounds.length - 1]);
-      console.log(leaderboard , "leaderboard");
       //Get rank
       leaderboard.forEach(item => {
         // #TODO, two teams of same college winning in one event.
@@ -88,7 +87,6 @@ export default class extends React.Component {
     colleges.forEach(college => {
       total[college.id] = this.getTotal(college);
     })
-    console.log(total);
     this.setState({ status: "Done", showButton: true, total });
   }
   getPoints(event, college) {
