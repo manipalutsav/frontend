@@ -158,9 +158,9 @@ export default class extends React.Component {
             }}
           >
             <h2 className="mucapp">Practice Slots</h2>
-            <button className="mucapp" onClick={this.deleteSlots}>
+            {/* <button className="mucapp" onClick={this.deleteSlots}>
               Reset Slots
-            </button>
+            </button> */}
             <select
               name="date"
               id="date"

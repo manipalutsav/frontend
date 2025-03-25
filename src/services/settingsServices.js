@@ -26,8 +26,8 @@ export const getSettings = async () => {
     return response.data;
 }
 
-export const updateSettings = async ({title, editTeamEnabled}) => {
-    const data = {title, editTeamEnabled};
+export const updateSettings = async ({title, editTeamEnabled , downloadCertificateEnabled}) => {
+    const data = {title, editTeamEnabled , downloadCertificateEnabled };
     let response = await request(`/settings`, 'POST', data);
 
     if(response?.status == 200){
