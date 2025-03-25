@@ -247,13 +247,11 @@ export default () => {
         console.error('Error fetching data:', error);
       }
     };
-    fetchData();
+    //fetchData();
     console.log(events, 'events data');
 
-  // }, [events]);
-  
-}, []); // Commented to avoid infinite loop
-
+    // }, [events]);
+  }, []); // Commented to avoid infinite loop
 
   return (
     <div
