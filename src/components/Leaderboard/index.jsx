@@ -43,11 +43,11 @@ export default class extends React.PureComponent {
         <h1 className="mucapp">College Leaderboard</h1>
         <div>
           <Link to="/board"><Button>View Table</Button></Link>
-          {/* {
+          {
             this.state.published
               ? "Published"
               : <button className="mucapp" style={{ marginLeft: 20 }} onClick={this.handlePublish}>Publish</button>
-          } */}
+          }
         </div>
       </div>
       <div>
