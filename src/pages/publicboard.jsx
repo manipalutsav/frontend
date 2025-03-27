@@ -1,5 +1,6 @@
 import React from "react";
 
+import request from "../utils/request.js";
 import Layout from "../layouts/app";
 import eventsService from '../services/events'
 import leaderboardService from '../services/leaderboard';
@@ -9,9 +10,10 @@ import ReactDOMServer from 'react-dom/server';
 
 import "./index.css"
 
+
 const remove_college_list = [{name:"Cultural Coordination Committee", location:"Manipal"}, {name:"Kasturba Hospital", location:"Manipal"}, {name:"MAHE", location:"Manipal"}];
 const remove_event_list = ["Staff Cooking: Vegetarian", "Staff Cooking: Non-Vegetarian", "Staff Cooking: Sweets and Desserts", "Staff Vegetable & Fruit Carving","Staff Variety Entertainment", "Poetry (Kannada)"];
-// const remove_event_list = ["Some event", "Hello World"]; // Testing
+
 export default class extends React.Component {
   state = {
     status: "...",
@@ -57,32 +59,10 @@ export default class extends React.Component {
     })
     await this.setState({ colleges });
     let set = [];
-    for (let i = 0; i < events.length; i++) {
-      let event = events[i];
-      console.log(event.name);
-      if (event.faculty)
-        continue;
-      let round = await eventsService.getRound(event.id, event.rounds[0]);
-      if (!round.published)
-        continue;
-      await this.setState({ status: "Fetching  " + event.name + " leaderboard..." });
-      //Fetch rounds leaderboard (only last)
-      if (event.rounds.length == 0)
-        continue;//skip if no rounds found
-      let leaderboard = await leaderboardService.getRound(event.id, event.rounds[event.rounds.length - 1]);
-      //Get rank
-      leaderboard.forEach(item => {
-        // #TODO, two teams of same college winning in one event.
-        if (item.rank <= 3) {
-          set.push({
-            college: item.slot.college,
-            event: event.id,
-            rank: item.rank
-          });
-        }
-      });
-      this.setState({ set })
-    }
+    
+    let response = await request("/leaderboard/getleaderboard");
+    set = response.data;
+    this.setState({ set });
     let total = {};
     colleges.forEach(college => {
       total[college.id] = this.getTotal(college);
