@@ -15,7 +15,7 @@ const college_abbreviations = {
   'Manipal Institute of Communication': 'MIC',
   'Manipal College of Health Professions': 'MCHP',
   'Manipal Institute of Management': 'MIM',
-  'Department of Commerce': 'DOC',
+  'Department of Commerce (MSCE)': 'DOC (MSCE)',
   'Manipal School of Architecture and Planning': 'MSAP',
   'MAHE Teaching Departments': 'MAHE TD',
   'Prasanna School of Public Health': 'PSPH',
