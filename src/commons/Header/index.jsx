@@ -5,10 +5,11 @@ import sidebarStore from '../../reducers/sidebarReducer';
 import userStore from '../../reducers/userReducer';
 import { open, close } from '../../actions/sidebarActions';
 import { getUser, isLoggedIn } from '../../services/userServices';
+import { getSettings } from "../../services/settingsServices";
 import { Dropdown } from 'rsuite';
 import store from '../../reducers/sidebarReducer';
 
-const SidebarItems = ({ backupName, backupData }) => {
+const SidebarItems = ({ backupName, backupData , navbarDownloadCertificate }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     const _isAdmin = isLoggedIn() && getUser().type <= 2;
@@ -31,7 +32,7 @@ const SidebarItems = ({ backupName, backupData }) => {
       }}
     >
       <SidebarItem to="/" title="HOME" />
-      <SidebarItem to="/register" title="REGISTER" />
+      {!navbarDownloadCertificate && <SidebarItem to="/register" title="REGISTER" />}
       <SidebarItem to="/teams" title="TEAMS" />
       <SidebarItem to="/slots" title="SLOTS" />
       <SidebarItem to="/volunteers" title="VOLUNTEERS" />
@@ -39,7 +40,7 @@ const SidebarItems = ({ backupName, backupData }) => {
       <SidebarItem to="/leaderboard/public" title="EVENT STANDINGS" />
       <SidebarItem to="/practice-slots/public" title="PRACTICE SLOTS" />
       <SidebarItem to="/stats" title="STATS" />
-      {/* <SidebarItem to="/certificates" title="CERTIFICATES" /> */}
+      {navbarDownloadCertificate && <SidebarItem to="/certificates" title="CERTIFICATES" />}
 
       {isAdmin && (
         <li css={{ width: 150 }}>
@@ -221,6 +222,7 @@ class UserLink extends Component {
     backupName: '', // Initialize backupName state
     backupData: '', // Initialize backupData state
     screenWidth: typeof window !== 'undefined' ? window.innerWidth : '', // Initialize screenWidth state
+    navbarDownloadCertificate: false,
   };
 
   async checkLoggedIn() {
@@ -231,6 +233,17 @@ class UserLink extends Component {
 
   componentDidMount() {
     this.checkLoggedIn();
+    getSettings().then(settings => {
+      if (settings) {
+        console.log(settings);
+        this.setState({
+          navbarDownloadCertificate: settings.navbarDownloadCertificate || false,
+        })
+        console.log(this.state.navbarDownloadCertificate);
+      }
+    }).catch((err) => {
+      console.error(err)
+    })
 
     userStore.subscribe(() => {
       this.checkLoggedIn();
@@ -292,6 +305,7 @@ class UserLink extends Component {
           <SidebarItems
             backupName={this.state.backupName}
             backupData={this.state.backupData}
+            navbarDownloadCertificate={this.state.navbarDownloadCertificate}
           />
         </div>
       )}
