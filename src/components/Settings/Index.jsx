@@ -30,12 +30,13 @@ export default class Settings extends React.Component {
     title: "",
     enableTeamEdit: false,
     enableDownloadCertificate: false,
+    enableDownloadCertificateInNavbar: false,
   };
 
 
 
   handleSave() {
-    const data = { title: this.state.title, editTeamEnabled: this.state.enableTeamEdit , downloadCertificateEnabled: this.state.enableDownloadCertificate};
+    const data = { title: this.state.title, editTeamEnabled: this.state.enableTeamEdit , downloadCertificateEnabled: this.state.enableDownloadCertificate, navbarDownloadCertificate: this.state.enableDownloadCertificateInNavbar };
     console.log(data)
     updateSettings(data).then(data => {
       toast("Updated ✔")
@@ -50,11 +51,23 @@ export default class Settings extends React.Component {
           title: settings.title || "",
           enableTeamEdit: settings.editTeamEnabled || false,
           enableDownloadCertificate: settings.downloadCertificateEnabled || false,
+          enableDownloadCertificateInNavbar: settings.navbarDownloadCertificate || false,
         })
       }
     }).catch((err) => {
       console.error(err)
     })
+  }
+
+  confirmNavbarDownloadCertificate = (downloadInNabar) => {
+    if (downloadInNabar) {
+      const confirmEnable = window.confirm("Are you sure you want to enable download in navbar? This will disble register navlink.");
+      if(confirmEnable){
+        this.setState({ enableDownloadCertificateInNavbar: downloadInNabar })
+      }
+    }else{
+      this.setState({ enableDownloadCertificateInNavbar: downloadInNabar })
+    }
   }
 
 
@@ -76,6 +89,10 @@ export default class Settings extends React.Component {
           <div className="input-group gap-2 flex">
             <label htmlFor="enable_certificate_download" className=" text-md">Enable Certificate Download</label>
             <input className=" border rounded-sm w-[20px]" type="checkbox" id="enable_certificate_download" value={this.state.enableDownloadCertificate} onChange={(e) => this.setState({ enableDownloadCertificate: e.target.checked })} checked={this.state.enableDownloadCertificate} />
+          </div>
+          <div className="input-group gap-2 flex">
+            <label htmlFor="enable_certificate_download_in_Navbar" className=" text-md">Certificate Download in Navbar</label>
+            <input className=" border rounded-sm w-[20px]" type="checkbox" id="enable_certificate_download_in_Navbar" value={this.state.enableDownloadCertificateInNavbar} onChange={(e) => this.confirmNavbarDownloadCertificate(e.target.checked)} checked={this.state.enableDownloadCertificateInNavbar} />
           </div>
 
           <button className="mucapp mt-4 w-[200px]" onClick={this.handleSave.bind(this)}>Save</button>

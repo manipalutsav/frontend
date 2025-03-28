@@ -139,7 +139,6 @@ class CoreVolunteer extends React.Component {
     this.getVolunteers();
 
     getSettings().then(settings => {
-      console.log(settings);
       if (settings) {
         console.log(settings.downloadCertificateEnabled);
         this.setState({
