@@ -31,12 +31,13 @@ export default class Settings extends React.Component {
     enableTeamEdit: false,
     enableDownloadCertificate: false,
     enableDownloadCertificateInNavbar: false,
+    enableDownloadFacultyCertificates: false,
   };
 
 
 
   handleSave() {
-    const data = { title: this.state.title, editTeamEnabled: this.state.enableTeamEdit , downloadCertificateEnabled: this.state.enableDownloadCertificate, navbarDownloadCertificate: this.state.enableDownloadCertificateInNavbar };
+    const data = { title: this.state.title, editTeamEnabled: this.state.enableTeamEdit , downloadCertificateEnabled: this.state.enableDownloadCertificate, navbarDownloadCertificate: this.state.enableDownloadCertificateInNavbar, downloadFacultyCertificates: this.state.enableDownloadFacultyCertificates };
     console.log(data)
     updateSettings(data).then(data => {
       toast("Updated ✔")
@@ -52,6 +53,7 @@ export default class Settings extends React.Component {
           enableTeamEdit: settings.editTeamEnabled || false,
           enableDownloadCertificate: settings.downloadCertificateEnabled || false,
           enableDownloadCertificateInNavbar: settings.navbarDownloadCertificate || false,
+          enableDownloadFacultyCertificates: settings.downloadFacultyCertificates || false,
         })
       }
     }).catch((err) => {
@@ -86,13 +88,20 @@ export default class Settings extends React.Component {
             <label htmlFor="enable_team_edit" className=" text-md">Enable Team Edit</label>
             <input className=" border rounded-sm w-[20px]" type="checkbox" id="enable_team_edit" value={this.state.enableTeamEdit} onChange={(e) => this.setState({ enableTeamEdit: e.target.checked })} checked={this.state.enableTeamEdit} />
           </div>
+          
           <div className="input-group gap-2 flex">
-            <label htmlFor="enable_certificate_download" className=" text-md">Enable Certificate Download</label>
+            <label htmlFor="enable_certificate_download" className=" text-md">Volunteers Certificates</label>
             <input className=" border rounded-sm w-[20px]" type="checkbox" id="enable_certificate_download" value={this.state.enableDownloadCertificate} onChange={(e) => this.setState({ enableDownloadCertificate: e.target.checked })} checked={this.state.enableDownloadCertificate} />
           </div>
+
           <div className="input-group gap-2 flex">
             <label htmlFor="enable_certificate_download_in_Navbar" className=" text-md">Certificate Download in Navbar</label>
             <input className=" border rounded-sm w-[20px]" type="checkbox" id="enable_certificate_download_in_Navbar" value={this.state.enableDownloadCertificateInNavbar} onChange={(e) => this.confirmNavbarDownloadCertificate(e.target.checked)} checked={this.state.enableDownloadCertificateInNavbar} />
+          </div>
+
+          <div className="input-group gap-2 flex">
+            <label htmlFor="faculty_certificate_download" className=" text-md">Faculty Certificates</label>
+            <input className=" border rounded-sm w-[20px]" type="checkbox" id="faculty_certificate_download" value={this.state.enableDownloadFacultyCertificates} onChange={(e) => this.setState({enableDownloadFacultyCertificates: e.target.checked})} checked={this.state.enableDownloadFacultyCertificates} />
           </div>
 
           <button className="mucapp mt-4 w-[200px]" onClick={this.handleSave.bind(this)}>Save</button>
