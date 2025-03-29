@@ -9,11 +9,13 @@ import constants from "../../utils/constants";
 import certificateURL from '../../images/facultyCoordinator25.jpg'
 import avatar from "../../images/user.svg";
 import { toast } from "../../actions/toastActions";
+import { getSettings } from "../../services/settingsServices";
 
 export default class Profile extends React.Component {
   state = {
     user: {},
     changePassword: false,
+    downloadFacultyCertificates: false,
   };
 
   handleChange = (e) => {
@@ -69,71 +71,82 @@ export default class Profile extends React.Component {
         })
       )
     );
+
+    getSettings().then(settings => {
+      if (settings) {
+        console.log(settings.downloadFacultyCertificates);
+        this.setState({
+          downloadFacultyCertificates: settings.downloadFacultyCertificates || false,
+        })
+      }
+    }).catch((err) => {
+      console.error(err)
+    })
   }
 
   download(member) {
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-      const image = new Image();
-      const link = document.createElement('a');
-      image.onload = () => {
-        canvas.width = image.width;
-        canvas.height = image.height;
-        context.drawImage(image, 0, 0);
-        context.font = "bold 60px Blogger Sans";
-        context.fillStyle = "#000000";
-        context.textAlign = "center";
-        console.log(member);
-        context.fillText(member.name, (canvas.width / 2), 540);
-        // context.fillText(member.collegeName, (canvas.width / 2), 750);
-        const lines = [];
-        console.log(member.collegeName.length);
-        if (member.collegeName.length > 50) {
-          console.log("HIIII");
-          const sep = member.collegeName.split(" ");
-          
-          let line = "";
-          let j = 0;
-          while (j < sep.length) {
-            line += " " + sep[j];
-            j++;
-            if (line.length >= 45) {
-              lines.push(line.trim());
-              line = "";
-            }
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const image = new Image();
+    const link = document.createElement('a');
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      context.drawImage(image, 0, 0);
+      context.font = "bold 60px Blogger Sans";
+      context.fillStyle = "#000000";
+      context.textAlign = "center";
+      console.log(member);
+      context.fillText(member.name, (canvas.width / 2), 540);
+      // context.fillText(member.collegeName, (canvas.width / 2), 750);
+      const lines = [];
+      console.log(member.collegeName.length);
+      if (member.collegeName.length > 50) {
+        console.log("HIIII");
+        const sep = member.collegeName.split(" ");
+
+        let line = "";
+        let j = 0;
+        while (j < sep.length) {
+          line += " " + sep[j];
+          j++;
+          if (line.length >= 45) {
+            lines.push(line.trim());
+            line = "";
           }
-          lines.push(line.trim());
         }
-        if (lines.length > 1) {
-          // let spacing = 0;
-          context.font = "bold 40px Blogger Sans";
-          lines.forEach((ln, idx) => {  
-            // if (idx !== 0) {
-            //   spacing = 30;
-            // }
-            context.fillText(
-              ln,
-              canvas.width / 2,
-              820 - (lines.length - idx) * 50
-            );
-          });
-        } else {
-            context.font = "bold 50px Blogger Sans";
-            context.fillText(member.collegeName, canvas.width / 2, 750);
-          }
+        lines.push(line.trim());
+      }
+      if (lines.length > 1) {
+        // let spacing = 0;
+        context.font = "bold 40px Blogger Sans";
+        lines.forEach((ln, idx) => {
+          // if (idx !== 0) {
+          //   spacing = 30;
+          // }
+          context.fillText(
+            ln,
+            canvas.width / 2,
+            820 - (lines.length - idx) * 50
+          );
+        });
+      } else {
+        context.font = "bold 50px Blogger Sans";
+        context.fillText(member.collegeName, canvas.width / 2, 750);
+      }
 
 
-        canvas.toBlob((blob) => {
-          link.href = URL.createObjectURL(blob);
-          link.download = member.name +  ".png"
-          link.style.display = "none";
-          document.body.append(link);
-          link.click();
-          link.remove();
-        }, 'image/png');
-      };
-      image.src = certificateURL;
-    }
+      canvas.toBlob((blob) => {
+        link.href = URL.createObjectURL(blob);
+        link.download = member.name + ".png"
+        link.style.display = "none";
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }, 'image/png');
+    };
+    image.src = certificateURL;
+  }
 
   render() {
     return (
@@ -153,7 +166,7 @@ export default class Profile extends React.Component {
         <div>
           <button className="mucapp" css={{ margin: 5, }} onClick={() => this.handleLogout()}>{"Logout"}</button>
           <button className="mucapp" css={{ margin: 5, }} onClick={() => this.handleChangePassword()}>{this.state.changePassword ? "Change?" : "Change Password"}</button>
-          {constants.getUserType(this.state.user.type) === "FACULTY COORDINATOR" ? <button className="mucapp" css={{ margin: 5, }} onClick={()=>{this.download(this.state.user)}}>{"Download Certificate"}</button> : null}
+          { this.state.downloadFacultyCertificates && constants.getUserType(this.state.user.type) === "FACULTY COORDINATOR" ? <button className="mucapp" css={{ margin: 5, }} onClick={() => { this.download(this.state.user) }}>{"Download Certificate"}</button> : null}
         </div>
         <div>
           {
