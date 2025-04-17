@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "gatsby";
 import collegesService from "../../services/colleges";
 import eventsService from "../../services/events";
 import teamsService from "../../services/teams";
@@ -66,11 +67,21 @@ export default class WinnerForm extends React.Component {
     this.setState({ participants });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting form with data:", this.state.participants);
-    // Perform upload logic here
-    this.setState({ formSubmitted: true });
+    let payload = {
+      eventId: this.state.eventId,
+      collegeId: this.state.collegeId,
+      participants:this.state.participants
+    }
+    console.log(payload);
+    try{
+      // let response = await teamsService.submitWinnerForm( payload );
+      this.setState({ formSubmitted: true });
+    }catch( err ){
+      console.log(err);
+    }
   };
 
   render() {
@@ -81,8 +92,16 @@ export default class WinnerForm extends React.Component {
     }
 
     if (formSubmitted) {
-      return <div>Form submitted successfully!</div>;
+      return (
+        <div>
+          <div>Form submitted successfully!</div>
+          <Link to="/teams/rankings">
+            <button className="btn btn-primary mt-3">Go to Rankings</button>
+          </Link>
+        </div>
+      );
     }
+    
 
     return (
       <div className="container">
