@@ -21,7 +21,6 @@ export default class Teams extends React.Component {
     let college = await collegesService.get(user.college);
     console.log(response);
     this.setState({ ranks: response, college, showLoader: false })
-
   }
 
   ordinal_suffix_of(i) {
@@ -48,15 +47,25 @@ export default class Teams extends React.Component {
         <tr>
           <th>Event name</th>
           <th>Ranks</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
         {this.state.ranks.filter((eventRanks)=>eventRanks.event.faculty==false).map(eventRanks => {
           console.log(eventRanks)
+          const hasTopRank = eventRanks.ranks.some(rank => [1].includes(rank.rank));
           return <tr>
           <td><Link to={`/events/${eventRanks.event._id}/rounds/${eventRanks.event.rounds.pop()}/leaderboard`}>{eventRanks.event.name}</Link></td>
           {/* uncomment this to show ranks to public */}
           <td>{eventRanks.ranks.map(rank => <span className="pr-5">{this.ordinal_suffix_of(rank.rank)}</span>)}</td>
+
+          <td>
+          {hasTopRank && (
+                    <Link to={`/winnerForm/college/${this.state.college.id}/events/${eventRanks.event._id}`}>
+                      <button className="btn btn-primary">Fill out winners form</button>
+                    </Link>
+                  )}
+          </td>
         </tr>
         })}
       </tbody>
