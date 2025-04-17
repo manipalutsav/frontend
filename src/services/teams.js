@@ -15,7 +15,7 @@ const getTeamByCollegeAndEvent = async (collegeId, eventId) =>{
 
 
 const submitWinnerForm = async (payload) => {
-    let response = await request("/teams/submitWinnerForm", "POST", payload);
+    let response = await request("/teams/submitWinnerForm", "POST", payload,"multipart/form-data");
 
     if (response && response.status === 200) {
         return response.data;
