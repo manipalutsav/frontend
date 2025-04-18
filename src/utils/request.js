@@ -12,33 +12,35 @@ const getToken = () => {
   return null;
 };
 
-const request = async (path, method = "GET", body = {}) => {
-  try {
-    let url = path ? constants.server + path : constants.server;
-    const options = {
-      credentials: "include",
-      mode: 'cors',
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      method: method,
-    };
+const request = async (path, method = "GET", body, contentType = "application/json") => {
+  const url = path ? constants.server + path : constants.server;
+  const options = {
+    credentials: "include",
+    mode: "cors",
+    method,
+    headers: { Accept: "application/json" },
+  };
 
-    let token = getToken();
-    if (token) options.headers["Authorization"] = token;
+  // auth‑token header if available
+  const token = getToken();
+  if (token) options.headers["Authorization"] = token;
 
-    if (!["GET", "HEAD"].includes(method))
-      options.body = typeof body === "object" ? JSON.stringify(body) : body;
-
-    let response = typeof window !== "undefined" && await window.fetch(url, options);
-    if (response)
-      return await response.json();
-    else
-      return "";
-  } catch (e) {
-    throw e;
+  if (!["GET", "HEAD"].includes(method)) {
+    if (body instanceof FormData) {
+      // send the FormData directly
+      options.body = body;
+      // let the browser set Content-Type (with boundary) for you:
+      // so don’t set options.headers["Content-Type"] at all
+    } else {
+      // assume JSON
+      options.body = JSON.stringify(body);
+      options.headers["Content-Type"] = contentType;
+    }
   }
+
+  const res = await window.fetch(url, options);
+  return res.ok ? res.json() : Promise.reject(res);
 };
+
 
 export default request;

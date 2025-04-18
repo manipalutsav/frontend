@@ -46,6 +46,7 @@ import EditMember from '../components/CollegeTeams/Edit';
 import Rankings from '../components/CollegeTeams/rankings';
 import Winners from '../components/Winners';
 import Certificates from '../components/Certificates';
+import WinnerForm from "../components/CollegeTeams/WinnerForm";
 
 //Imported for volunteer
 import AddVolunteer from '../components/Volunteer';
@@ -272,6 +273,8 @@ export default () => (
         type={8}
       />
       <PrivateRoute path="/notifications" component={Notifications} type={8} />
+      <PrivateRoute path="/winnerForm/college/:college/events/:event" component={WinnerForm} type={8} />
+
 
       <PrivateRoute path="/settings" component={Settings} type={1} />
 
