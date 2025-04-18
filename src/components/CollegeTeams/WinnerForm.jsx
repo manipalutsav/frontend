@@ -1,13 +1,16 @@
 import React from "react";
-import { Link } from "gatsby"; // Assuming Gatsby context, adjust if needed
+import { Link } from "gatsby";
 import collegesService from "../../services/colleges";
 import eventsService from "../../services/events";
 import teamsService from "../../services/teams";
 
-// Assuming teamsService.submitWinnerForm can handle FormData
-// Example using axios might look like:
-// submitWinnerForm: (formData) => axios.post('/api/teams/submitWinnerForm', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-// Note: Often axios/fetch set the Content-Type automatically for FormData
+const VALIDATIONS = {
+  PHONE: /^[6-9]\d{9}$/,
+  IFSC: /^[A-Z]{4}0[A-Z0-9]{6}$/,
+  PAN: /^[A-Z]{5}[0-9]{4}[A-Z]$/,
+  ACCOUNT_NUMBER: /^\d{9,18}$/,
+  FILE_MAX_SIZE: 2 * 1024 * 1024 // 2MB
+};
 
 export default class WinnerForm extends React.Component {
   state = {
@@ -18,21 +21,18 @@ export default class WinnerForm extends React.Component {
     participants: [],
     maxParticipants: 0,
     formSubmitted: false,
-    isSubmitting: false, // Added state to disable button during submission
-    submitError: null, // Added state to display submission errors
+    isSubmitting: false,
+    submitError: null,
+    fieldErrors: {}
   };
 
   componentDidMount() {
-    // Get props from router or parent component
-    // Ensure props.event and props.college contain the IDs
-    const eventId = this.props.event; // Adjust based on how props are passed
-    const collegeId = this.props.college; // Adjust based on how props are passed
-
+    const eventId = this.props.event;
+    const collegeId = this.props.college;
     if (eventId && collegeId) {
       this.setState({ eventId, collegeId }, this.init);
     } else {
       console.error("Missing eventId or collegeId in props");
-      // Handle error state - maybe redirect or show message
     }
   }
 
@@ -41,327 +41,459 @@ export default class WinnerForm extends React.Component {
     try {
       const college = await collegesService.get(collegeId);
       const event = await eventsService.get(eventId);
-      // Fetch team details to determine max participants if needed
-      // This logic might vary based on your application rules
       const team = await teamsService.getTeamByCollegeAndEvent(collegeId, eventId);
-
-      // Determine max participants - using team members length or fallback to 1
-      // Adjust this logic if winners count is determined differently
       const maxParticipants = team?.members?.length || 1;
       const participants = Array.from({ length: maxParticipants }, () => this.emptyParticipant());
-
-      this.setState({
-        college,
-        event,
-        maxParticipants,
-        participants,
-      });
+      this.setState({ college, event, maxParticipants, participants });
     } catch (err) {
       console.error("Error loading form data:", err);
-      // Set an error state to inform the user
       this.setState({ submitError: "Failed to load initial form data." });
     }
   };
 
-  // Helper to create an empty participant structure
   emptyParticipant = () => ({
     name: "",
     regNumber: "",
     panNumber: "",
-    panPhoto: null, // Will hold the File object
+    panPhoto: null,
     bankAccount: "",
     bankName: "",
     branch: "",
     ifsc: "",
     phone: "",
-    chequeImage: null, // Will hold the File object
+    chequeImage: null,
   });
 
-  // Handles changes for text input fields
+  validateField = (field, value) => {
+    switch (field) {
+      case "phone":
+        if (!VALIDATIONS.PHONE.test(value)) return "Invalid phone number (must be 10 digits, start with 6-9).";
+        break;
+      case "ifsc":
+        if (!VALIDATIONS.IFSC.test(value.toUpperCase())) return "Invalid IFSC code (e.g., SBIN0001234).";
+        break;
+      case "panNumber":
+        if (!VALIDATIONS.PAN.test(value.toUpperCase())) return "Invalid PAN (e.g., ABCDE1234F).";
+        break;
+      case "bankAccount":
+        if (!VALIDATIONS.ACCOUNT_NUMBER.test(value)) return "Invalid account number (9–18 digits).";
+        break;
+      default:
+        break;
+    }
+    return null;
+  };
+
   handleChange = (index, field, value) => {
     const participants = [...this.state.participants];
+    const fieldErrors = { ...this.state.fieldErrors };
+    const error = this.validateField(field, value);
+
+    if (!fieldErrors[index]) fieldErrors[index] = {};
+    fieldErrors[index][field] = error;
+
     participants[index][field] = value;
-    this.setState({ participants });
+    this.setState({ participants, fieldErrors });
   };
 
-  // Handles file selection
-  handleFileChange = (index, field, file) => {
-    // Basic file validation (optional but recommended)
-    if (file) {
-        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-        const maxSize = 2 * 1024 * 1024; // 2MB
+  handleFileChange = (index, field, file, event) => {
+    const participants = [...this.state.participants];
+    const fieldErrors = { ...this.state.fieldErrors };
 
-        if (!allowedTypes.includes(file.type)) {
-            alert(`Invalid file type for ${field}. Please select a JPEG, PNG, or PDF.`);
-            return; // Stop processing this file
-        }
-        if (file.size > maxSize) {
-             alert(`File size for ${field} exceeds the 2MB limit.`);
-             return; // Stop processing this file
-        }
+    if (!fieldErrors[index]) fieldErrors[index] = {};
+
+    if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!allowedTypes.includes(file.type)) {
+        fieldErrors[index][field] = "Invalid file type. Use JPG, PNG, or PDF.";
+        if (event) event.target.value = "";
+        this.setState({ fieldErrors });
+        return;
+      }
+      if (file.size > VALIDATIONS.FILE_MAX_SIZE) {
+        fieldErrors[index][field] = "File too large. Max size is 2MB.";
+        if (event) event.target.value = "";
+        this.setState({ fieldErrors });
+        return;
+      }
+      fieldErrors[index][field] = null;
     }
 
-    const participants = [...this.state.participants];
-    participants[index][field] = file; // Store the File object
-    this.setState({ participants });
+    participants[index][field] = file;
+    this.setState({ participants, fieldErrors });
   };
 
-  // --- *** MODIFIED handleSubmit *** ---
+  validateAll = () => {
+    const { participants } = this.state;
+    let isValid = true;
+    const fieldErrors = {};
+
+    participants.forEach((p, idx) => {
+      fieldErrors[idx] = {};
+      // Required checks
+      Object.entries(p).forEach(([key, value]) => {
+        if (
+          !value &&
+          key !== "panPhoto" &&
+          key !== "chequeImage"
+        ) {
+          fieldErrors[idx][key] = "This field is required.";
+          isValid = false;
+        }
+      });
+
+      // Format checks
+      ["phone", "ifsc", "panNumber", "bankAccount"].forEach((key) => {
+        const error = this.validateField(key, p[key]);
+        if (error) {
+          fieldErrors[idx][key] = error;
+          isValid = false;
+        }
+      });
+
+      // File checks
+      if (!(p.panPhoto instanceof File)) {
+        fieldErrors[idx]["panPhoto"] = "PAN Photo is required.";
+        isValid = false;
+      }
+      if (!(p.chequeImage instanceof File)) {
+        fieldErrors[idx]["chequeImage"] = "Cheque Image is required.";
+        isValid = false;
+      }
+    });
+
+    this.setState({ fieldErrors });
+    return isValid;
+  };
+
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ isSubmitting: true, submitError: null }); // Disable button, clear old errors
+    this.setState({ isSubmitting: true, submitError: null });
+
+    if (!this.validateAll()) {
+      this.setState({ isSubmitting: false, submitError: "Please fix the errors above." });
+      return;
+    }
 
     const { eventId, collegeId, participants } = this.state;
-
-    // 1. Create FormData object
     const formData = new FormData();
-
-    // 2. Append standard fields
     formData.append('collegeId', collegeId);
     formData.append('eventId', eventId);
 
-    // 3. Prepare participant data WITHOUT files for JSON string
-    const participantsForJson = participants.map(p => {
-      // Destructure to exclude file keys
+    const participantsForJson = participants.map((p) => {
       const { panPhoto, chequeImage, ...textData } = p;
-      // Basic validation: Check if all required text fields are filled (optional here, could be done earlier)
-      for(const key in textData) {
-          if(!textData[key] && key !== 'panPhoto' && key !== 'chequeImage') { // Check if any required text field is empty
-             // Optionally throw error or mark form invalid
-             console.warn(`Participant ${participants.indexOf(p) + 1} has empty field: ${key}`);
-             // Consider adding validation feedback to the UI
-          }
-      }
-      return textData; // Return object with only non-file data
+      return textData;
     });
-
-    // 4. Stringify and append the non-file participant data
     formData.append('participants', JSON.stringify(participantsForJson));
 
-    // 5. Append files with indexed field names
-    let filesValid = true;
     participants.forEach((p, index) => {
-      // Check if file exists before appending
-      if (p.panPhoto instanceof File) {
-        formData.append(`panPhoto-${index}`, p.panPhoto, p.panPhoto.name);
-      } else {
-        // Handle missing required file
-        this.setState({ submitError: `Missing PAN Photo for participant ${index + 1}.`, isSubmitting: false });
-        filesValid = false;
-        console.error(`Missing PAN Photo file object for participant ${index}`);
-        return; // Exit forEach early if needed, or just flag
-      }
-
-      if (p.chequeImage instanceof File) {
-        formData.append(`chequePhoto-${index}`, p.chequeImage, p.chequeImage.name);
-      } else {
-         // Handle missing required file
-         this.setState({ submitError: `Missing Cheque Image for participant ${index + 1}.`, isSubmitting: false });
-         filesValid = false;
-         console.error(`Missing Cheque Image file object for participant ${index}`);
-         return; // Exit forEach early if needed, or just flag
-      }
+      formData.append(`panPhoto-${index}`, p.panPhoto, p.panPhoto.name);
+      formData.append(`chequePhoto-${index}`, p.chequeImage, p.chequeImage.name);
     });
 
-    // Stop submission if required files are missing
-    if (!filesValid) {
-        return;
-    }
-
-
-    // --- Debugging: Log FormData entries (won't show file content, but keys are useful) ---
-    console.log("Submitting FormData:");
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-    }
-    // --- End Debugging ---
-
-
-    // 6. Send the FormData object using the service
     try {
-      // Ensure teamsService.submitWinnerForm can handle FormData
-      let response = await teamsService.submitWinnerForm(formData);
-      console.log("Submission Response:", response); // Log success response
+      await teamsService.submitWinnerForm(formData);
       this.setState({ formSubmitted: true, isSubmitting: false });
     } catch (err) {
       console.error("Submission Error:", err);
-      // Try to get specific error message from response if available
       const errorMessage = err.response?.data?.message || err.message || "An unexpected error occurred during submission.";
-      this.setState({ submitError: errorMessage, isSubmitting: false }); // Show error to user, re-enable button
+      this.setState({ submitError: errorMessage, isSubmitting: false });
     }
   };
 
   render() {
-    const { college, event, participants, maxParticipants, formSubmitted, isSubmitting, submitError } = this.state;
-
+    const { college, event, participants, formSubmitted, isSubmitting, submitError, fieldErrors } = this.state;
     if (!college || !event) {
-      return <div>Loading form data...</div>;
+      return <div className="text-center py-10 text-lg">Loading...</div>;
     }
-
-    // Display success message
     if (formSubmitted) {
       return (
-        <div className="container mt-4">
-          <div className="alert alert-success" role="alert">
-            Form submitted successfully!
-          </div>
-          <Link to="/teams/rankings"> {/* Adjust link as needed */}
-            <button className="btn btn-primary mt-3">Go to Rankings</button>
+        <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 mt-8 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-[#ff5800]">
+            Submission Successful!
+          </h2>
+          <p className="text-lg text-gray-600">
+            Thank you for submitting the winner details.
+          </p>
+          <Link to={`/teams/rankings`}>
+            <button className="btn btn-primary">Go back to rankings</button>
           </Link>
         </div>
       );
     }
 
-    // Main form rendering
     return (
-      <div className="container mt-4">
-        <h2>Winners Form</h2>
-        <p><strong>Event:</strong> {event.name}</p>
-        <p><strong>Winning College:</strong> {college.name}</p>
+      <form
+        className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 mt-8"
+        onSubmit={this.handleSubmit}
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center text-[#ff5800]">
+          Winner Submission Form
+        </h2>
 
-        {/* Display submission errors */}
-        {submitError && (
-            <div className="alert alert-danger" role="alert">
-                Submission Failed: {submitError}
+        {/* Event and College Info */}
+        <div className="mb-6">
+          <div className="flex flex-col md:flex-row md:space-x-8">
+            <div className="mb-4 md:mb-0 flex-1">
+              <label className="block text-gray-700 font-medium mb-2">
+                Event
+                <span className="text-[#ff5800] ml-1">*</span>
+              </label>
+              <input
+                type="text"
+                value={event?.name || ""}
+                disabled
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-gray-600"
+              />
             </div>
-        )}
-
-        {/* Use standard form tag, but submission is handled by JS */}
-        <form onSubmit={this.handleSubmit}>
-          {/* Map through participants based on maxParticipants */}
-          {Array.from({ length: maxParticipants }).map((_, index) => {
-            // Get participant data, provide default empty object if needed
-            const participant = participants[index] || this.emptyParticipant();
-
-            return (
-              // Use Bootstrap card styling for better separation
-              <div key={index} className="card mb-3">
-                 <div className="card-header">
-                    <h4>Participant {index + 1}</h4>
-                 </div>
-                 <div className="card-body">
-                    {/* Use form-group for better spacing */}
-                    <div className="form-group mb-2">
-                        <label>Name</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Full Name"
-                            required
-                            value={participant.name}
-                            onChange={e => this.handleChange(index, "name", e.target.value)} />
-                    </div>
-                    <div className="form-group mb-2">
-                         <label>Registration Number</label>
-                         <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Registration Number"
-                            required
-                            value={participant.regNumber}
-                            onChange={e => this.handleChange(index, "regNumber", e.target.value)} />
-                    </div>
-                     <div className="form-group mb-2">
-                         <label>PAN Number</label>
-                         <input
-                            type="text"
-                            className="form-control"
-                            placeholder="PAN Number (e.g., ABCDE1234F)"
-                            required
-                            pattern="^[A-Z]{5}[0-9]{4}[A-Z]{1}$" // Add pattern validation
-                            title="PAN should be 5 letters, 4 numbers, 1 letter (e.g., ABCDE1234F)"
-                            value={participant.panNumber}
-                            onChange={e => this.handleChange(index, "panNumber", e.target.value.toUpperCase())} // Convert to uppercase
-                         />
-                    </div>
-                     <div className="form-group mb-2">
-                         <label>PAN Photo (JPG, PNG, PDF - Max 2MB)</label>
-                         <input
-                            type="file"
-                            className="form-control"
-                            required
-                            accept="image/jpeg,image/png,application/pdf" // Specify accepted types
-                            onChange={e => this.handleFileChange(index, "panPhoto", e.target.files[0])}
-                         />
-                         {/* Optional: Display selected filename */}
-                         {participant.panPhoto && <small className="form-text text-muted">Selected: {participant.panPhoto.name}</small>}
-                    </div>
-                     <div className="form-group mb-2">
-                         <label>Bank Account Number</label>
-                         <input
-                            type="text"
-                             className="form-control"
-                            placeholder="Bank Account Number"
-                            required
-                            value={participant.bankAccount}
-                            onChange={e => this.handleChange(index, "bankAccount", e.target.value)} />
-                    </div>
-                     <div className="form-group mb-2">
-                         <label>Bank Name</label>
-                         <input
-                            type="text"
-                             className="form-control"
-                            placeholder="Bank Name"
-                            required
-                            value={participant.bankName}
-                            onChange={e => this.handleChange(index, "bankName", e.target.value)} />
-                    </div>
-                     <div className="form-group mb-2">
-                         <label>Branch and Address</label>
-                         <input
-                            type="text"
-                             className="form-control"
-                            placeholder="Branch and Address"
-                            required
-                            value={participant.branch}
-                            onChange={e => this.handleChange(index, "branch", e.target.value)} />
-                    </div>
-                     <div className="form-group mb-2">
-                         <label>IFSC Code</label>
-                         <input
-                            type="text"
-                             className="form-control"
-                            placeholder="IFSC Code"
-                            required
-                            value={participant.ifsc}
-                            onChange={e => this.handleChange(index, "ifsc", e.target.value.toUpperCase())} />
-                    </div>
-                     <div className="form-group mb-2">
-                         <label>Phone Number</label>
-                         <input
-                            type="tel" // Use tel type for phone numbers
-                             className="form-control"
-                            placeholder="10-digit Phone Number"
-                            required
-                            pattern="[0-9]{10}" // Basic 10-digit validation
-                            title="Please enter a 10-digit phone number"
-                            value={participant.phone}
-                            onChange={e => this.handleChange(index, "phone", e.target.value)} />
-                    </div>
-                     <div className="form-group mb-3"> {/* Added mb-3 for spacing before button */}
-                         <label>Cancelled Cheque Photo (JPG, PNG, PDF - Max 2MB)</label>
-                         <input
-                            type="file"
-                             className="form-control"
-                            required
-                            accept="image/jpeg,image/png,application/pdf"
-                            onChange={e => this.handleFileChange(index, "chequeImage", e.target.files[0])}
-                         />
-                          {/* Optional: Display selected filename */}
-                         {participant.chequeImage && <small className="form-text text-muted">Selected: {participant.chequeImage.name}</small>}
-                    </div>
-                 </div> {/* End card-body */}
-              </div> // End card
-            );
-          })}
-
-          <div className="mt-3">
-            <button type="submit" className="btn btn-success" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit'}
-            </button>
+            <div className="flex-1">
+              <label className="block text-gray-700 font-medium mb-2">
+                Winning College
+                <span className="text-[#ff5800] ml-1">*</span>
+              </label>
+              <input
+                type="text"
+                value={college?.name || ""}
+                disabled
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-gray-600"
+              />
+            </div>
           </div>
-        </form>
-      </div>
+        </div>
+
+        {/* Participants */}
+        <div className="space-y-8">
+          {participants.map((p, idx) => (
+            <div
+              key={idx}
+              className="bg-gray-50 border border-gray-200 rounded-lg p-6 shadow-sm"
+            >
+              <h3 className="text-lg font-semibold mb-4 text-[#ff5800]">
+                Participant {idx + 1}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Name */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    Name
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] ${
+                      fieldErrors[idx]?.name ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="text"
+                    value={p.name}
+                    onChange={e => this.handleChange(idx, "name", e.target.value)}
+                    placeholder="Full Name"
+                    required
+                  />
+                  {fieldErrors[idx]?.name && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].name}</p>
+                  )}
+                </div>
+                {/* Registration Number */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    Registration Number
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] ${
+                      fieldErrors[idx]?.regNumber ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="text"
+                    value={p.regNumber}
+                    onChange={e => this.handleChange(idx, "regNumber", e.target.value)}
+                    placeholder="Reg Number"
+                    required
+                  />
+                  {fieldErrors[idx]?.regNumber && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].regNumber}</p>
+                  )}
+                </div>
+                {/* PAN Number */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    PAN Number
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] uppercase ${
+                      fieldErrors[idx]?.panNumber ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="text"
+                    value={p.panNumber}
+                    onChange={e => this.handleChange(idx, "panNumber", e.target.value.toUpperCase())}
+                    placeholder="ABCDE1234F"
+                    required
+                  />
+                  {fieldErrors[idx]?.panNumber && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].panNumber}</p>
+                  )}
+                </div>
+                {/* Bank Account */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    Bank Account
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] ${
+                      fieldErrors[idx]?.bankAccount ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="text"
+                    value={p.bankAccount}
+                    onChange={e => this.handleChange(idx, "bankAccount", e.target.value)}
+                    placeholder="Account Number"
+                    required
+                  />
+                  {fieldErrors[idx]?.bankAccount && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].bankAccount}</p>
+                  )}
+                </div>
+                {/* Bank Name */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    Bank Name
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] ${
+                      fieldErrors[idx]?.bankName ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="text"
+                    value={p.bankName}
+                    onChange={e => this.handleChange(idx, "bankName", e.target.value)}
+                    placeholder="Bank Name"
+                    required
+                  />
+                  {fieldErrors[idx]?.bankName && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].bankName}</p>
+                  )}
+                </div>
+                {/* Branch */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    Branch
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] ${
+                      fieldErrors[idx]?.branch ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="text"
+                    value={p.branch}
+                    onChange={e => this.handleChange(idx, "branch", e.target.value)}
+                    placeholder="Branch"
+                    required
+                  />
+                  {fieldErrors[idx]?.branch && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].branch}</p>
+                  )}
+                </div>
+                {/* IFSC */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    IFSC
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] uppercase ${
+                      fieldErrors[idx]?.ifsc ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="text"
+                    value={p.ifsc}
+                    onChange={e => this.handleChange(idx, "ifsc", e.target.value.toUpperCase())}
+                    placeholder="SBIN0001234"
+                    required
+                  />
+                  {fieldErrors[idx]?.ifsc && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].ifsc}</p>
+                  )}
+                </div>
+                {/* Phone */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    Phone
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 focus:ring-[#ff5800] focus:border-[#ff5800] ${
+                      fieldErrors[idx]?.phone ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="tel"
+                    value={p.phone}
+                    onChange={e => this.handleChange(idx, "phone", e.target.value)}
+                    placeholder="Phone Number"
+                    required
+                  />
+                  {fieldErrors[idx]?.phone && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].phone}</p>
+                  )}
+                </div>
+                {/* PAN Photo */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    PAN Photo
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-[#ff5800]/10 file:text-[#ff5800] hover:file:bg-[#ff5800]/20 ${
+                      fieldErrors[idx]?.panPhoto ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="file"
+                    accept="image/jpeg,image/png,application/pdf"
+                    onChange={e => this.handleFileChange(idx, "panPhoto", e.target.files[0], e)}
+                    required
+                  />
+                  <p className="mt-1 text-sm text-gray-500">
+                    Allowed: JPG, PNG, PDF. <span className="text-[#ff5800] font-semibold">Max size: 2MB</span>
+                  </p>
+                  {fieldErrors[idx]?.panPhoto && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].panPhoto}</p>
+                  )}
+                </div>
+                {/* Cheque Image */}
+                <div>
+                  <label className="block text-gray-600 mb-1">
+                    Cheque Image
+                    <span className="text-[#ff5800] ml-1">*</span>
+                  </label>
+                  <input
+                    className={`w-full border rounded-lg p-2.5 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-[#ff5800]/10 file:text-[#ff5800] hover:file:bg-[#ff5800]/20 ${
+                      fieldErrors[idx]?.chequeImage ? "border-red-500" : "border-gray-300"
+                    }`}
+                    type="file"
+                    accept="image/jpeg,image/png,application/pdf"
+                    onChange={e => this.handleFileChange(idx, "chequeImage", e.target.files[0], e)}
+                    required
+                  />
+                  <p className="mt-1 text-sm text-gray-500">
+                    Allowed: JPG, PNG, PDF. <span className="text-[#ff5800] font-semibold">Max size: 2MB</span>
+                  </p>
+                  {fieldErrors[idx]?.chequeImage && (
+                    <p className="text-red-600 text-sm mt-1">{fieldErrors[idx].chequeImage}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {submitError && (
+          <div className="mt-6 text-red-600 text-center font-semibold">
+            {submitError}
+          </div>
+        )}
+        <button
+          type="submit"
+          className="mt-8 w-full bg-[#ff5800] hover:bg-[#ff5800]/90 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </button>
+      </form>
     );
   }
 }
